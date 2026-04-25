@@ -3,468 +3,2341 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>눈치코치 — 눈치 있게, 코치 받자</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <title>눈치코치</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    :root {
+      --pink:        #FF5500;
+      --pink-dark:   #E04800;
+      --pink-light:  #FF6633;
+      --pink-pale:   #FFF2EE;
+      --pink-mid:    #FFD6C8;
+      --black:       #111111;
+      --gray-900:    #1A1A1A;
+      --gray-700:    #3D3D3D;
+      --gray-500:    #7A7A7A;
+      --gray-300:    #C2C2C2;
+      --gray-100:    #F5F5F5;
+      --white:       #FFFFFF;
+      --r-sm:        10px;
+      --r-md:        16px;
+      --r-lg:        22px;
+      --r-xl:        28px;
+      --r-pill:      9999px;
+      --shadow-sm:   0 2px 12px rgba(0,0,0,.06);
+      --shadow-md:   0 8px 32px rgba(0,0,0,.10);
+      --shadow-lg:   0 20px 60px rgba(0,0,0,.14);
+      --shadow-pink: 0 8px 28px rgba(255,85,0,.28);
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #EFEFEF;
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app-shell {
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    @media (min-width: 600px) {
+      .app-shell { box-shadow: 0 0 0 1px rgba(0,0,0,.07), var(--shadow-lg); }
+    }
+
+    /* ─── SCREENS ─── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      padding: 0 20px; height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid rgba(0,0,0,.05);
+      transition: box-shadow .3s;
+    }
+    .topbar.scrolled { box-shadow: var(--shadow-sm); }
+    .topbar-logo img { height: 22px; width: auto; display: block; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+
+    .icon-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--gray-100);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s; position: relative;
+    }
+    .icon-btn:hover { background: var(--pink-pale); }
+    .icon-btn svg { width: 18px; height: 18px; stroke: var(--gray-700); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .notif-dot::after {
+      content: ''; position: absolute; top: 7px; right: 7px;
+      width: 7px; height: 7px; background: var(--pink);
+      border-radius: 50%; border: 2px solid var(--white);
+    }
+
+    /* ─── SCROLL CONTENT ─── */
+    .scroll-content { padding-bottom: 88px; }
+
+    /* ─── HOME: HERO ─── */
+    .hero {
+      padding: 28px 20px 20px;
+      background: var(--white);
+      position: relative;
+    }
+    .hero-label {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--pink-pale); color: var(--pink);
+      font-size: 12px; font-weight: 600; padding: 5px 12px;
+      border-radius: var(--r-pill); margin-bottom: 14px;
+    }
+    .hero-label .dot {
+      width: 6px; height: 6px; background: var(--pink);
+      border-radius: 50%; animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50% { opacity:.4; transform:scale(.7); }
+    }
+    .hero-greeting { font-size: 13px; color: var(--gray-500); margin-bottom: 6px; }
+    .hero-title {
+      font-size: 26px; font-weight: 800; line-height: 1.3;
+      letter-spacing: -0.8px; color: var(--gray-900); margin-bottom: 10px;
+    }
+    .hero-title .hl { color: var(--pink); position: relative; }
+    .hero-title .hl::after {
+      content: ''; position: absolute; bottom: 1px; left: 0; right: 0;
+      height: 4px; background: rgba(255,107,157,.18); border-radius: 2px;
+    }
+    .hero-sub { font-size: 13.5px; color: var(--gray-500); line-height: 1.6; max-width: 280px; }
+
+    /* ─── SEARCH ─── */
+    .search-section { padding: 16px 20px 18px; }
+    .search-wrap { position: relative; }
+    .search-bar {
+      width: 100%; height: 52px; padding: 0 54px 0 48px;
+      border-radius: var(--r-pill); border: 1.5px solid transparent;
+      background: var(--gray-100); font-size: 14px; font-family: inherit;
+      color: var(--black); outline: none;
+      transition: border-color .2s, background .2s, box-shadow .2s;
+    }
+    .search-bar::placeholder { color: var(--gray-300); }
+    .search-bar:focus {
+      background: var(--white); border-color: var(--pink);
+      box-shadow: 0 0 0 4px rgba(255,107,157,.10);
+    }
+    .search-icon {
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      color: var(--gray-300); pointer-events: none; transition: color .2s;
+    }
+    .search-bar:focus + .search-icon { color: var(--pink); }
+    .search-ai-badge {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: linear-gradient(135deg, var(--pink), var(--pink-light));
+      color: white; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.5px; padding: 4px 10px; border-radius: var(--r-pill);
+      pointer-events: none;
+    }
+    .quick-chips {
+      display: flex; gap: 8px; margin-top: 10px;
+      overflow-x: auto; padding-bottom: 2px; scrollbar-width: none;
+    }
+    .quick-chips::-webkit-scrollbar { display: none; }
+    .chip {
+      flex-shrink: 0; height: 32px; padding: 0 14px;
+      border-radius: var(--r-pill); border: 1.5px solid var(--gray-100);
+      background: var(--white); font-size: 12.5px; font-family: inherit;
+      color: var(--gray-700); font-weight: 500; cursor: pointer;
+      transition: all .18s; white-space: nowrap;
+    }
+    .chip:hover, .chip.active { background: var(--pink-pale); border-color: var(--pink); color: var(--pink); }
+
+    /* ─── SECTION HEADER ─── */
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px; margin-bottom: 12px;
+    }
+    .section-title { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+    .section-more {
+      font-size: 13px; color: var(--gray-500); font-weight: 500;
+      display: flex; align-items: center; gap: 2px; transition: color .2s;
+    }
+    .section-more:hover { color: var(--pink); }
+    .section-more svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ─── SITUATION CARDS ─── */
+    .cards-scroll-section { margin-bottom: 32px; }
+    .cards-scroll {
+      display: flex; gap: 12px; padding: 4px 20px 10px;
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .cards-scroll::-webkit-scrollbar { display: none; }
+
+    .sit-card {
+      flex-shrink: 0; width: 180px; border-radius: var(--r-md);
+      padding: 18px 16px; background: var(--white);
+      border: 1px solid rgba(0,0,0,.06); box-shadow: var(--shadow-sm);
+      cursor: pointer; display: block; color: inherit;
+      transition: transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s;
+    }
+    .sit-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .sit-card.featured {
+      background: linear-gradient(140deg, #FF5500 0%, #FF7733 100%);
+      border-color: transparent; color: white;
+    }
+    .sit-card.featured .sit-category,
+    .sit-card.featured .sit-count { color: rgba(255,255,255,.75); }
+    .sit-card.featured .sit-badge { background: rgba(255,255,255,.22); color: white; }
+    .sit-emoji { font-size: 26px; margin-bottom: 10px; line-height: 1; }
+    .sit-badge {
+      display: inline-block; font-size: 10px; font-weight: 600;
+      padding: 3px 9px; border-radius: var(--r-pill);
+      background: var(--pink-pale); color: var(--pink); margin-bottom: 8px;
+    }
+    .sit-title { font-size: 14.5px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.3; margin-bottom: 6px; }
+    .sit-category { font-size: 12px; color: var(--gray-500); margin-bottom: 14px; }
+    .sit-footer { display: flex; align-items: center; justify-content: space-between; }
+    .sit-count { font-size: 11px; color: var(--gray-500); font-weight: 500; }
+    .sit-arrow {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(0,0,0,.05);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sit-card.featured .sit-arrow { background: rgba(255,255,255,.22); }
+    .sit-arrow svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ─── AI CARD ─── */
+    .ai-section { padding: 0 20px; margin-bottom: 32px; }
+    .ai-card {
+      border-radius: var(--r-lg); padding: 22px 20px;
+      background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
+      color: white; position: relative; overflow: hidden;
+      cursor: pointer; transition: transform .2s;
+    }
+    .ai-card:hover { transform: translateY(-3px); }
+    .ai-card::before {
+      content: ''; position: absolute; top: -40px; right: -40px;
+      width: 160px; height: 160px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,107,157,.32) 0%, transparent 65%);
+    }
+    .ai-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,107,157,.2); border: 1px solid rgba(255,107,157,.3);
+      color: var(--pink-light); font-size: 11px; font-weight: 600;
+      padding: 4px 11px; border-radius: var(--r-pill); margin-bottom: 14px;
+    }
+    .ai-title { font-size: 18px; font-weight: 700; letter-spacing: -0.4px; line-height: 1.3; margin-bottom: 8px; }
+    .ai-desc { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.6; margin-bottom: 18px; }
+    .ai-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--pink); color: white; font-size: 13px; font-weight: 600;
+      padding: 10px 18px; border-radius: var(--r-pill);
+      box-shadow: var(--shadow-pink); transition: background .2s, transform .15s;
+    }
+    .ai-cta:hover { background: var(--pink-dark); transform: scale(1.03); }
+    .ai-cta svg { width: 14px; height: 14px; stroke: white; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ─── STATS ─── */
+    .stats-section { padding: 0 20px; margin-bottom: 32px; }
+    .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .stat-card { border-radius: var(--r-md); background: var(--gray-100); padding: 16px 12px; text-align: center; }
+    .stat-num { font-size: 22px; font-weight: 800; letter-spacing: -0.8px; color: var(--pink); margin-bottom: 4px; }
+    .stat-label { font-size: 11px; color: var(--gray-500); font-weight: 500; }
+
+    /* ─── FEED CARDS (shared) ─── */
+    .feed-section { margin-bottom: 32px; }
+    .feed-list { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; }
+
+    .feed-card {
+      border-radius: var(--r-md); background: var(--white);
+      border: 1px solid rgba(0,0,0,.06); box-shadow: var(--shadow-sm);
+      padding: 16px; cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .feed-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .feed-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .feed-user { display: flex; align-items: center; gap: 8px; }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; flex-shrink: 0;
+    }
+    .feed-username { font-size: 13px; font-weight: 600; color: var(--gray-700); }
+    .feed-time { font-size: 11px; color: var(--gray-300); margin-top: 1px; }
+    .feed-tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: var(--r-pill); white-space: nowrap; }
+    .tag-funeral { background: #FFF2EE; color: #FF5500; }
+    .tag-wedding  { background: #FFF0F6; color: #E45D8A; }
+    .tag-work     { background: #F0FBF4; color: #30A55F; }
+    .tag-school   { background: #FFF8E1; color: #E6A817; }
+    .tag-family   { background: var(--pink-pale); color: var(--pink); }
+    .feed-body { font-size: 14px; font-weight: 600; color: var(--gray-900); line-height: 1.5; letter-spacing: -0.2px; margin-bottom: 6px; }
+    .feed-preview {
+      font-size: 13px; color: var(--gray-500); line-height: 1.55;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden; margin-bottom: 12px;
+    }
+    .feed-footer { display: flex; align-items: center; gap: 14px; }
+    .reaction-btn {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12px; color: var(--gray-500); font-weight: 500; padding: 4px 0;
+      transition: color .18s;
+    }
+    .reaction-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .reaction-btn:hover { color: var(--pink); }
+    .reaction-btn.liked { color: var(--pink); }
+    .reaction-btn.liked svg { fill: var(--pink); }
+
+    /* ─── BANNER ─── */
+    .banner-section { padding: 0 20px; margin-bottom: 32px; }
+    .banner-card {
+      border-radius: var(--r-md); background: var(--pink-pale);
+      padding: 20px; display: flex; align-items: center;
+      justify-content: space-between; gap: 12px; cursor: pointer;
+      border: 1.5px solid rgba(255,107,157,.15); transition: background .2s;
+    }
+    .banner-card:hover { background: var(--pink-mid); }
+    .banner-label { font-size: 11px; font-weight: 600; color: var(--pink); margin-bottom: 6px; }
+    .banner-title { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.35; color: var(--gray-900); }
+    .banner-btn {
+      flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+      background: var(--pink); display: flex; align-items: center; justify-content: center;
+      box-shadow: var(--shadow-pink); transition: transform .2s;
+    }
+    .banner-card:hover .banner-btn { transform: scale(1.08) rotate(8deg); }
+    .banner-btn svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ─── SIMULATION SCREEN ─── */
+    .sim-screen { padding: 20px 20px 0; }
+
+    .sim-list-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .sim-list-header h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+    .sim-list-header span { font-size: 13px; color: var(--gray-500); }
+
+    .sim-cats {
+      display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px;
+      scrollbar-width: none; margin-bottom: 18px;
+    }
+    .sim-cats::-webkit-scrollbar { display: none; }
+    .sim-cat-chip {
+      flex-shrink: 0; padding: 8px 16px; border-radius: var(--r-pill);
+      border: 1.5px solid var(--gray-100); background: var(--white);
+      font-size: 13px; font-family: inherit; color: var(--gray-700);
+      font-weight: 600; cursor: pointer; transition: all .18s;
+    }
+    .sim-cat-chip.active { background: var(--pink); border-color: var(--pink); color: white; }
+
+    .sim-list { display: flex; flex-direction: column; gap: 12px; }
+    .sim-item {
+      border-radius: var(--r-md); border: 1.5px solid var(--gray-100);
+      padding: 18px 16px; cursor: pointer; background: var(--white);
+      transition: border-color .18s, box-shadow .18s, transform .18s;
+    }
+    .sim-item:hover { border-color: var(--pink); box-shadow: 0 4px 16px rgba(255,107,157,.12); transform: translateY(-2px); }
+    .sim-item-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+    .sim-item-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: var(--r-pill); background: var(--pink-pale); color: var(--pink); }
+    .sim-item-count { font-size: 11px; color: var(--gray-300); font-weight: 500; }
+    .sim-item-title { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.4; margin-bottom: 6px; }
+    .sim-item-desc { font-size: 13px; color: var(--gray-500); line-height: 1.55; }
+    .sim-item-footer { display: flex; align-items: center; margin-top: 12px; }
+    .difficulty { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; color: var(--gray-500); }
+    .diff-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gray-200); }
+    .diff-dot.on { background: var(--pink); }
+    .sim-start-btn {
+      margin-left: auto; padding: 7px 16px; border-radius: var(--r-pill);
+      background: var(--pink); color: white; font-size: 12px; font-weight: 700;
+      font-family: inherit; transition: background .2s;
+    }
+    .sim-start-btn:hover { background: var(--pink-dark); }
+
+    /* Active simulation */
+    .sim-active { display: none; }
+    .sim-active.show { display: block; }
+    .sim-list-wrap.hide { display: none; }
+
+    .sim-back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 600; color: var(--gray-500);
+      padding: 8px 0; margin-bottom: 16px; transition: color .18s;
+    }
+    .sim-back-btn:hover { color: var(--pink); }
+    .sim-back-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .sim-progress-wrap { height: 4px; background: var(--gray-100); border-radius: 2px; margin-bottom: 20px; overflow: hidden; }
+    .sim-progress-fill {
+      height: 100%; border-radius: 2px;
+      background: linear-gradient(90deg, var(--pink), var(--pink-light));
+      transition: width .4s ease;
+    }
+
+    .sim-sit-card {
+      border-radius: var(--r-lg); padding: 20px;
+      background: linear-gradient(135deg, var(--pink-pale) 0%, white 100%);
+      border: 1.5px solid rgba(255,107,157,.15); margin-bottom: 16px;
+    }
+    .sim-sit-tag { font-size: 12px; font-weight: 600; color: var(--pink); display: block; margin-bottom: 10px; }
+    .sim-sit-text { font-size: 15px; font-weight: 600; line-height: 1.6; color: var(--gray-900); margin-bottom: 6px; }
+    .sim-sit-hint { font-size: 12.5px; color: var(--gray-500); }
+
+    .sim-q-label { font-size: 14px; font-weight: 700; color: var(--gray-700); margin-bottom: 12px; }
+
+    .sim-choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .sim-choice {
+      border: 1.5px solid var(--gray-100); border-radius: var(--r-md);
+      padding: 16px; cursor: pointer;
+      display: flex; align-items: center; gap: 12px;
+      transition: border-color .18s, background .18s, transform .15s;
+    }
+    .sim-choice:hover { border-color: var(--pink); background: var(--pink-pale); transform: scale(1.01); }
+    .sim-choice.selected { border-color: var(--pink); background: var(--pink-pale); }
+    .choice-marker {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1.5px solid var(--gray-300);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--gray-500);
+      flex-shrink: 0; transition: all .18s;
+    }
+    .sim-choice.selected .choice-marker { background: var(--pink); border-color: var(--pink); color: white; }
+    .sim-choice-text { font-size: 14px; font-weight: 500; line-height: 1.5; color: var(--gray-900); }
+
+    .sim-submit-btn {
+      width: 100%; height: 52px; border-radius: var(--r-md);
+      background: var(--pink); color: white;
+      font-size: 15px; font-weight: 700; font-family: inherit;
+      box-shadow: var(--shadow-pink); transition: background .2s, transform .15s;
+    }
+    .sim-submit-btn:hover:not(:disabled) { background: var(--pink-dark); transform: scale(1.01); }
+    .sim-submit-btn:disabled { background: var(--gray-300); box-shadow: none; cursor: not-allowed; }
+
+    .sim-result-card {
+      display: none; border-radius: var(--r-lg);
+      background: linear-gradient(135deg, var(--pink), var(--pink-light));
+      color: white; padding: 20px; margin-bottom: 16px;
+    }
+    .sim-result-card.show { display: block; }
+    .sim-result-label { font-size: 11px; font-weight: 600; opacity: .8; margin-bottom: 8px; }
+    .sim-result-pct { font-size: 38px; font-weight: 900; letter-spacing: -1.5px; margin-bottom: 2px; }
+    .sim-result-pct-sub { font-size: 13px; opacity: .8; margin-bottom: 14px; }
+    .sim-result-text { font-size: 14.5px; font-weight: 600; line-height: 1.6; }
+
+    /* ─── COMMUNITY SCREEN ─── */
+    .comm-filters {
+      padding: 14px 20px 0; display: flex; gap: 8px;
+      overflow-x: auto; scrollbar-width: none; margin-bottom: 14px;
+    }
+    .comm-filters::-webkit-scrollbar { display: none; }
+    .filter-tab {
+      flex-shrink: 0; padding: 8px 16px; border-radius: var(--r-pill);
+      border: 1.5px solid var(--gray-100); background: var(--white);
+      font-size: 13px; font-family: inherit; color: var(--gray-700);
+      font-weight: 600; cursor: pointer; transition: all .18s;
+    }
+    .filter-tab.active { background: var(--pink); border-color: var(--pink); color: white; }
+
+    .write-fab {
+      position: fixed; bottom: 92px; right: calc(50% - 210px);
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--pink); border: none;
+      display: none; align-items: center; justify-content: center;
+      box-shadow: var(--shadow-pink); transition: transform .2s; z-index: 50;
+    }
+    .write-fab:hover { transform: scale(1.1); }
+    .write-fab svg { width: 22px; height: 22px; stroke: white; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    @media (max-width: 600px) { .write-fab { right: 16px; } }
+
+    /* ─── MY PAGE ─── */
+    .mypage-header {
+      background: linear-gradient(160deg, #FFF5F8 0%, #FFFFFF 60%);
+      padding: 28px 20px 24px; position: relative; overflow: hidden;
+    }
+    .mypage-header::before {
+      content: ''; position: absolute; top: -40px; right: -40px;
+      width: 160px; height: 160px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,107,157,.12) 0%, transparent 70%);
+    }
+    .profile-row { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+    .profile-avatar {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--pink), var(--pink-light));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; flex-shrink: 0; box-shadow: var(--shadow-pink);
+    }
+    .profile-name { font-size: 17px; font-weight: 700; letter-spacing: -0.2px; margin-bottom: 4px; color: var(--gray-900); }
+    .profile-level { font-size: 12px; color: var(--gray-500); font-weight: 500; }
+    .profile-level span { color: var(--pink); font-weight: 700; }
+    .profile-edit-btn {
+      margin-left: auto; padding: 8px 16px; border-radius: var(--r-pill);
+      border: 1.5px solid var(--gray-100); font-size: 13px; font-weight: 600;
+      color: var(--gray-700); font-family: inherit; transition: all .18s;
+    }
+    .profile-edit-btn:hover { border-color: var(--pink); color: var(--pink); }
+    .profile-stats {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px; background: var(--gray-100); border-radius: var(--r-md); overflow: hidden;
+    }
+    .profile-stat { background: white; padding: 14px 8px; text-align: center; }
+    .profile-stat-num { font-size: 20px; font-weight: 800; color: var(--gray-900); letter-spacing: -0.5px; }
+    .profile-stat-num span { color: var(--pink); }
+    .profile-stat-label { font-size: 11px; color: var(--gray-500); font-weight: 500; margin-top: 2px; }
+
+    .mypage-section { padding: 22px 20px 0; }
+    .mypage-section-title { font-size: 13px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.3px; text-transform: uppercase; margin-bottom: 10px; }
+
+    .menu-list { display: flex; flex-direction: column; gap: 2px; }
+    .menu-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 14px; border-radius: var(--r-md);
+      cursor: pointer; transition: background .18s;
+    }
+    .menu-item:hover { background: var(--gray-100); }
+    .menu-icon { width: 38px; height: 38px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .menu-label { font-size: 14.5px; font-weight: 600; color: var(--gray-900); }
+    .menu-sub { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+    .menu-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .menu-badge { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: var(--r-pill); background: var(--pink-pale); color: var(--pink); }
+    .menu-arrow svg { width: 16px; height: 16px; stroke: var(--gray-300); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .section-divider { height: 8px; background: var(--gray-100); margin: 10px 0; }
+
+    /* ─── MESSAGES ─── */
+    .msg-search-wrap { position: relative; padding: 12px 20px 14px; }
+    .msg-search {
+      width: 100%; height: 44px; padding: 0 16px 0 44px;
+      border-radius: var(--r-pill); border: none; background: var(--gray-100);
+      font-size: 14px; font-family: inherit; color: var(--black); outline: none;
+    }
+    .msg-search::placeholder { color: var(--gray-300); }
+    .msg-search-icon { position: absolute; left: 36px; top: 50%; transform: translateY(-50%); color: var(--gray-300); }
+
+    .msg-list { display: flex; flex-direction: column; }
+    .msg-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px; cursor: pointer; transition: background .15s;
+    }
+    .msg-item:hover { background: var(--gray-100); }
+    .msg-item.unread .msg-name { font-weight: 700; }
+    .msg-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700; flex-shrink: 0; position: relative;
+    }
+    .msg-avatar.ai-avatar { background: linear-gradient(135deg, #1A1A1A, #2D2D2D); color: var(--pink); font-size: 13px; font-weight: 900; }
+    .unread-dot {
+      position: absolute; top: 1px; right: 1px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--pink); border: 2px solid var(--white);
+    }
+    .msg-body { flex: 1; min-width: 0; }
+    .msg-name { font-size: 14.5px; font-weight: 600; color: var(--gray-900); margin-bottom: 3px; }
+    .msg-preview { font-size: 13px; color: var(--gray-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .msg-meta { text-align: right; flex-shrink: 0; }
+    .msg-time { font-size: 11px; color: var(--gray-300); margin-bottom: 5px; }
+    .msg-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 20px; height: 20px; border-radius: var(--r-pill);
+      background: var(--pink); color: white; font-size: 10px; font-weight: 700;
+      padding: 0 5px;
+    }
+    .msg-sep { height: 1px; background: var(--gray-100); margin: 0 20px; }
+
+    /* ─── POST DETAIL OVERLAY ─── */
+    .post-detail-overlay {
+      position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 430px; height: 100%;
+      background: #F5F5F5; z-index: 350; overflow-y: auto;
+      display: none; flex-direction: column;
+    }
+    .post-detail-overlay.show { display: flex; }
+    .pd-topbar {
+      position: sticky; top: 0; background: rgba(255,255,255,.96);
+      backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,.06);
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px; z-index: 10; flex-shrink: 0;
+    }
+    .pd-back {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--gray-100); display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0;
+    }
+    .pd-back svg { width: 18px; height: 18px; stroke: var(--gray-700); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .pd-topbar-title { font-size: 16px; font-weight: 700; color: var(--black); }
+    .pd-body { padding: 16px 20px; flex: 1; }
+    .pd-post-card {
+      background: var(--white); border-radius: var(--r-md);
+      border: 1px solid rgba(0,0,0,.06); padding: 18px; margin-bottom: 12px;
+    }
+    .pd-post-full { font-size: 14px; color: var(--gray-700); line-height: 1.7; margin-top: 10px; }
+    .pd-post-footer { display: flex; gap: 16px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--gray-100); }
+    .pd-comments-label { font-size: 13px; font-weight: 700; color: var(--gray-500); margin-bottom: 10px; }
+    .pd-comment {
+      background: var(--white); border-radius: var(--r-md);
+      border: 1px solid rgba(0,0,0,.06); padding: 14px; margin-bottom: 8px;
+    }
+    .pd-comment-user { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .pd-comment-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; flex-shrink: 0;
+    }
+    .pd-comment-name { font-size: 12px; font-weight: 700; color: var(--black); }
+    .pd-comment-time { font-size: 11px; color: var(--gray-300); margin-left: auto; }
+    .pd-comment-text { font-size: 13px; color: var(--gray-700); line-height: 1.6; }
+    .pd-ai-comment { background: var(--pink-pale); border-color: var(--pink-mid); }
+    .pd-ai-label {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--pink); color: white; font-size: 10px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 2px 8px; margin-bottom: 8px;
+    }
+    .pd-comment-input-row {
+      position: sticky; bottom: 0; background: var(--white);
+      border-top: 1px solid var(--gray-100); padding: 12px 16px;
+      display: flex; gap: 8px; align-items: center; flex-shrink: 0;
+    }
+    .pd-comment-input {
+      flex: 1; background: var(--gray-100); border: none; border-radius: var(--r-pill);
+      padding: 10px 16px; font-size: 13px; font-family: inherit; color: var(--black);
+      outline: none;
+    }
+    .pd-send-btn {
+      width: 36px; height: 36px; background: var(--pink); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer;
+    }
+    .pd-send-btn svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ─── BOTTOM NAV ─── */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 430px; height: 72px;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(0,0,0,.06);
+      display: flex; align-items: center; justify-content: space-around;
+      padding: 0 4px; z-index: 200;
+    }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 6px 8px; border-radius: var(--r-sm); flex: 1;
+      transition: background .18s; position: relative;
+    }
+    .nav-badge {
+      position: absolute; top: 6px; right: 12px;
+      background: var(--pink); width: 8px; height: 8px;
+      border-radius: 9999px; border: 1.5px solid #fff;
+      pointer-events: none;
+    }
+    .nav-item:not(.nav-home):hover { background: var(--pink-pale); }
+    .nav-item svg { width: 22px; height: 22px; stroke: var(--gray-300); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: stroke .18s; }
+    .nav-item span { font-size: 9.5px; color: var(--gray-300); font-weight: 600; transition: color .18s; white-space: nowrap; }
+    .nav-item.active svg { stroke: var(--pink); }
+    .nav-item.active span { color: var(--pink); }
+
+    /* Center HOME button */
+    .nav-item.nav-home {
+      position: relative;
+    }
+    .nav-item.nav-home .nav-home-inner {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      background: var(--pink); border-radius: var(--r-md);
+      padding: 8px 14px;
+      box-shadow: 0 4px 16px rgba(255,85,0,.35);
+    }
+    .nav-item.nav-home svg { stroke: var(--white); width: 22px; height: 22px; }
+    .nav-item.nav-home span { color: var(--white); font-size: 10px; font-weight: 700; }
+
+    /* ─── MODAL ─── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.5); backdrop-filter: blur(6px);
+      z-index: 500; opacity: 0; pointer-events: none;
+      transition: opacity .3s;
+      display: flex; align-items: flex-end; justify-content: center;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-sheet {
+      width: 100%; max-width: 430px; background: var(--white);
+      border-radius: 28px 28px 0 0; padding: 12px 24px 48px;
+      transform: translateY(100%);
+      transition: transform .4s cubic-bezier(.32,0,.67,0);
+    }
+    .modal-overlay.open .modal-sheet { transform: translateY(0); transition: transform .4s cubic-bezier(.16,1,.3,1); }
+    .modal-handle { width: 36px; height: 4px; background: var(--gray-300); border-radius: 2px; margin: 0 auto 22px; }
+    .modal-title { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
+    .modal-sub { font-size: 13px; color: var(--gray-500); margin-bottom: 22px; }
+    .modal-opts { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+    .modal-opt {
+      border: 1.5px solid var(--gray-100); border-radius: var(--r-md);
+      padding: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: border-color .18s, background .18s;
+    }
+    .modal-opt:hover, .modal-opt.selected { border-color: var(--pink); background: var(--pink-pale); }
+    .modal-opt-label { font-size: 14.5px; font-weight: 600; }
+    .modal-opt-meta { font-size: 12px; color: var(--gray-500); margin-top: 3px; }
+    .modal-opt-pct { font-size: 20px; font-weight: 800; color: var(--pink); }
+    .modal-result {
+      display: none; border-radius: var(--r-md);
+      background: linear-gradient(135deg, var(--pink), var(--pink-light));
+      color: white; padding: 18px; margin-bottom: 16px;
+    }
+    .modal-result.visible { display: block; }
+    .modal-result-label { font-size: 11px; font-weight: 600; opacity: .8; margin-bottom: 6px; }
+    .modal-result-text { font-size: 15px; font-weight: 700; line-height: 1.45; }
+    .modal-close-btn {
+      width: 100%; height: 50px; border-radius: var(--r-md);
+      border: 1.5px solid var(--gray-100); background: var(--white);
+      font-size: 14px; font-family: inherit; font-weight: 600; color: var(--gray-500);
+      cursor: pointer; transition: border-color .18s, color .18s;
+    }
+    .modal-close-btn:hover { border-color: var(--pink); color: var(--pink); }
+
+    /* ─── TOAST ─── */
+    .toast {
+      position: fixed; bottom: 90px; left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: var(--gray-900); color: white;
+      font-size: 13px; font-weight: 500; padding: 12px 20px;
+      border-radius: var(--r-pill); white-space: nowrap;
+      z-index: 600; opacity: 0; pointer-events: none;
+      transition: opacity .25s, transform .25s;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ─── REVEAL ANIMATIONS ─── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .5s ease, transform .5s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-stagger > * { opacity: 0; transform: translateY(16px); transition: opacity .4s ease, transform .4s ease; }
+    .reveal-stagger.visible > *:nth-child(1) { opacity:1; transform:none; transition-delay:0s; }
+    .reveal-stagger.visible > *:nth-child(2) { opacity:1; transform:none; transition-delay:.08s; }
+    .reveal-stagger.visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:.16s; }
+    .reveal-stagger.visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:.24s; }
+    .reveal-stagger.visible > *:nth-child(5) { opacity:1; transform:none; transition-delay:.32s; }
+  </style>
 </head>
 <body>
+<div class="app-shell" id="appShell">
 
-<!-- ── NAV ────────────────────────────── -->
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="#" class="logo-lockup">
-      <img src="logo-noonchi.png" alt="눈치코치" class="logo-img" />
-    </a>
-    <div class="nav-links">
-      <a href="#scenarios" class="nav-link">상황 유형</a>
-      <a href="#simulate"  class="nav-link">시뮬레이션</a>
-      <a href="#community" class="nav-link">후기</a>
+  <!-- TOPBAR -->
+  <header class="topbar" id="topbar">
+    <div class="topbar-logo">
+      <img src="logo.jpg" alt="눈치코치" />
     </div>
-    <a href="#download" class="nav-cta">무료 시작</a>
-  </div>
-</nav>
+    <div class="topbar-right">
+      <button class="icon-btn notif-dot" onclick="showToast('새 알림 3개가 있어요')">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+      <button class="icon-btn" onclick="switchTab('messages')">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </button>
+    </div>
+  </header>
 
-<!-- ── HERO ────────────────────────────── -->
-<section class="hero">
-  <div class="hero-content">
-    <div class="badge">
-      <span class="badge-dot"></span>
-      당신을 위한 사회 예절 가이드
-    </div>
-    <h1 class="hero-title">
-      <span class="hero-emph">눈치</span><span class="hero-light"> 있게,</span><br />
-      <span class="hero-emph">코치</span><span class="hero-light"> 받자.</span>
-    </h1>
-    <p class="hero-sub">
-      다양한 사회적 상황들, 너무 어렵죠?<br />
-      장례식, 결혼식, 회식… 사소한 것들까지<br />
-      실제 데이터를 보면서 함께 익혀봐요!
-    </p>
-    <div class="hero-cta-row">
-      <a href="#simulate" class="btn-primary">시뮬레이션 보기</a>
-      <a href="#community" class="btn-ghost">사용 후기 보기</a>
-    </div>
-    <div class="hero-proof">
-      <div class="proof-faces">
-        <span class="face" style="background:#FFE8D6">🙋</span>
-        <span class="face" style="background:#D6E8FF">🤔</span>
-        <span class="face" style="background:#D6FFE8">😌</span>
-        <span class="face" style="background:#FFE8F6">🌙</span>
-      </div>
-      <p class="proof-label"><strong>4,173명</strong>이 이미 연습 중이에요</p>
-    </div>
-  </div>
+  <!-- ① HOME -->
+  <div class="screen active" id="screen-home">
+    <main class="scroll-content">
 
-  <div class="hero-device">
-    <div class="device">
-      <div class="device-island"></div>
-      <div class="device-screen">
-        <div class="ds-appbar">
-          <div class="ds-logo">
-            <div class="ds-logo-mark"><span class="ds-logo-n">N</span></div>
-            <span class="ds-logo-name">눈치코치</span>
-          </div>
+      <section class="hero reveal">
+        <div class="hero-label"><span class="dot"></span>지금 가장 많이 찾는 상황</div>
+        <p class="hero-greeting">안녕하세요 👋</p>
+        <h1 class="hero-title">이 상황,<br>어떻게 하면 <span class="hl">괜찮을까요?</span></h1>
+        <p class="hero-sub">실제 사람들의 경험을 바탕으로<br>상황별 예절을 안내해드려요</p>
+      </section>
+
+      <section class="search-section reveal">
+        <div class="search-wrap">
+          <input class="search-bar" type="text" id="searchInput" placeholder="상황을 입력해보세요 (예: 장례식 부의금)" autocomplete="off" />
+          <span class="search-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <span class="search-ai-badge">AI</span>
         </div>
-        <div class="ds-label">오늘의 상황</div>
-        <div class="ds-card">
-          <span class="ds-tag">💬 직장</span>
-          <p class="ds-situation">팀장님이 단톡방에 '다들 수고했어요~'를 보냈다.</p>
+        <div class="quick-chips">
+          <button class="chip active" onclick="filterChip(this,'전체')">전체</button>
+          <button class="chip" onclick="filterChip(this,'장례식')">⚫ 장례식</button>
+          <button class="chip" onclick="filterChip(this,'결혼식')">💍 결혼식</button>
+          <button class="chip" onclick="filterChip(this,'회식')">🍻 회식</button>
+          <button class="chip" onclick="filterChip(this,'직장')">💼 직장</button>
+          <button class="chip" onclick="filterChip(this,'학교')">🎓 학교</button>
         </div>
-        <div class="ds-choice">😊 이모티콘으로 간단히 답장한다</div>
-        <div class="ds-choice active">✍️ 정중하게 텍스트로 감사 인사를 한다</div>
-        <div class="ds-stat">
-          <span class="ds-pct">68%</span>
-          <span class="ds-pct-label">가 같은 선택을 했어요</span>
+      </section>
+
+      <section class="cards-scroll-section">
+        <div class="section-header reveal">
+          <h2 class="section-title">🔥 지금 핫한 상황</h2>
+          <button class="section-more" onclick="switchTab('simulation')">전체보기 <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
         </div>
-      </div>
-      <div class="device-bar"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ── SCENARIOS ────────────────────────────── -->
-<section class="section-alt" id="scenarios">
-  <div class="container">
-    <div class="section-head">
-      <p class="eyebrow">다루는 상황들</p>
-      <h2 class="sec-title">처음이라 어색한<br />그 순간들</h2>
-      <p class="sec-sub">사회생활에서 누구나 한 번쯤 맞닥뜨리는 상황들.<br />모르면 난처하고, 알면 자신감이 달라져요.</p>
-    </div>
-    <div class="card-grid col-3">
-      <div class="s-card">
-        <div class="s-icon">🕯️</div>
-        <span class="s-tag">장례식</span>
-        <p class="s-desc">처음 가는 장례식, 어디서 절을 하고<br />뭐라고 말해야 할까?</p>
-      </div>
-      <div class="s-card">
-        <div class="s-icon">💍</div>
-        <span class="s-tag">결혼식</span>
-        <p class="s-desc">친한 친구 결혼식 축의금,<br />얼마가 적당한지 모르겠어.</p>
-      </div>
-      <div class="s-card">
-        <div class="s-icon">🍻</div>
-        <span class="s-tag">회식</span>
-        <p class="s-desc">팀장이 첫 잔을 권할 때,<br />어떻게 받는 게 예의일까?</p>
-      </div>
-      <div class="s-card">
-        <div class="s-icon">🤝</div>
-        <span class="s-tag">직장</span>
-        <p class="s-desc">처음 만나는 거래처 담당자,<br />명함은 어떻게 주고받아야 하지?</p>
-      </div>
-      <div class="s-card">
-        <div class="s-icon">🎊</div>
-        <span class="s-tag">경조사</span>
-        <p class="s-desc">선배가 승진했을 때,<br />어떻게 축하 인사를 전해야 자연스럽지?</p>
-      </div>
-      <div class="s-card">
-        <div class="s-icon">🏥</div>
-        <span class="s-tag">병문안</span>
-        <p class="s-desc">처음 병문안을 가는데,<br />무엇을 들고 가고 뭐라고 해야 하나?</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── APP PREVIEW ────────────────────────────── -->
-<section class="preview-section" id="preview">
-  <div class="container">
-    <div class="section-head center">
-      <p class="eyebrow">이렇게 작동해요</p>
-      <h2 class="sec-title">어플 하나로<br />이런 연습이 되네?</h2>
-    </div>
-
-    <div class="phones-stage">
-
-      <!-- Phone 1 — 홈 -->
-      <div class="phone-col side left">
-        <p class="phone-chip">🗂 상황 모아보기</p>
-        <div class="iphone">
-          <div class="iphone-top"><div class="iphone-island"></div></div>
-          <div class="iphone-screen">
-            <div class="app-bar">
-              <div class="app-bar-logo">
-                <div class="app-logo-mark"><span class="app-logo-n">N</span></div>
-                <span class="app-bar-title">눈치코치</span>
-              </div>
+        <div class="cards-scroll reveal-stagger">
+          <a class="sit-card featured" onclick="openModal('funeral')" href="javascript:void(0)">
+            <div class="sit-emoji">⚫</div>
+            <div class="sit-badge">인기 1위</div>
+            <div class="sit-title">장례식장<br>첫 방문 예절</div>
+            <div class="sit-category">장례식 · 공식</div>
+            <div class="sit-footer">
+              <span class="sit-count">2,847명 확인</span>
+              <div class="sit-arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
             </div>
-            <div class="app-section-label">오늘의 상황 <span class="app-count">6</span></div>
-            <div class="app-list">
-              <div class="app-item active">
-                <span class="app-item-icon">🕯️</span>
-                <div class="app-item-body">
-                  <span class="app-item-tag">장례식</span>
-                  <span class="app-item-title">조문 순서를 모르겠다</span>
-                </div>
-                <span class="app-item-arr">›</span>
+          </a>
+          <a class="sit-card" onclick="openModal('wedding')" href="javascript:void(0)">
+            <div class="sit-emoji">💍</div>
+            <div class="sit-badge">주간 급상승</div>
+            <div class="sit-title">결혼식<br>축의금 얼마?</div>
+            <div class="sit-category">결혼식 · 금전</div>
+            <div class="sit-footer">
+              <span class="sit-count">1,523명 확인</span>
+              <div class="sit-arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            </div>
+          </a>
+          <a class="sit-card" onclick="openModal('work')" href="javascript:void(0)">
+            <div class="sit-emoji">🍻</div>
+            <div class="sit-badge">신규</div>
+            <div class="sit-title">첫 회식<br>어디 앉지?</div>
+            <div class="sit-category">회식 · 직장</div>
+            <div class="sit-footer">
+              <span class="sit-count">987명 확인</span>
+              <div class="sit-arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            </div>
+          </a>
+          <a class="sit-card" onclick="showToast('준비중이에요')" href="javascript:void(0)">
+            <div class="sit-emoji">🎓</div>
+            <div class="sit-badge">학교</div>
+            <div class="sit-title">교수님께<br>이메일 쓰기</div>
+            <div class="sit-category">학교 · 커뮤니케이션</div>
+            <div class="sit-footer">
+              <span class="sit-count">654명 확인</span>
+              <div class="sit-arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <section class="ai-section reveal">
+        <div class="ai-card" onclick="openModal('funeral')">
+          <div class="ai-tag">✦ AI 분석</div>
+          <div class="ai-title">상황을 입력하면<br>AI가 리스크를 분석해줘요</div>
+          <div class="ai-desc">친밀도, 장소, 상황을 입력하면<br>예상 리스크와 추천 행동을 알려드립니다</div>
+          <button class="ai-cta">지금 분석해보기 <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        </div>
+      </section>
+
+      <section class="stats-section reveal">
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-num">12k+</div><div class="stat-label">등록 사례</div></div>
+          <div class="stat-card"><div class="stat-num">4.9</div><div class="stat-label">만족도</div></div>
+          <div class="stat-card"><div class="stat-num">38k</div><div class="stat-label">활성 유저</div></div>
+        </div>
+      </section>
+
+      <section class="feed-section">
+        <div class="section-header reveal">
+          <h2 class="section-title">💬 커뮤니티 피드</h2>
+          <button class="section-more" onclick="switchTab('community')">전체보기 <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+        <div class="feed-list reveal-stagger">
+          <div class="feed-card" onclick="showToast('상세 보기')">
+            <div class="feed-top">
+              <div class="feed-user">
+                <div class="avatar" style="background:#FFF0F6;color:#E45D8A;">달</div>
+                <div><div class="feed-username">달빛산책중</div><div class="feed-time">23분 전</div></div>
               </div>
-              <div class="app-item">
-                <span class="app-item-icon">🍻</span>
-                <div class="app-item-body">
-                  <span class="app-item-tag">회식</span>
-                  <span class="app-item-title">술 권할 때 거절하는 법</span>
-                </div>
-                <span class="app-item-arr">›</span>
-              </div>
-              <div class="app-item">
-                <span class="app-item-icon">💍</span>
-                <div class="app-item-body">
-                  <span class="app-item-tag">결혼식</span>
-                  <span class="app-item-title">축의금 적정 금액</span>
-                </div>
-                <span class="app-item-arr">›</span>
-              </div>
-              <div class="app-item">
-                <span class="app-item-icon">🤝</span>
-                <div class="app-item-body">
-                  <span class="app-item-tag">직장</span>
-                  <span class="app-item-title">명함 주고받는 예절</span>
-                </div>
-                <span class="app-item-arr">›</span>
-              </div>
+              <span class="feed-tag tag-funeral">장례식</span>
+            </div>
+            <div class="feed-body">절을 한 번 해야 하나요, 두 번 해야 하나요?</div>
+            <div class="feed-preview">처음 장례식장에 가는데 절하는 방법을 모르겠어요. 친구 아버지 장례식인데 어떻게 해야 예의 바른 건지 알려주세요.</div>
+            <div class="feed-footer">
+              <button class="reaction-btn liked" id="like1" onclick="toggleLike(event,'like1','like1Count')">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span id="like1Count">128</span>
+              </button>
+              <button class="reaction-btn" onclick="showToast('댓글 달기')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>43</span></button>
+              <button class="reaction-btn" onclick="showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
             </div>
           </div>
-          <div class="iphone-bar"></div>
-        </div>
-        <p class="phone-chip">📱 직관적인 홈 화면</p>
-      </div>
-
-      <!-- Phone 2 — 시뮬레이션 (center) -->
-      <div class="phone-col center">
-        <p class="phone-chip">⚡ 반응 선택</p>
-        <div class="iphone large">
-          <div class="iphone-top"><div class="iphone-island large"></div></div>
-          <div class="iphone-screen">
-            <div class="app-bar">
-              <span class="app-back">‹</span>
-              <span class="app-bar-title">상황 연습</span>
-              <span class="app-bar-right">2 / 6</span>
-            </div>
-            <div class="app-prog-wrap">
-              <div class="app-prog-fill" style="width:33%"></div>
-            </div>
-            <div class="app-situation">
-              <div class="app-sit-header">
-                <span class="app-sit-tag">🍻 회식 · 첫 회식 자리</span>
-                <span class="app-sit-participants">👥 1,247명 참여</span>
+          <div class="feed-card" onclick="showToast('상세 보기')">
+            <div class="feed-top">
+              <div class="feed-user">
+                <div class="avatar" style="background:#F0FBF4;color:#30A55F;">구</div>
+                <div><div class="feed-username">구름위를걷는중</div><div class="feed-time">1시간 전</div></div>
               </div>
-              <p class="app-sit-text">팀장님이 첫 잔을 직접 따라주시겠다고 하셨다. 주변 동료들도 모두 지켜보고 있다.</p>
-              <p class="app-sit-hint">💡 이런 상황, 한 번쯤 겪어봤죠?</p>
+              <span class="feed-tag tag-work">직장</span>
             </div>
-            <p class="app-q-label">나라면 어떻게 할 것 같아요?</p>
-            <div class="app-choices">
-              <div class="app-choice selected">
-                <span class="choice-dot"></span>
-                두 손으로 잔을 들고 "감사합니다" 하고 받는다
-              </div>
-              <div class="app-choice">
-                <span class="choice-dot"></span>
-                한 손으로 자연스럽게 잔을 받는다
-              </div>
-              <div class="app-choice">
-                <span class="choice-dot"></span>
-                처음엔 사양하고, 다시 권하실 때 받는다
-              </div>
-            </div>
-            <button class="app-submit">이걸로 골랐어요</button>
-          </div>
-          <div class="iphone-bar"></div>
-        </div>
-        <p class="phone-chip">🎯 세 가지 중에서 고르기</p>
-      </div>
-
-      <!-- Phone 3 — 결과 -->
-      <div class="phone-col side right">
-        <p class="phone-chip">📊 결과 확인</p>
-        <div class="iphone">
-          <div class="iphone-top"><div class="iphone-island"></div></div>
-          <div class="iphone-screen">
-            <div class="app-bar">
-              <span class="app-back">‹</span>
-              <span class="app-bar-title">결과 나왔어요</span>
-              <span></span>
-            </div>
-            <div class="app-ring-wrap">
-              <div class="app-ring">
-                <span class="app-ring-pct">78%</span>
-                <span class="app-ring-sub">가 선택</span>
-              </div>
-            </div>
-            <div class="app-bars">
-              <div class="app-bar-row">
-                <div class="app-bar-label"><span class="dot-win"></span>두 손으로 감사하게</div>
-                <div class="app-bar-track"><div class="app-bar-fill win" style="width:78%"></div></div>
-                <span class="app-bar-pct win">78%</span>
-              </div>
-              <div class="app-bar-row">
-                <div class="app-bar-label"><span class="dot-gray"></span>한 손으로 받기</div>
-                <div class="app-bar-track"><div class="app-bar-fill" style="width:15%"></div></div>
-                <span class="app-bar-pct">15%</span>
-              </div>
-              <div class="app-bar-row">
-                <div class="app-bar-label"><span class="dot-gray"></span>처음엔 사양하기</div>
-                <div class="app-bar-track"><div class="app-bar-fill" style="width:7%"></div></div>
-                <span class="app-bar-pct">7%</span>
-              </div>
-            </div>
-            <div class="app-insight">💡 어른이 따르실 때 두 손으로 받는 게 기본 예의예요</div>
-          </div>
-          <div class="iphone-bar"></div>
-        </div>
-        <p class="phone-chip">✨ 실제 사람들 평균</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ── SIMULATION ────────────────────────────── -->
-<section class="sim-section" id="simulate">
-  <div class="container">
-    <div class="section-head center">
-      <p class="eyebrow">직접 해보는 연습</p>
-      <h2 class="sec-title">선택하고, 결과 보고,<br />그렇게 감각이 쌓여요</h2>
-      <p class="sec-sub">정답을 알려주는 게 아니에요.<br />실제 사람들의 선택과 그 결과를 보면서 스스로 판단하게 돼요.</p>
-    </div>
-
-    <div class="sim-flow">
-
-      <div class="sim-step">
-        <div class="sim-step-meta">
-          <span class="step-badge">01</span>
-          <span class="step-name">이런 상황이에요</span>
-        </div>
-        <div class="sim-card">
-          <span class="sim-tag">🍻 회식 · 신입사원 첫 회식</span>
-          <p class="sim-text">팀장님이 "내가 첫 잔 따라줄게" 하시며 술병을 들었다. 주변 사람들이 모두 지켜보고 있다.</p>
-        </div>
-      </div>
-
-      <div class="sim-divider">
-        <div class="sim-divider-line"></div>
-        <div class="sim-divider-dot"></div>
-        <div class="sim-divider-line"></div>
-      </div>
-
-      <div class="sim-step">
-        <div class="sim-step-meta">
-          <span class="step-badge">02</span>
-          <span class="step-name">나라면 어떻게 할 것 같아요?</span>
-        </div>
-        <div class="sim-card">
-          <div class="sim-options">
-            <div class="sim-option selected">
-              <span class="opt-marker">A</span>
-              <span>두 손으로 잔을 들고 "감사합니다" 하며 공손히 받는다.</span>
-            </div>
-            <div class="sim-option">
-              <span class="opt-marker">B</span>
-              <span>한 손으로 자연스럽게 잔을 받는다.</span>
-            </div>
-            <div class="sim-option">
-              <span class="opt-marker">C</span>
-              <span>"괜찮습니다" 하고 처음엔 사양한 뒤, 다시 권하실 때 받는다.</span>
+            <div class="feed-body">신입인데 회식 자리에서 술 안 마셔도 될까요?</div>
+            <div class="feed-preview">입사한 지 두 달 됐는데 팀장님이 술 좀 마셔야 한다고 하셔서요. 강요처럼 느껴지는데 어떻게 해야 할지...</div>
+            <div class="feed-footer">
+              <button class="reaction-btn" id="like2" onclick="toggleLike(event,'like2','like2Count')">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span id="like2Count">94</span>
+              </button>
+              <button class="reaction-btn" onclick="showToast('댓글 달기')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>31</span></button>
+              <button class="reaction-btn" onclick="showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="sim-divider">
-        <div class="sim-divider-line"></div>
-        <div class="sim-divider-dot"></div>
-        <div class="sim-divider-line"></div>
-      </div>
-
-      <div class="sim-step">
-        <div class="sim-step-meta">
-          <span class="step-badge">03</span>
-          <span class="step-name">다른 사람들은 어떻게 했고, 어떻게 됐을까요?</span>
+      <section class="banner-section reveal">
+        <div class="banner-card" onclick="switchTab('simulation')">
+          <div>
+            <div class="banner-label">✦ 시뮬레이션</div>
+            <div class="banner-title">지금 내 상황을<br>직접 시뮬레이션해볼까요?</div>
+          </div>
+          <div class="banner-btn"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
         </div>
-        <div class="sim-card result">
-          <div class="sim-results">
-            <div class="sim-result-row winner">
-              <div class="sim-result-left">
-                <span class="opt-marker sm">A</span>
-                <span class="sim-result-name">두 손으로 공손히 받기</span>
-                <span class="result-crown">👑 제일 많이 골랐어요</span>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ② SIMULATION -->
+  <div class="screen" id="screen-simulation">
+    <main class="scroll-content">
+      <div class="sim-screen">
+
+        <!-- Active simulation view -->
+        <div class="sim-active" id="simActive">
+          <button class="sim-back-btn" onclick="closeSim()">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            목록으로
+          </button>
+          <div class="sim-progress-wrap"><div class="sim-progress-fill" id="simProgress" style="width:0%"></div></div>
+          <div class="sim-sit-card" id="simSitCard"></div>
+          <p class="sim-q-label">나라면 어떻게 할 것 같아요?</p>
+          <div class="sim-choices" id="simChoices"></div>
+          <div class="sim-result-card" id="simResultCard">
+            <div class="sim-result-label">✦ 다른 사람들의 선택</div>
+            <div class="sim-result-pct" id="simResultPct"></div>
+            <div class="sim-result-pct-sub" id="simResultSub"></div>
+            <div class="sim-result-text" id="simResultText"></div>
+          </div>
+          <button class="sim-submit-btn" id="simSubmitBtn" onclick="submitSim()" disabled>이걸로 골랐어요</button>
+          <div style="height:20px"></div>
+        </div>
+
+        <!-- Scenario list -->
+        <div class="sim-list-wrap" id="simListWrap">
+          <div class="sim-list-header">
+            <h2>시뮬레이션</h2>
+            <span>총 21개 상황</span>
+          </div>
+          <div class="sim-cats">
+            <button class="sim-cat-chip active" onclick="filterSim(this,'전체')">전체</button>
+            <button class="sim-cat-chip" onclick="filterSim(this,'장례식')">⚫ 장례식</button>
+            <button class="sim-cat-chip" onclick="filterSim(this,'결혼식')">💍 결혼식</button>
+            <button class="sim-cat-chip" onclick="filterSim(this,'회식')">🍻 회식</button>
+            <button class="sim-cat-chip" onclick="filterSim(this,'직장')">💼 직장</button>
+            <button class="sim-cat-chip" onclick="filterSim(this,'학교')">🎓 학교</button>
+          </div>
+          <div class="sim-list">
+            <div class="sim-item" data-cat="장례식" onclick="startSim('funeral')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">⚫ 장례식</span>
+                <span class="sim-item-count">2,847명 참여</span>
               </div>
-              <div class="sim-result-right">
-                <span class="result-pct">78%</span>
-                <div class="result-track"><div class="result-fill win" style="width:78%"></div></div>
+              <div class="sim-item-title">장례식장 첫 방문, 절은 몇 번?</div>
+              <div class="sim-item-desc">처음 장례식장에 가는데 절하는 순서와 횟수를 모르겠어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot"></span> 보통</span>
+                <button class="sim-start-btn">시작하기</button>
               </div>
             </div>
-            <div class="sim-result-row">
-              <div class="sim-result-left">
-                <span class="opt-marker sm">B</span>
-                <span class="sim-result-name">한 손으로 받기</span>
+            <div class="sim-item" data-cat="결혼식" onclick="startSim('wedding')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">💍 결혼식</span>
+                <span class="sim-item-count">1,523명 참여</span>
               </div>
-              <div class="sim-result-right">
-                <span class="result-pct muted">15%</span>
-                <div class="result-track"><div class="result-fill" style="width:15%"></div></div>
-              </div>
-            </div>
-            <div class="sim-result-row">
-              <div class="sim-result-left">
-                <span class="opt-marker sm">C</span>
-                <span class="sim-result-name">처음엔 사양하기</span>
-              </div>
-              <div class="sim-result-right">
-                <span class="result-pct muted">7%</span>
-                <div class="result-track"><div class="result-fill" style="width:7%"></div></div>
+              <div class="sim-item-title">대학 동기 결혼식 축의금, 얼마가 적당해?</div>
+              <div class="sim-item-desc">가끔 연락하는 대학 동기 결혼식에 초대받았을 때 적정 금액은?</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
               </div>
             </div>
+            <div class="sim-item" data-cat="회식" onclick="startSim('work')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🍻 회식</span>
+                <span class="sim-item-count">987명 참여</span>
+              </div>
+              <div class="sim-item-title">첫 회식 자리, 어디 앉아야 해?</div>
+              <div class="sim-item-desc">신입사원으로 첫 회식에 참석하는데 자리 배치가 고민이에요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot on"></span> 어려움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="학교" onclick="startSim('school')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🎓 학교</span>
+                <span class="sim-item-count">654명 참여</span>
+              </div>
+              <div class="sim-item-title">교수님께 과제 늦게 낸다고 연락하기</div>
+              <div class="sim-item-desc">기한을 넘겼을 때 교수님께 이메일을 어떻게 써야 할지 모르겠어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="직장" onclick="startSim('office')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">💼 직장</span>
+                <span class="sim-item-count">432명 참여</span>
+              </div>
+              <div class="sim-item-title">처음 만나는 거래처, 명함 주고받기</div>
+              <div class="sim-item-desc">첫 미팅에서 명함을 어떻게 주고받아야 실례가 없을까요?</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot"></span> 보통</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="병문안" onclick="startSim('hospital')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🏥 병문안</span>
+                <span class="sim-item-count">318명 참여</span>
+              </div>
+              <div class="sim-item-title">처음 가는 병문안, 뭘 들고 가야 해?</div>
+              <div class="sim-item-desc">직장 동료가 입원했는데 병문안 예절을 하나도 모르겠어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="장례식" onclick="startSim('funeral2')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">⚫ 장례식</span>
+                <span class="sim-item-count">1,204명 참여</span>
+              </div>
+              <div class="sim-item-title">조의금, 친한 친구 부모님 장례엔 얼마?</div>
+              <div class="sim-item-desc">꽤 친한 친구 아버지 장례식에 가는데 조의금 금액이 고민돼요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="장례식" onclick="startSim('funeral3')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">⚫ 장례식</span>
+                <span class="sim-item-count">876명 참여</span>
+              </div>
+              <div class="sim-item-title">검은 정장 없는데 뭐 입고 가지?</div>
+              <div class="sim-item-desc">갑자기 장례식에 가야 하는데 검은 옷이 없어서 당황했어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="장례식" onclick="startSim('funeral4')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">⚫ 장례식</span>
+                <span class="sim-item-count">693명 참여</span>
+              </div>
+              <div class="sim-item-title">상주에게 뭐라고 인사해야 해?</div>
+              <div class="sim-item-desc">절을 마쳤는데 상주 앞에서 말이 막혀요. 조문 인사말이 뭔지 모르겠어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot"></span> 보통</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="장례식" onclick="startSim('funeral5')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">⚫ 장례식</span>
+                <span class="sim-item-count">512명 참여</span>
+              </div>
+              <div class="sim-item-title">조문 후 식사, 먹고 가야 해?</div>
+              <div class="sim-item-desc">조문 끝나고 식사 권유를 받았는데 먹고 가야 할지 모르겠어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="결혼식" onclick="startSim('wedding2')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">💍 결혼식</span>
+                <span class="sim-item-count">1,087명 참여</span>
+              </div>
+              <div class="sim-item-title">흰 원피스 입어도 돼? 하객 복장 고민</div>
+              <div class="sim-item-desc">결혼식 하객인데 흰색 원피스 입어도 괜찮은지 모르겠어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="결혼식" onclick="startSim('wedding3')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">💍 결혼식</span>
+                <span class="sim-item-count">734명 참여</span>
+              </div>
+              <div class="sim-item-title">결혼식 중 사진 찍어도 되나?</div>
+              <div class="sim-item-desc">식이 진행 중인데 사진 찍어도 되는지, 어디까지 찍어도 되는지 모르겠어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot"></span> 보통</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="결혼식" onclick="startSim('wedding4')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">💍 결혼식</span>
+                <span class="sim-item-count">598명 참여</span>
+              </div>
+              <div class="sim-item-title">결혼식에 20분 늦었어, 어떻게 들어가지?</div>
+              <div class="sim-item-desc">식이 이미 시작됐는데 지금 입장해도 되는지, 어떻게 해야 할지 몰라요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot"></span> 보통</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="결혼식" onclick="startSim('wedding5')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">💍 결혼식</span>
+                <span class="sim-item-count">421명 참여</span>
+              </div>
+              <div class="sim-item-title">신랑 측? 신부 측? 어디 앉아야 해?</div>
+              <div class="sim-item-desc">결혼식장에서 어느 쪽에 앉아야 할지 몰라서 우두커니 서 있었어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="회식" onclick="startSim('work2')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🍻 회식</span>
+                <span class="sim-item-count">845명 참여</span>
+              </div>
+              <div class="sim-item-title">부장님이 술 권하는데 난 못 마셔</div>
+              <div class="sim-item-desc">회식에서 부장님이 직접 술을 따라주는데 어떻게 거절해야 할지 모르겠어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot on"></span> 어려움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="회식" onclick="startSim('work3')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🍻 회식</span>
+                <span class="sim-item-count">712명 참여</span>
+              </div>
+              <div class="sim-item-title">2차 가자는데 내일 일찍 출근이야</div>
+              <div class="sim-item-desc">팀장이 2차를 권하는데 내일 출근이 걱정돼요. 거절해도 괜찮을까요?</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot"></span> 보통</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="회식" onclick="startSim('work4')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🍻 회식</span>
+                <span class="sim-item-count">534명 참여</span>
+              </div>
+              <div class="sim-item-title">팀장님이 나한테 먼저 메뉴 고르라고 해</div>
+              <div class="sim-item-desc">첫 회식인데 팀장이 신입에게 먼저 메뉴를 고르라고 해서 당황했어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot"></span> 보통</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="회식" onclick="startSim('work5')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🍻 회식</span>
+                <span class="sim-item-count">389명 참여</span>
+              </div>
+              <div class="sim-item-title">분위기 어색한데 자기소개 시키면 어떻게 해?</div>
+              <div class="sim-item-desc">회식 분위기가 가라앉았고 팀장이 신입에게 특기를 보여달라고 해요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot on"></span> 어려움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
           </div>
-          <p class="sim-insight">💡 A를 고른 사람 대부분이 <strong>팀장님에게 좋은 첫인상</strong>을 남겼다고 답했어요. 두 손으로 받는 작은 행동이 생각보다 많은 걸 말해줘요.</p>
+          <div style="height:20px"></div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ③ COMMUNITY -->
+  <div class="screen" id="screen-community">
+    <main class="scroll-content">
+
+      <div class="comm-filters">
+        <button class="filter-tab active" onclick="filterComm(this,'전체')">전체</button>
+        <button class="filter-tab" onclick="filterComm(this,'장례식')">⚫ 장례식</button>
+        <button class="filter-tab" onclick="filterComm(this,'결혼식')">💍 결혼식</button>
+        <button class="filter-tab" onclick="filterComm(this,'회식')">🍻 회식</button>
+        <button class="filter-tab" onclick="filterComm(this,'직장')">💼 직장</button>
+        <button class="filter-tab" onclick="filterComm(this,'학교')">🎓 학교</button>
+        <button class="filter-tab" onclick="filterComm(this,'자유')">💬 자유</button>
+      </div>
+
+      <div class="feed-list" id="commFeedList">
+        <div class="feed-card" data-category="장례식" onclick="openPostDetail('dalbit')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#FFF2EE;color:#FF5500;">달</div>
+              <div><div class="feed-username">달빛산책중</div><div class="feed-time">23분 전</div></div>
+            </div>
+            <span class="feed-tag tag-funeral">장례식</span>
+          </div>
+          <div class="feed-body">절을 한 번 해야 하나요, 두 번 해야 하나요?</div>
+          <div class="feed-preview">처음 장례식장에 가는데 절하는 방법을 모르겠어요. 친구 아버지 장례식인데 어떻게 해야 예의 바른 건지 알려주세요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn liked" id="clike1" onclick="toggleLike(event,'clike1','clike1Count')">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              <span id="clike1Count">128</span>
+            </button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글 달기')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>43</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="회식" onclick="openPostDetail('gureum')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#F0FBF4;color:#30A55F;">구</div>
+              <div><div class="feed-username">구름위를걷는중</div><div class="feed-time">1시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-work">회식</span>
+          </div>
+          <div class="feed-body">신입인데 회식에서 술 안 마셔도 될까요?</div>
+          <div class="feed-preview">입사한 지 두 달 됐는데 팀장님이 술 좀 마셔야 한다고 하셔서요. 강요처럼 느껴지는데 어떻게 해야 할지...</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" id="clike2" onclick="toggleLike(event,'clike2','clike2Count')">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              <span id="clike2Count">94</span>
+            </button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글 달기')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>31</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="결혼식">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#EEF2FF;color:#5B6EF5;">잠</div>
+              <div><div class="feed-username">잠수함타는사람</div><div class="feed-time">3시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-wedding">결혼식</span>
+          </div>
+          <div class="feed-body">친구 결혼식 축의금 5만원이면 적은 건가요?</div>
+          <div class="feed-preview">대학교 친구인데 그냥 동기예요. 요즘 물가가 올라서 고민이에요. 식사 자리에 초대받았는데 5만원이 너무 적은 것 같기도 하고...</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" id="clike3" onclick="toggleLike(event,'clike3','clike3Count')">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              <span id="clike3Count">76</span>
+            </button>
+            <button class="reaction-btn" onclick="showToast('댓글 달기')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>58</span></button>
+            <button class="reaction-btn" onclick="showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="학교">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#FFF8E1;color:#E6A817;">민</div>
+              <div><div class="feed-username">민들레홀씨</div><div class="feed-time">5시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-school">학교</span>
+          </div>
+          <div class="feed-body">교수님한테 과제 늦게 낸다고 어떻게 말해요?</div>
+          <div class="feed-preview">갑자기 몸이 안 좋아서 과제 제출이 하루 늦어질 것 같은데 이메일을 어떻게 써야 할지...</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" id="clike4" onclick="toggleLike(event,'clike4','clike4Count')">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              <span id="clike4Count">52</span>
+            </button>
+            <button class="reaction-btn" onclick="showToast('댓글 달기')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>19</span></button>
+            <button class="reaction-btn" onclick="showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="직장">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#F5F5F5;color:#3D3D3D;">새</div>
+              <div><div class="feed-username">새벽네시반</div><div class="feed-time">7시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-work">직장</span>
+          </div>
+          <div class="feed-body">명함 받을 때 한 손으로 받으면 실례인가요?</div>
+          <div class="feed-preview">첫 거래처 미팅에서 명함을 한 손으로 받았는데 상대방 표정이 살짝 굳은 것 같아서요. 제가 실례를 한 건지 모르겠어요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" id="clike5" onclick="toggleLike(event,'clike5','clike5Count')">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              <span id="clike5Count">38</span>
+            </button>
+            <button class="reaction-btn" onclick="showToast('댓글 달기')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>12</span></button>
+            <button class="reaction-btn" onclick="showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <!-- 장례식 추가 -->
+        <div class="feed-card" data-category="장례식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#EEF2FF;color:#5B6EF5;">봄</div>
+              <div><div class="feed-username">봄비내리는날</div><div class="feed-time">2시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-funeral">장례식</span>
+          </div>
+          <div class="feed-body">조의금 봉투 이름 어떻게 써요?</div>
+          <div class="feed-preview">조의금 봉투에 이름 쓰는 방법을 몰라서요. 세로로 써야 한다고 하는데 어디에 어떻게 쓰는 건지 알려주시면 감사해요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl6','cl6c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl6c">47</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>18</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="장례식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#F5F5F5;color:#555;">하</div>
+              <div><div class="feed-username">하늘길걷는사람</div><div class="feed-time">4시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-funeral">장례식</span>
+          </div>
+          <div class="feed-body">검은 옷이 없어요, 어떡하죠?</div>
+          <div class="feed-preview">갑자기 부고 연락을 받았는데 검은 정장이 없어요. 내일 아침 일찍 가야 하는데 짙은 남색 정장도 괜찮을까요?</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl7','cl7c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl7c">83</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>29</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="장례식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#E8F4FD;color:#2980b9;">새</div>
+              <div><div class="feed-username">새벽안개속</div><div class="feed-time">6시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-funeral">장례식</span>
+          </div>
+          <div class="feed-body">조문 후 식사 꼭 먹고 가야 해요?</div>
+          <div class="feed-preview">장례식장에서 식사 권하면 먹는 게 예의인지 그냥 나오는 게 맞는지 헷갈려요. 일이 있어서 빨리 가야 하는 상황이에요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl8','cl8c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl8c">61</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>22</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="장례식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#FFF0F0;color:#c0392b;">찬</div>
+              <div><div class="feed-username">찬바람부는날</div><div class="feed-time">9시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-funeral">장례식</span>
+          </div>
+          <div class="feed-body">상주가 친한 친구일 때 어떻게 위로해요?</div>
+          <div class="feed-preview">상주가 제 친한 친구인데 어떻게 위로해야 할지 모르겠어요. 형식적인 인사는 하기 싫고, 그렇다고 오래 잡고 있기도 그렇고요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl9','cl9c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl9c">74</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>33</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="장례식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#F0F4FF;color:#6c5ce7;">달</div>
+              <div><div class="feed-username">달그림자</div><div class="feed-time">어제</div></div>
+            </div>
+            <span class="feed-tag tag-funeral">장례식</span>
+          </div>
+          <div class="feed-body">장례식에 아이 데려가도 될까요?</div>
+          <div class="feed-preview">4살 아이가 있는데 장례식장에 함께 가도 되는지 모르겠어요. 혼자 맡길 곳이 없어서요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl10','cl10c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl10c">39</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>15</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+
+        <!-- 결혼식 추가 -->
+        <div class="feed-card" data-category="결혼식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#FFF0FB;color:#d63031;">솜</div>
+              <div><div class="feed-username">솜사탕구름</div><div class="feed-time">30분 전</div></div>
+            </div>
+            <span class="feed-tag tag-wedding">결혼식</span>
+          </div>
+          <div class="feed-body">드레스코드 안 따라도 되나요?</div>
+          <div class="feed-preview">청첩장에 드레스코드가 있는데 꼭 따라야 해요? 제 옷 중에 딱 맞는 게 없어서요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl11','cl11c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl11c">55</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>21</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="결혼식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#F0FFF4;color:#27ae60;">오</div>
+              <div><div class="feed-username">오후세시산책</div><div class="feed-time">2시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-wedding">결혼식</span>
+          </div>
+          <div class="feed-body">결혼식에 20분 늦었어요</div>
+          <div class="feed-preview">길이 막혀서 식 시작하고 20분 뒤에 도착했어요. 이미 진행 중인데 그냥 들어가도 될까요? 너무 민망해서요 ㅠ</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl12','cl12c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl12c">88</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>34</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="결혼식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#FFF9E6;color:#f39c12;">초</div>
+              <div><div class="feed-username">초승달빛</div><div class="feed-time">4시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-wedding">결혼식</span>
+          </div>
+          <div class="feed-body">혼주 테이블에 인사드려야 하나요?</div>
+          <div class="feed-preview">신랑 측 하객인데 신부 부모님께도 따로 인사드려야 하는 건지 모르겠어요. 아는 분도 아니라서 더 어색하고요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl13','cl13c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl13c">42</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>16</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="결혼식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#E8F4FD;color:#3498db;">여</div>
+              <div><div class="feed-username">여름소나기</div><div class="feed-time">6시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-wedding">결혼식</span>
+          </div>
+          <div class="feed-body">청첩장 받았는데 못 가면 어떡해요?</div>
+          <div class="feed-preview">갑자기 일이 생겨서 결혼식에 못 가게 됐어요. 미리 연락해야 하는지, 축의금은 어떻게 해야 하는지 모르겠어요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl14','cl14c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl14c">67</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>28</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="결혼식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#F9F0FF;color:#8e44ad;">바</div>
+              <div><div class="feed-username">바람의노래</div><div class="feed-time">어제</div></div>
+            </div>
+            <span class="feed-tag tag-wedding">결혼식</span>
+          </div>
+          <div class="feed-body">결혼식 사진 막 찍어도 되나요?</div>
+          <div class="feed-preview">식 진행 중에 핸드폰으로 사진 찍는 분들이 많던데 저도 찍어도 될까요? 신랑신부한테 실례가 될까봐요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl15','cl15c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl15c">53</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>20</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+
+        <!-- 회식 추가 -->
+        <div class="feed-card" data-category="회식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#EEF2FF;color:#5B6EF5;">소</div>
+              <div><div class="feed-username">소라치즈</div><div class="feed-time">40분 전</div></div>
+            </div>
+            <span class="feed-tag tag-work">회식</span>
+          </div>
+          <div class="feed-body">2차 꼭 가야 하나요?</div>
+          <div class="feed-preview">팀장님이 2차 가자고 하시는데 내일 일찍 출근이에요. 거절하면 눈치 보일 것 같고, 진짜 가기 싫은데 어떻게 해요?</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl16','cl16c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl16c">112</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>47</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="회식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#FFF8E1;color:#f39c12;">파</div>
+              <div><div class="feed-username">파란하늘별</div><div class="feed-time">2시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-work">회식</span>
+          </div>
+          <div class="feed-body">먼저 자리 뜨는 거 실례인가요?</div>
+          <div class="feed-preview">개인 사정으로 회식 도중 먼저 나가야 하는데 팀장님한테 어떻게 말씀드려야 할지 모르겠어요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl17','cl17c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl17c">79</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>31</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="회식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#F0FBF4;color:#27ae60;">달</div>
+              <div><div class="feed-username">달팽이걸음</div><div class="feed-time">5시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-work">회식</span>
+          </div>
+          <div class="feed-body">부장님이 음식 시키래요, 비싼 거 시켜도 되나요?</div>
+          <div class="feed-preview">첫 회식인데 부장님이 제가 먹고 싶은 거 시키라고 하셨어요. 뭘 시켜야 할지 너무 눈치 보여요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl18','cl18c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl18c">66</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>25</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="회식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#FFF0EE;color:#FF5500;">이</div>
+              <div><div class="feed-username">이른아침이슬</div><div class="feed-time">8시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-work">회식</span>
+          </div>
+          <div class="feed-body">회식 대화 어떻게 이끌어야 해요?</div>
+          <div class="feed-preview">분위기가 너무 가라앉았는데 제가 말을 잘 못 하는 편이에요. 어떤 주제로 말을 꺼내야 어색하지 않을까요?</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl19','cl19c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl19c">58</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>19</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="회식" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#E8F4FD;color:#2980b9;">구</div>
+              <div><div class="feed-username">구름한조각</div><div class="feed-time">어제</div></div>
+            </div>
+            <span class="feed-tag tag-work">회식</span>
+          </div>
+          <div class="feed-body">팀장님이 취하신 것 같아요, 어떻게 해요?</div>
+          <div class="feed-preview">팀장님이 많이 드신 것 같은데 제가 모셔다드려야 하는 건지, 어디까지 챙겨드려야 하는 건지 모르겠어요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl20','cl20c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl20c">91</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>36</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+
+        <!-- 직장 추가 -->
+        <div class="feed-card" data-category="직장" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#F0F4FF;color:#6c5ce7;">오</div>
+              <div><div class="feed-username">오전열시</div><div class="feed-time">1시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-work">직장</span>
+          </div>
+          <div class="feed-body">상사한테 업무 실수 어떻게 사과해요?</div>
+          <div class="feed-preview">보고서 실수를 뒤늦게 발견했어요. 팀장님께 어떻게 말씀드려야 하는지, 어디서 어떻게 사과드려야 할지 모르겠어요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl21','cl21c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl21c">73</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>27</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="직장" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#FFF8E1;color:#f39c12;">저</div>
+              <div><div class="feed-username">저녁노을빛</div><div class="feed-time">3시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-work">직장</span>
+          </div>
+          <div class="feed-body">회의 중 의견 내는 게 눈치 보여요</div>
+          <div class="feed-preview">아이디어가 있는데 선임들 앞에서 의견 내기가 너무 무서워요. 잘못 말했다가 찍힐까봐 그냥 조용히 있게 돼요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl22','cl22c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl22c">104</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>41</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="직장" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#F0FBF4;color:#27ae60;">봄</div>
+              <div><div class="feed-username">봄볕산책</div><div class="feed-time">5시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-work">직장</span>
+          </div>
+          <div class="feed-body">상사랑 점심에 뭐 시켜야 해요?</div>
+          <div class="feed-preview">팀장님이 점심 같이 먹자고 하셨는데 뭘 시켜야 할지 모르겠어요. 너무 비싼 건 눈치 보이고 너무 싼 것도 그렇고.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl23','cl23c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl23c">48</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>17</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="직장" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#FFF0EE;color:#FF5500;">별</div>
+              <div><div class="feed-username">별빛강물</div><div class="feed-time">7시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-work">직장</span>
+          </div>
+          <div class="feed-body">퇴근 인사 어느 정도로 해요?</div>
+          <div class="feed-preview">팀장님이 아직 계신데 제가 먼저 퇴근해야 해요. "먼저 들어가겠습니다"면 충분한가요? 아니면 뭔가 더 해야 하나요?</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl24','cl24c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl24c">82</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>30</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="직장" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#E8F4FD;color:#3498db;">구</div>
+              <div><div class="feed-username">구름조각</div><div class="feed-time">어제</div></div>
+            </div>
+            <span class="feed-tag tag-work">직장</span>
+          </div>
+          <div class="feed-body">업무 이메일 쓸 때 뭘 주의해야 해요?</div>
+          <div class="feed-preview">처음 거래처에 메일을 써야 하는데 형식이 있는 건지 모르겠어요. 인사말은 어떻게 하고 마무리는 어떻게 하는 게 좋을까요?</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl25','cl25c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl25c">57</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>22</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+
+        <!-- 학교 추가 -->
+        <div class="feed-card" data-category="학교" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#E8F8F5;color:#27ae60;">소</div>
+              <div><div class="feed-username">소나기구름</div><div class="feed-time">50분 전</div></div>
+            </div>
+            <span class="feed-tag tag-school">학교</span>
+          </div>
+          <div class="feed-body">수업 중 질문해도 되나요?</div>
+          <div class="feed-preview">궁금한 게 생겼는데 교수님이 기분 나빠하실까봐 그냥 참고 있어요. 수업 중에 손 들어도 될까요?</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl26','cl26c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl26c">44</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>14</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="학교" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#FFF9E6;color:#f39c12;">파</div>
+              <div><div class="feed-username">파도소리</div><div class="feed-time">3시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-school">학교</span>
+          </div>
+          <div class="feed-body">팀플 무임승차 어떻게 대처해요?</div>
+          <div class="feed-preview">팀원 한 명이 아무것도 안 하는데 교수님께 말씀드려야 할지 그냥 제가 다 해야 할지 너무 스트레스예요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl27','cl27c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl27c">97</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>38</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="학교" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#F0F4FF;color:#6c5ce7;">새</div>
+              <div><div class="feed-username">새벽달빛</div><div class="feed-time">5시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-school">학교</span>
+          </div>
+          <div class="feed-body">교수님 연구실 방문할 때 예약해야 하나요?</div>
+          <div class="feed-preview">성적 관련해서 교수님과 면담을 하고 싶은데 그냥 찾아가면 실례인가요? 메일을 먼저 드려야 하는 건지...</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl28','cl28c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl28c">51</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>18</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="학교" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#F0FFF4;color:#27ae60;">초</div>
+              <div><div class="feed-username">초록잔디</div><div class="feed-time">8시간 전</div></div>
+            </div>
+            <span class="feed-tag tag-school">학교</span>
+          </div>
+          <div class="feed-body">수업 중 화장실 가도 될까요?</div>
+          <div class="feed-preview">강의 중간에 화장실이 너무 급한데 그냥 일어나서 나가면 실례인가요? 교수님께 따로 말씀드려야 하는 건지 모르겠어요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl29','cl29c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl29c">63</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>24</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="학교" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#E8F4FD;color:#3498db;">하</div>
+              <div><div class="feed-username">하늘바람</div><div class="feed-time">어제</div></div>
+            </div>
+            <span class="feed-tag tag-school">학교</span>
+          </div>
+          <div class="feed-body">발표 전날 교수님께 자료 공유해야 해요?</div>
+          <div class="feed-preview">팀 발표가 내일인데 교수님께 미리 PPT 공유드리는 게 예의인지 그냥 당일에만 사용하면 되는 건지 모르겠어요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl30','cl30c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl30c">35</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>12</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+
+        <!-- 자유게시판 -->
+        <div class="feed-card" data-category="자유" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#FFF2EE;color:#FF5500;">봄</div>
+              <div><div class="feed-username">봄비내리는날</div><div class="feed-time">방금</div></div>
+            </div>
+            <span class="feed-tag" style="background:#F0F0F0;color:#555;">자유</span>
+          </div>
+          <div class="feed-body">눈치코치 앱 진짜 유용한 거 같아요</div>
+          <div class="feed-preview">장례식 시뮬레이션 해보고 실제로 가니까 훨씬 덜 당황하더라고요. 미리 연습할 수 있다는 게 생각보다 효과가 좋아요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl31','cl31c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl31c">143</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>52</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="자유" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#E8F4FD;color:#2980b9;">새</div>
+              <div><div class="feed-username">새벽별빛</div><div class="feed-time">15분 전</div></div>
+            </div>
+            <span class="feed-tag" style="background:#F0F0F0;color:#555;">자유</span>
+          </div>
+          <div class="feed-body">어떤 상황이 제일 당황스러웠어요?</div>
+          <div class="feed-preview">저는 첫 회식 자리 배치가 제일 당황스러웠어요. 다들 어떤 상황에서 제일 눈치 없었다고 느끼셨나요?</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl32','cl32c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl32c">87</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>63</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="자유" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#F9F0FF;color:#8e44ad;">구</div>
+              <div><div class="feed-username">구름위의성</div><div class="feed-time">1시간 전</div></div>
+            </div>
+            <span class="feed-tag" style="background:#F0F0F0;color:#555;">자유</span>
+          </div>
+          <div class="feed-body">눈치 없는 사람 vs 눈치 보는 사람</div>
+          <div class="feed-preview">눈치 없어서 실수하는 것도 힘들지만, 지나치게 눈치 보느라 지치는 것도 문제인 것 같아요. 여러분은 어느 쪽이에요?</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl33','cl33c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl33c">119</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>74</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="자유" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#FFF2EE;color:#FF5500;">달</div>
+              <div><div class="feed-username">달빛수면</div><div class="feed-time">2시간 전</div></div>
+            </div>
+            <span class="feed-tag" style="background:#F0F0F0;color:#555;">자유</span>
+          </div>
+          <div class="feed-body">오늘 장례식장 제대로 했어요! 🙏</div>
+          <div class="feed-preview">앱에서 미리 연습하고 갔더니 당황하지 않고 잘 마쳤어요. 상주 분께서 오히려 고맙다고 하셔서 뿌듯했어요.</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl34','cl34c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl34c">201</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>89</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="자유" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#F0FBF4;color:#27ae60;">솜</div>
+              <div><div class="feed-username">솜털바람</div><div class="feed-time">4시간 전</div></div>
+            </div>
+            <span class="feed-tag" style="background:#F0F0F0;color:#555;">자유</span>
+          </div>
+          <div class="feed-body">처음 회사생활 시작하는 분 있나요?</div>
+          <div class="feed-preview">이번 달에 첫 직장을 다니기 시작했어요. 모르는 게 너무 많아서 눈치코치 앱 많이 쓰고 있어요. 같은 분들끼리 정보 나눠요!</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl35','cl35c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl35c">76</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>41</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+        <div class="feed-card" data-category="자유" onclick="showToast('상세 보기')">
+          <div class="feed-top">
+            <div class="feed-user">
+              <div class="avatar" style="background:#FFF8E1;color:#e67e22;">이</div>
+              <div><div class="feed-username">이슬방울</div><div class="feed-time">어제</div></div>
+            </div>
+            <span class="feed-tag" style="background:#F0F0F0;color:#555;">자유</span>
+          </div>
+          <div class="feed-body">한국 예절이 너무 복잡하지 않나요?</div>
+          <div class="feed-preview">배워도 상황마다 다르고 사람마다 다르고... 그래서 오히려 이런 앱이 필요한 건 맞는 것 같아요. 여러분은 어떻게 생각해요?</div>
+          <div class="feed-footer">
+            <button class="reaction-btn" onclick="toggleLike(event,'cl36','cl36c')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span id="cl36c">134</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>67</span></button>
+            <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
+          </div>
+        </div>
+
+        <div style="height:8px"></div>
+      </div>
+
+      <button class="write-fab" id="writeFab" onclick="showToast('글쓰기 화면')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+
+    </main>
+  </div>
+
+  <!-- ④ MY PAGE -->
+  <div class="screen" id="screen-mypage">
+    <div style="padding-bottom:88px;">
+
+      <div class="mypage-header">
+        <div class="profile-row">
+          <div class="profile-avatar">🌸</div>
+          <div>
+            <div class="profile-name">봄비내리는날</div>
+            <div class="profile-level">레벨 <span>예절 마스터</span> · 활동 28일째</div>
+          </div>
+          <button class="profile-edit-btn" onclick="showToast('프로필 수정')">편집</button>
+        </div>
+        <div class="profile-stats">
+          <div class="profile-stat"><div class="profile-stat-num">12</div><div class="profile-stat-label">완료한 시뮬</div></div>
+          <div class="profile-stat"><div class="profile-stat-num">5개</div><div class="profile-stat-label">저장한 상황</div></div>
+          <div class="profile-stat"><div class="profile-stat-num">23</div><div class="profile-stat-label">받은 공감</div></div>
+        </div>
+      </div>
+
+      <div class="mypage-section">
+        <div class="mypage-section-title">내 활동</div>
+        <div class="menu-list">
+          <div class="menu-item" onclick="showToast('완료한 시뮬레이션')">
+            <div class="menu-icon" style="background:#FFF0F5;">🎯</div>
+            <div><div class="menu-label">완료한 시뮬레이션</div><div class="menu-sub">12개 완료</div></div>
+            <div class="menu-right"><div class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+          </div>
+          <div class="menu-item" onclick="showToast('저장한 상황')">
+            <div class="menu-icon" style="background:#FFF8EE;">🔖</div>
+            <div><div class="menu-label">저장한 상황</div><div class="menu-sub">5개 저장</div></div>
+            <div class="menu-right"><div class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+          </div>
+          <div class="menu-item" onclick="showToast('내가 쓴 글')">
+            <div class="menu-icon" style="background:#EEF2FF;">✍️</div>
+            <div><div class="menu-label">내가 쓴 글</div><div class="menu-sub">3개 작성</div></div>
+            <div class="menu-right"><span class="menu-badge">3</span><div class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="mypage-section">
+        <div class="mypage-section-title">설정</div>
+        <div class="menu-list">
+          <div class="menu-item" onclick="showToast('알림 설정')">
+            <div class="menu-icon" style="background:#F5F5F5;">🔔</div>
+            <div><div class="menu-label">알림 설정</div></div>
+            <div class="menu-right"><div class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+          </div>
+          <div class="menu-item" onclick="showToast('개인정보 처리방침')">
+            <div class="menu-icon" style="background:#F5F5F5;">🔒</div>
+            <div><div class="menu-label">개인정보 처리방침</div></div>
+            <div class="menu-right"><div class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+          </div>
+          <div class="menu-item" onclick="showToast('앱 버전 1.0.0')">
+            <div class="menu-icon" style="background:#F5F5F5;">ℹ️</div>
+            <div><div class="menu-label">앱 버전</div><div class="menu-sub">1.0.0</div></div>
+          </div>
         </div>
       </div>
 
     </div>
   </div>
-</section>
 
-<!-- ── COMMUNITY ────────────────────────────── -->
-<section class="community-section" id="community">
-  <div class="container">
-    <div class="section-head center">
-      <p class="eyebrow">커뮤니티 후기</p>
-      <h2 class="sec-title sec-title-sm">실제로 써본 사람들 이야기</h2>
-      <p class="sec-sub sec-sub-sm">첫 댓글은 AI가 자동으로 달아드려요. 무플 걱정 없이 경험을 나눠보세요.</p>
-    </div>
-    <div class="testimonial-grid">
+  <!-- ⑤ MESSAGES -->
+  <div class="screen" id="screen-messages">
+    <main class="scroll-content">
 
-      <div class="testimonial-card">
-        <div class="t-header">
-          <div class="t-avatar" style="background:#FFE8D6">🐻</div>
-          <div class="t-meta">
-            <span class="t-nick">봄비내리는날</span>
-            <span class="t-tag">🕯️ 장례식</span>
-          </div>
-        </div>
-        <p class="t-text">처음 조문을 가서 순서를 몰라 당황했는데, 미리 연습하고 가니까 훨씬 침착하게 행동할 수 있었어요. 유가족 분들께 실례 없이 조문을 마칠 수 있었습니다.</p>
-        <span class="t-empathy">312명 공감</span>
+      <div class="msg-search-wrap">
+        <input class="msg-search" type="text" placeholder="대화 검색" />
+        <span class="msg-search-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
       </div>
 
-      <div class="testimonial-card">
-        <div class="t-header">
-          <div class="t-avatar" style="background:#D6E8FF">🌙</div>
-          <div class="t-meta">
-            <span class="t-nick">잠수함타는사람</span>
-            <span class="t-tag">🍻 회식</span>
+      <div class="msg-list">
+        <div class="msg-item unread" onclick="showToast('AI 코치와 대화')">
+          <div class="msg-avatar ai-avatar">AI<div class="unread-dot"></div></div>
+          <div class="msg-body">
+            <div class="msg-name">AI 눈치 코치</div>
+            <div class="msg-preview">장례식 예절 분석 결과가 도착했어요 👀</div>
           </div>
+          <div class="msg-meta"><div class="msg-time">방금</div><div class="msg-count">2</div></div>
         </div>
-        <p class="t-text">첫 회식에서 어떻게 행동해야 할지 몰라 여기서 미리 연습했어요. 술 따르는 법, 자리 배치, 인사 방식까지 확인하고 갔더니 팀장님이 예의 바르다고 하셨어요.</p>
-        <span class="t-empathy">241명 공감</span>
+        <div class="msg-sep"></div>
+        <div class="msg-item unread" onclick="showToast('달빛산책중 님과 대화')">
+          <div class="msg-avatar" style="background:#FFF0F6;color:#E45D8A;">달<div class="unread-dot"></div></div>
+          <div class="msg-body">
+            <div class="msg-name">달빛산책중</div>
+            <div class="msg-preview">감사해요! 덕분에 장례식을 잘 마쳤어요 🙏</div>
+          </div>
+          <div class="msg-meta"><div class="msg-time">3분 전</div><div class="msg-count">1</div></div>
+        </div>
+        <div class="msg-sep"></div>
+        <div class="msg-item" onclick="showToast('구름위를걷는중 님과 대화')">
+          <div class="msg-avatar" style="background:#F0FBF4;color:#30A55F;">구</div>
+          <div class="msg-body">
+            <div class="msg-name">구름위를걷는중</div>
+            <div class="msg-preview">저도 비슷한 상황이었는데 공감해요</div>
+          </div>
+          <div class="msg-meta"><div class="msg-time">1시간 전</div></div>
+        </div>
+        <div class="msg-sep"></div>
+        <div class="msg-item" onclick="showToast('소라치즈 님과 대화')">
+          <div class="msg-avatar" style="background:#EEF2FF;color:#5B6EF5;">소</div>
+          <div class="msg-body">
+            <div class="msg-name">소라치즈</div>
+            <div class="msg-preview">축의금은 결국 7만원으로 결정했어요!</div>
+          </div>
+          <div class="msg-meta"><div class="msg-time">어제</div></div>
+        </div>
+        <div class="msg-sep"></div>
+        <div class="msg-item" onclick="showToast('민들레홀씨 님과 대화')">
+          <div class="msg-avatar" style="background:#FFF8E1;color:#E6A817;">민</div>
+          <div class="msg-body">
+            <div class="msg-name">민들레홀씨</div>
+            <div class="msg-preview">교수님한테 이메일 잘 보냈어요 ㅎㅎ</div>
+          </div>
+          <div class="msg-meta"><div class="msg-time">2일 전</div></div>
+        </div>
       </div>
 
-      <div class="testimonial-card">
-        <div class="t-header">
-          <div class="t-avatar" style="background:#E8FFD6">🌿</div>
-          <div class="t-meta">
-            <span class="t-nick">민트초코싫음</span>
-            <span class="t-tag">💍 결혼식</span>
-          </div>
-        </div>
-        <p class="t-text">친한 친구 결혼식 축의금을 얼마 내야 할지 진짜 몰랐는데, 비슷한 상황 데이터 보고 결정했어요. 괜히 혼자 고민하지 말고 여기서 확인하는 게 훨씬 나아요.</p>
-        <span class="t-empathy">187명 공감</span>
+    </main>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item" data-tab="simulation" onclick="switchTab('simulation')">
+      <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span>시뮬레이션</span>
+    </button>
+    <button class="nav-item" data-tab="community" onclick="switchTab('community')">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>커뮤니티</span>
+    </button>
+    <button class="nav-item nav-home active" data-tab="home" onclick="switchTab('home')">
+      <div class="nav-home-inner">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>홈</span>
       </div>
+    </button>
+    <button class="nav-item" data-tab="messages" onclick="switchTab('messages')">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>쪽지</span>
+      <span class="nav-badge" id="msgBadge"></span>
+    </button>
+    <button class="nav-item" data-tab="mypage" onclick="switchTab('mypage')">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>MY</span>
+    </button>
+  </nav>
 
-    </div>
-    <div class="community-note">
-      <span>지금 4,173개의 실제 경험이 쌓여 있어요</span>
-      <a href="#download" class="btn-ghost sm">앱에서 더 보기</a>
-    </div>
+</div><!-- /app-shell -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div id="modalContent"></div>
+    <button class="modal-close-btn" onclick="closeModal()">닫기</button>
   </div>
-</section>
+</div>
 
-<!-- ── CTA ────────────────────────────── -->
-<section class="cta" id="download">
-  <div class="cta-blob"></div>
-  <div class="container cta-inner">
-    <p class="cta-eyebrow">무료로 시작</p>
-    <h2 class="cta-title">한번 해보면<br />금방 느껴져요</h2>
-    <p class="cta-sub">첫 상황 하나만 골라보세요. 생각보다 재밌어요.</p>
-    <div class="store-btns">
-      <a href="#" class="store-btn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        App Store
-      </a>
-      <a href="#" class="store-btn outline">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.64.22.99.13l13.43-7.76-2.89-2.9-11.53 10.53zM.5 1.4C.19 1.74 0 2.27 0 2.96v18.08c0 .69.19 1.22.51 1.56l.08.08 10.12-10.12v-.24L.58 1.32.5 1.4zm18.95 9.25L16.6 9.24 13.7 6.35l2.91-2.9 2.83 1.63c.81.46.81 1.22 0 1.68l-2.84 1.63.85.85zM4.17.24L17.6 8l-2.89 2.9L3.18.24c.35-.2.74-.23.99.0z"/></svg>
-        Google Play
-      </a>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── TOPBAR SHADOW ── */
+const topbar = document.getElementById('topbar');
+window.addEventListener('scroll', () => topbar.classList.toggle('scrolled', window.scrollY > 10), { passive: true });
+
+/* ── SCROLL REVEAL ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => obs.observe(el));
+
+/* ── TAB SWITCHING ── */
+function switchTab(tab) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('screen-' + tab).classList.add('active');
+  const navBtn = document.querySelector(`.nav-item[data-tab="${tab}"]`);
+  if (navBtn) navBtn.classList.add('active');
+  const fab = document.getElementById('writeFab');
+  fab.style.display = tab === 'community' ? 'flex' : 'none';
+  if (tab === 'messages') {
+    const badge = document.getElementById('msgBadge');
+    if (badge) badge.style.display = 'none';
+  }
+  window.scrollTo(0, 0);
+}
+
+/* ── FILTERS ── */
+function filterChip(el, label) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active'); showToast(`"${label}" 상황 보기`);
+}
+function filterSim(el, label) {
+  document.querySelectorAll('.sim-cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.sim-list .sim-item').forEach(item => {
+    const cat = item.dataset.cat || '';
+    item.style.display = (label === '전체' || cat === label) ? 'block' : 'none';
+  });
+}
+function filterComm(el, label) {
+  document.querySelectorAll('.filter-tab').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#commFeedList .feed-card').forEach(card => {
+    const cat = card.dataset.category;
+    card.style.display = (label === '전체' || cat === label) ? 'block' : 'none';
+  });
+}
+
+/* ── SIMULATION DATA ── */
+const simData = {
+  funeral: {
+    tag: '⚫ 장례식 · 첫 방문',
+    text: '친한 친구 아버지 장례식에 처음으로 가게 됐다. 조문 절차를 몰라서 당황스럽다.',
+    hint: '💡 절 횟수가 고인과의 관계에 따라 달라지기도 해요',
+    choices: [
+      { label: '두 번 절하고 상주에게 짧게 위로한다', pct: '63%', result: '영정에 두 번 절 후, 상주에게 "삼가 고인의 명복을 빕니다"라고 인사드리세요. 조의금은 3~5만원이 적당합니다.' },
+      { label: '한 번만 절하고 나온다', pct: '28%', result: '한 번 절도 예의에 맞지만, 친한 친구의 경우엔 두 번 절이 더 예를 갖추는 방법입니다.' },
+      { label: '절 없이 묵념만 한다', pct: '9%', result: '묵념도 존중의 표현이지만, 가능하다면 절을 하는 것이 유가족에 대한 더 깊은 예의 표현이에요.' },
+    ]
+  },
+  wedding: {
+    tag: '💍 결혼식 · 축의금',
+    text: '대학 동기가 결혼식에 초대했다. 가끔 연락하는 사이인데 적정 축의금이 얼마일지 모르겠다.',
+    hint: '💡 식사 참석 여부에 따라 달라질 수 있어요',
+    choices: [
+      { label: '5만원 (식사 불참 예정)', pct: '51%', result: '5만원은 식사 불참 시 적당한 금액이에요. 식사에 참석한다면 7만원 이상이 일반적입니다.' },
+      { label: '7만원 (식사 참석 예정)', pct: '35%', result: '7만원은 가끔 연락하는 동기 결혼식에서 가장 보편적인 금액이에요. 적당한 성의 표현입니다.' },
+      { label: '10만원 이상', pct: '14%', result: '10만원 이상은 친한 친구 수준의 친밀도일 때 더 어울려요. 가끔 연락하는 사이라면 7만원으로도 충분해요.' },
+    ]
+  },
+  work: {
+    tag: '🍻 회식 · 신입사원',
+    text: '입사 후 첫 팀 회식이다. 자리 배치부터 어떻게 행동해야 할지 하나도 모르겠다.',
+    hint: '💡 첫 인상이 정말 중요한 자리예요',
+    choices: [
+      { label: '상급자에게 자리를 여쭤보고 끝자리에 앉는다', pct: '44%', result: '상석은 상급자 자리이므로 끝 자리나 입구 쪽에 앉는 게 예의예요. 자리를 여쭤보는 것 자체가 좋은 인상을 줍니다.' },
+      { label: '아무 자리나 자연스럽게 앉는다', pct: '38%', result: '편한 분위기의 팀이라면 괜찮지만, 첫 회식이라면 상급자에게 자리를 물어보는 것이 더 안전해요.' },
+      { label: '상급자 옆에 가서 앉는다', pct: '18%', result: '상급자 바로 옆은 배려보다 부담으로 느껴질 수 있어요. 비슷한 연차의 사람 옆에 앉는 게 자연스러워요.' },
+    ]
+  },
+  office: {
+    tag: '💼 직장 · 명함 교환',
+    text: '처음 만나는 거래처 담당자와 명함을 주고받아야 한다. 어떻게 해야 실례가 없을지 모르겠다.',
+    hint: '💡 명함은 작은 자기소개서예요',
+    choices: [
+      { label: '두 손으로 공손히 건네고, 받을 때도 두 손으로 받는다', pct: '72%', result: '명함은 두 손으로 주고받는 게 기본이에요. 받은 명함은 바로 넣지 말고 잠깐 살펴본 뒤 명함 지갑에 넣으세요.' },
+      { label: '한 손으로 자연스럽게 주고받는다', pct: '21%', result: '편한 사이라면 몰라도 첫 미팅에서는 두 손이 예의예요. 상대방이 공식 자리로 느낄수록 더 중요해요.' },
+      { label: '받자마자 주머니에 바로 넣는다', pct: '7%', result: '명함을 바로 주머니에 넣는 건 실례예요. 잠깐 살펴보고 "잘 부탁드립니다"라고 말한 뒤 명함 지갑에 넣으세요.' },
+    ]
+  },
+  school: {
+    tag: '🎓 학교 · 교수님 이메일',
+    text: '과제 제출 기한을 하루 넘겼다. 교수님께 이메일로 늦은 이유를 말씀드려야 하는데 어떻게 써야 할지 모르겠다.',
+    hint: '💡 핵심은 솔직함과 간결함이에요',
+    choices: [
+      { label: '이유를 자세히 설명하고 양해를 구하는 이메일을 쓴다', pct: '58%', result: '"늦게 제출하게 되어 죄송합니다. [이유]로 인해 기한을 지키지 못했습니다. 첨부파일로 제출드립니다"처럼 간결하고 진심 어린 이메일이 가장 좋아요.' },
+      { label: '이유 없이 "늦어서 죄송합니다"만 보낸다', pct: '30%', result: '사과만으로도 예의는 있지만, 간단한 이유를 함께 쓰면 교수님 입장에서 더 납득하기 쉬워요.' },
+      { label: '그냥 조용히 제출만 한다', pct: '12%', result: '아무 연락 없이 늦게 제출하면 인식이 나빠질 수 있어요. 짧게라도 이메일로 먼저 연락드리는 게 좋아요.' },
+    ]
+  },
+  hospital: {
+    tag: '🏥 병문안 · 처음 가는 경우',
+    text: '직장 동료가 입원했다는 소식을 들었다. 처음 병문안을 가는데 무엇을 들고 가야 하고 어떻게 행동해야 할지 모르겠다.',
+    hint: '💡 병문안은 짧고 조용하게가 기본이에요',
+    choices: [
+      { label: '과일이나 간식을 챙겨서 짧게 안부만 묻고 나온다', pct: '61%', result: '과일, 음료, 간단한 간식이 무난해요. 환자가 피곤할 수 있으니 15~20분 이내로 짧게 머물고, 쾌유를 빌며 나오는 게 예의입니다.' },
+      { label: '꽃다발을 들고 오래 이야기하며 위로해준다', pct: '27%', result: '꽃은 병실에 따라 반입이 안 될 수 있어요. 오래 있으면 환자가 더 피곤해질 수 있으니 짧게 방문하는 게 더 배려 있는 행동이에요.' },
+      { label: '아무것도 안 들고 그냥 얼굴만 보러 간다', pct: '12%', result: '작은 선물 없이 가도 괜찮은 경우도 있지만, 간단한 음료나 과일 하나 정도는 챙기면 마음이 더 전해져요.' },
+    ]
+  },
+  funeral2: {
+    tag: '⚫ 장례식 · 조의금',
+    text: '친구 아버지 장례식에 가야 하는데 조의금을 얼마나 준비해야 할지 모르겠다. 친구랑은 꽤 친한 편이다.',
+    hint: '💡 조의금 봉투엔 세로로 이름을 쓰는 게 관례예요',
+    choices: [
+      { label: '5만원을 봉투에 담아 전달한다', pct: '28%', result: '5만원도 예의에 어긋나지 않지만, 꽤 친한 친구라면 조금 부족할 수 있어요. 조의금은 3·5·10만원처럼 홀수 금액이 일반적입니다.' },
+      { label: '10만원을 봉투에 담아 전달한다', pct: '54%', result: '친한 친구의 가족 장례라면 10만원이 가장 보편적이고 적절해요. 봉투에 이름을 세로로 쓰고 접수대에 전달하면 됩니다.' },
+      { label: '현금 없이 마음만 전한다', pct: '18%', result: '조의금 없이 조문하는 것도 예의이긴 해요. 하지만 친한 사이라면 현금 봉투를 준비하는 게 유가족에 대한 더 깊은 예의 표현이에요.' },
+    ]
+  },
+  funeral3: {
+    tag: '⚫ 장례식 · 복장',
+    text: '갑자기 장례식에 가야 하는데 검은 정장이 없다. 어떤 옷을 입고 가야 할지 급하게 결정해야 한다.',
+    hint: '💡 단색 어두운 계열이라면 어느 정도 허용돼요',
+    choices: [
+      { label: '진한 남색 또는 회색 단색 옷을 입는다', pct: '61%', result: '검은색이 아닌 짙은 남색·회색도 장례식에서 허용되는 복장이에요. 무늬 없이 단색이라면 충분히 예의를 갖춘 차림입니다.' },
+      { label: '흰 셔츠에 검은 바지만 입는다', pct: '29%', result: '흰 셔츠는 유가족을 연상시켜 어색할 수 있어요. 가능하면 어두운 계열의 상의를 구하거나, 검은 재킷을 빌리는 게 낫습니다.' },
+      { label: '그냥 평소 입는 옷을 입고 간다', pct: '10%', result: '화려한 색상이나 캐주얼한 복장은 유가족에게 실례가 될 수 있어요. 어두운 계열의 단색 옷으로 최대한 맞춰 입는 게 예의입니다.' },
+    ]
+  },
+  funeral4: {
+    tag: '⚫ 장례식 · 조문 인사말',
+    text: '영정 앞에서 절을 마쳤는데 상주에게 뭐라고 말해야 할지 입이 안 떨어진다. 적절한 인사말이 뭔지 모르겠다.',
+    hint: '💡 짧고 진심이 담긴 말 한마디가 최고예요',
+    choices: [
+      { label: '"삼가 고인의 명복을 빕니다"라고 짧게 인사한다', pct: '67%', result: '"삼가 고인의 명복을 빕니다"는 가장 정중하고 보편적인 조문 인사말이에요. 덧붙이고 싶다면 "많이 힘드시죠, 건강 챙기세요" 정도가 자연스럽습니다.' },
+      { label: '"얼마나 슬프세요, 정말 안됐어요"라고 공감을 표현한다', pct: '22%', result: '공감의 표현이지만 자칫 상주의 감정을 자극할 수 있어요. 조문 자리에서는 짧고 격식 있는 인사가 더 예의 있게 전달됩니다.' },
+      { label: '말없이 고개를 깊이 숙여 인사한다', pct: '11%', result: '말 없는 묵례도 충분히 진심을 전할 수 있어요. 하지만 상주가 아는 사이라면 짧게라도 인사말을 건네는 게 더 따뜻한 예의 표현이에요.' },
+    ]
+  },
+  funeral5: {
+    tag: '⚫ 장례식 · 식사 예절',
+    text: '조문을 마치고 나오는데 직원이 식사하고 가라고 안내한다. 어떻게 하는 게 맞는지 모르겠다.',
+    hint: '💡 장례식 식사는 고인에 대한 예우의 연장이에요',
+    choices: [
+      { label: '조용히 자리에 앉아 식사하고 나온다', pct: '57%', result: '장례식 식사는 유가족이 준비한 예우이므로 받아들이는 것이 예의예요. 조용히 식사하고 감사 인사 후 나오면 됩니다.' },
+      { label: '"바빠서요"라며 정중히 사양하고 나온다', pct: '35%', result: '식사를 사양해도 실례는 아니에요. 다만 이유를 간단히 말하고 정중하게 인사한 뒤 나오는 것이 예의 있는 행동입니다.' },
+      { label: '음식을 싸서 들고 나온다', pct: '8%', result: '장례 음식을 포장해 나가는 것은 예의에 어긋나요. 식사는 그 자리에서 조용히 하거나 정중히 사양하는 것이 맞습니다.' },
+    ]
+  },
+  wedding2: {
+    tag: '💍 결혼식 · 복장',
+    text: '친구 결혼식 하객으로 참석한다. 화사한 원피스를 입으려고 했는데 흰색 원피스도 괜찮은지 고민된다.',
+    hint: '💡 흰색은 신부를 위해 피하는 게 암묵적 예절이에요',
+    choices: [
+      { label: '흰색 원피스는 피하고 다른 색으로 바꾼다', pct: '79%', result: '흰색은 신부의 드레스 색상과 겹쳐 하객이 입는 것은 예의에 어긋나는 관례예요. 파스텔·코랄·민트 등 화사한 색상을 선택하는 게 좋아요.' },
+      { label: '흰색이어도 레이스나 장식이 있으면 괜찮다', pct: '15%', result: '디자인과 관계없이 흰색 자체가 신부의 컬러로 여겨져요. 비슷한 스타일의 아이보리나 다른 밝은 색상으로 대체하는 게 안전합니다.' },
+      { label: '상관없이 입고 싶은 걸 입는다', pct: '6%', result: '최근엔 관대해지는 추세이긴 하지만, 특히 한국 결혼식에서는 흰색 하객 복장이 신부 측 가족에게 불편함을 줄 수 있어요. 피하는 게 무난해요.' },
+    ]
+  },
+  wedding3: {
+    tag: '💍 결혼식 · 사진 촬영',
+    text: '식이 시작되기 전 웨딩홀에 도착했다. 예쁜 포토존에서 사진을 찍고 싶은데 어디까지 찍어도 되는지 모르겠다.',
+    hint: '💡 공식 촬영 시간에는 조용히 관람하는 게 예의예요',
+    choices: [
+      { label: '식 전후 포토존에서는 자유롭게 찍고, 식 중엔 플래시 없이 조용히 찍는다', pct: '65%', result: '식 전후 포토존은 자유롭게 이용해도 돼요. 식이 진행되는 동안에는 플래시를 끄고 조용히, 전문 촬영팀의 동선을 방해하지 않는 게 기본 예절입니다.' },
+      { label: '식이 진행되는 동안에도 자유롭게 찍는다', pct: '22%', result: '플래시·셔터 소리·이동 등이 공식 촬영 및 식의 분위기를 방해할 수 있어요. 하이라이트 장면에서는 조용히 감상하는 게 예의예요.' },
+      { label: '사진은 전혀 찍지 않고 감상만 한다', pct: '13%', result: '가장 방해 없는 선택이지만 과도하게 조심할 필요는 없어요. 포토존은 하객을 위한 공간이니 식 전후에는 편하게 찍어도 됩니다.' },
+    ]
+  },
+  wedding4: {
+    tag: '💍 결혼식 · 지각',
+    text: '교통 체증으로 결혼식에 20분 늦었다. 식은 이미 시작됐고 입장해야 하는데 어떻게 해야 할지 모르겠다.',
+    hint: '💡 조용히 눈에 띄지 않게 들어가는 게 핵심이에요',
+    choices: [
+      { label: '조용히 뒷자리에 앉아 식을 지켜본다', pct: '71%', result: '이미 진행 중인 식에는 소리 내지 않고 뒷자리에 조용히 앉는 게 맞아요. 앞 자리를 찾아 이동하거나 시선을 끄는 행동은 피하는 게 예의예요.' },
+      { label: '신랑신부 측에 연락해 미리 사과한다', pct: '22%', result: '진심 어린 사과는 중요하지만, 식 진행 중 연락하면 오히려 방해가 될 수 있어요. 식이 끝난 후 직접 사과하는 것이 더 적절합니다.' },
+      { label: '늦었으니 그냥 식사만 하러 간다', pct: '7%', result: '식에 참석하지 않고 식사만 하는 건 신랑신부에게 예의 없게 보일 수 있어요. 조용히라도 식장에 들어가 참석하는 게 예의 있는 행동이에요.' },
+    ]
+  },
+  wedding5: {
+    tag: '💍 결혼식 · 자리 배치',
+    text: '결혼식장에 도착했는데 신랑 측인지 신부 측인지 구분이 안 된다. 어디 앉아야 할지 모르겠다.',
+    hint: '💡 모르면 안내 직원에게 물어보는 게 가장 정확해요',
+    choices: [
+      { label: '안내 직원에게 "신랑 측 자리가 어디예요?" 라고 물어본다', pct: '74%', result: '웨딩홀 안내 직원에게 물어보는 게 가장 확실해요. 신랑 측은 오른쪽, 신부 측은 왼쪽이 일반적이지만 웨딩홀마다 다를 수 있어요.' },
+      { label: '아무 자리나 빈 곳에 앉는다', pct: '19%', result: '가족석이나 지정 좌석에 앉게 될 수 있어요. 특히 앞자리는 가족 지정 좌석인 경우가 많으니 안내 직원에게 먼저 확인하는 게 안전해요.' },
+      { label: '신랑신부 공통 지인이라 어느 쪽이든 상관없다고 생각한다', pct: '7%', result: '공통 지인이라도 기본적으로 자신을 초대한 측의 자리에 앉는 게 관례예요. 모를 경우 직원에게 물어보면 바로 안내받을 수 있어요.' },
+    ]
+  },
+  work2: {
+    tag: '🍻 회식 · 음주 권유',
+    text: '회식 중 부장님이 직접 술을 따라주며 한 잔 권한다. 나는 술을 못 마시는데 어떻게 해야 할지 모르겠다.',
+    hint: '💡 부드럽게 거절해도 괜찮아요, 이유가 명확하면 돼요',
+    choices: [
+      { label: '"저는 술을 못해서요, 음료로 함께하겠습니다"라고 정중히 말한다', pct: '69%', result: '술을 마시지 못한다는 이유를 간단히 말하면 대부분 이해해요. 음료라도 함께 들어 분위기에 참여하는 의지를 보여주는 게 좋아요.' },
+      { label: '거절하기 어려우니 조금만 받아서 입에만 댄다', pct: '24%', result: '원치 않으면 억지로 마실 필요 없어요. 다만 정말 못 마시는 상황이라면 솔직하게 말하는 것이 오히려 신뢰를 주는 행동이에요.' },
+      { label: '아무 말 없이 잔을 받아두고 안 마신다', pct: '7%', result: '잔을 받아두고 마시지 않으면 오히려 어색한 상황이 생길 수 있어요. 처음부터 솔직하게 못 마신다고 말하는 게 서로에게 편해요.' },
+    ]
+  },
+  work3: {
+    tag: '🍻 회식 · 2차 제안',
+    text: '1차 회식이 끝났는데 팀장이 2차를 가자고 한다. 내일 일찍 출근인데 가야 할지 고민된다.',
+    hint: '💡 2차는 선택이에요, 단 거절 방식이 중요해요',
+    choices: [
+      { label: '"내일 일정이 있어서 오늘은 먼저 들어가겠습니다"라고 말한다', pct: '62%', result: '자신의 상황을 솔직하게 말하는 건 예의에 어긋나지 않아요. "좋은 시간 됐습니다"처럼 긍정적인 마무리와 함께 이야기하면 더 좋아요.' },
+      { label: '피곤해도 그냥 2차까지 함께 간다', pct: '29%', result: '팀 분위기에 맞추는 것도 하나의 방법이에요. 다만 무리하면 다음 날 업무에 영향을 줄 수 있으니 본인 상황을 우선 판단하세요.' },
+      { label: '아무 말 없이 슬쩍 자리를 피한다', pct: '9%', result: '말 없이 사라지면 팀장이나 동료에게 인상이 좋지 않을 수 있어요. 짧게라도 이유를 말하고 인사하고 나가는 게 훨씬 나아요.' },
+    ]
+  },
+  work4: {
+    tag: '🍻 회식 · 메뉴 선택',
+    text: '첫 팀 회식인데 팀장이 나에게 먼저 메뉴를 고르라고 한다. 뭘 시켜야 할지 눈치가 보인다.',
+    hint: '💡 너무 비싸거나 너무 튀는 메뉴는 피하는 게 좋아요',
+    choices: [
+      { label: '"다들 드시고 싶은 게 있으세요? 저는 잘 맞출게요"라고 먼저 여쭤본다', pct: '55%', result: '처음 자리에서는 의견을 물어보는 것 자체가 배려로 보여요. 팀의 선호를 파악하면서 자신을 낮추는 자세가 신입에게 좋은 인상을 줍니다.' },
+      { label: '중간 가격대의 무난한 메뉴를 선택한다', pct: '37%', result: '무난한 선택도 좋아요. 너무 저렴하거나 너무 비싼 메뉴보다 팀 분위기에 맞는 중간 선택이 부담 없이 받아들여져요.' },
+      { label: '가장 비싼 메뉴를 시킨다', pct: '8%', result: '신입이 가장 비싼 메뉴를 고르면 팀장 입장에서 부담스럽게 느껴질 수 있어요. 첫 회식에선 눈치껏 중간 가격대를 고르는 게 무난해요.' },
+    ]
+  },
+  work5: {
+    tag: '🍻 회식 · 분위기 띄우기',
+    text: '회식 분위기가 어색하게 가라앉았다. 팀장이 신입에게 자기소개나 특기를 보여달라고 한다.',
+    hint: '💡 지나치게 빼거나 오버하는 것 둘 다 금물이에요',
+    choices: [
+      { label: '간단하게 본인 소개와 잘 부탁드린다는 인사를 한다', pct: '58%', result: '"안녕하세요, [이름]입니다. 잘 부탁드려요"처럼 짧고 밝게 자기소개하면 충분해요. 억지로 특기를 보여주려 하지 않아도 진심이 더 잘 전달돼요.' },
+      { label: '노래나 장기를 보여줘 분위기를 확 살린다', pct: '28%', result: '적극적인 모습은 인상을 남길 수 있어요. 단, 분위기를 읽고 상황에 맞게 하는 게 중요해요. 의도치 않게 과하면 역효과가 날 수 있어요.' },
+      { label: '"저는 특기가 없어요"라며 넘어간다', pct: '14%', result: '부담스러운 요청이지만 완전히 거절하면 어색해질 수 있어요. 짧은 자기소개라도 밝게 하면 분위기에 자연스럽게 녹아들 수 있어요.' },
+    ]
+  }
+};
+
+let currentSim = null, selectedIdx = null;
+
+function startSim(type) {
+  currentSim = type; selectedIdx = null;
+  const data = simData[type];
+  if (!data) return;
+
+  document.getElementById('simActive').classList.add('show');
+  document.getElementById('simListWrap').classList.add('hide');
+
+  document.getElementById('simProgress').style.width = '0%';
+  document.getElementById('simSitCard').innerHTML = `
+    <span class="sim-sit-tag">${data.tag}</span>
+    <p class="sim-sit-text">${data.text}</p>
+    <p class="sim-sit-hint">${data.hint}</p>
+  `;
+  document.getElementById('simChoices').innerHTML = data.choices.map((c, i) => `
+    <div class="sim-choice" onclick="pickChoice(${i})">
+      <div class="choice-marker">${String.fromCharCode(65+i)}</div>
+      <div class="sim-choice-text">${c.label}</div>
     </div>
-  </div>
-</section>
+  `).join('');
 
-<!-- ── FOOTER ────────────────────────────── -->
-<footer class="footer">
-  <div class="container footer-inner">
-    <div class="footer-logo-lockup">
-      <img src="logo-noonchi.png" alt="눈치코치" class="footer-logo-img" />
+  const btn = document.getElementById('simSubmitBtn');
+  btn.disabled = true; btn.textContent = '선택해주세요';
+  btn.onclick = submitSim;
+  document.getElementById('simResultCard').classList.remove('show');
+  window.scrollTo(0, 0);
+}
+
+function pickChoice(idx) {
+  selectedIdx = idx;
+  document.querySelectorAll('.sim-choice').forEach((el, i) => el.classList.toggle('selected', i === idx));
+  const btn = document.getElementById('simSubmitBtn');
+  btn.disabled = false; btn.textContent = '이걸로 골랐어요';
+  document.getElementById('simProgress').style.width = '50%';
+}
+
+function submitSim() {
+  if (selectedIdx === null || !currentSim) return;
+  const choice = simData[currentSim].choices[selectedIdx];
+  document.getElementById('simProgress').style.width = '100%';
+  document.getElementById('simResultPct').textContent = choice.pct;
+  document.getElementById('simResultSub').textContent = '가 같은 선택을 했어요';
+  document.getElementById('simResultText').textContent = choice.result;
+  const card = document.getElementById('simResultCard');
+  card.classList.add('show');
+  const btn = document.getElementById('simSubmitBtn');
+  btn.textContent = '다시 해보기'; btn.onclick = () => startSim(currentSim);
+  setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function closeSim() {
+  document.getElementById('simActive').classList.remove('show');
+  document.getElementById('simListWrap').classList.remove('hide');
+  currentSim = null; selectedIdx = null;
+}
+
+/* ── LIKE TOGGLE ── */
+function toggleLike(e, btnId, countId) {
+  e.stopPropagation();
+  const btn = document.getElementById(btnId);
+  const cnt = document.getElementById(countId);
+  const liked = btn.classList.toggle('liked');
+  cnt.textContent = parseInt(cnt.textContent) + (liked ? 1 : -1);
+}
+
+/* ── MODAL ── */
+const modalData = {
+  funeral: {
+    title: '장례식장 예절',
+    sub: '고인과의 관계를 선택해주세요',
+    options: [
+      { label: '친한 친구의 부모님', meta: '친밀도 높음', pct: '63%', result: '영정에 두 번 절 후, 상주에게 인사드리세요. 조의금은 3~5만원이 적당합니다.' },
+      { label: '직장 동료의 부모님', meta: '친밀도 보통', pct: '28%', result: '1~2번 절, 조의금 3만원. 짧은 위로 후 빠르게 자리를 비우는 것이 예의입니다.' },
+      { label: '지인의 가족', meta: '친밀도 낮음', pct: '9%', result: '절 1번, 조의금 3만원. 부의함에 넣고 짧게 인사 후 나오셔도 됩니다.' },
+    ]
+  },
+  wedding: {
+    title: '결혼식 예절',
+    sub: '신랑/신부와의 관계를 선택해주세요',
+    options: [
+      { label: '친한 친구 (가장 친한)', meta: '10년 이상 친분', pct: '51%', result: '축의금 10만원 이상 권장. 식사 자리에 꼭 참석하고 축하 메시지를 전달해보세요.' },
+      { label: '대학교 동기 (보통)', meta: '가끔 연락하는 사이', pct: '35%', result: '축의금 5~7만원. 식사 참석 시 7만원, 불참 시 5만원이 일반적입니다.' },
+      { label: '직장 동료 (가볍게 아는)', meta: '업무상 아는 사이', pct: '14%', result: '3~5만원. 참석 여부에 따라 결정하세요.' },
+    ]
+  },
+  work: {
+    title: '회식 예절',
+    sub: '어떤 회식인가요?',
+    options: [
+      { label: '신입사원 첫 회식', meta: '입사 후 첫 번째', pct: '44%', result: '상석은 상급자 자리이니 끝 자리에 앉으세요. 술을 못 마셔도 정중히 사양 가능합니다.' },
+      { label: '팀 정기 회식', meta: '분기 1회 정도', pct: '38%', result: '분위기 파악 후 자연스럽게 참여하세요. 1차 참여가 기본 예의이며 2차는 선택입니다.' },
+      { label: '부서 회식 (임원 포함)', meta: '공식적인 자리', pct: '18%', result: '단정한 복장 필수. 건배사 시 잔을 높이 들어올리지 마세요.' },
+    ]
+  }
+};
+
+function openModal(type) {
+  const data = modalData[type];
+  if (!data) return;
+  document.getElementById('modalContent').innerHTML = `
+    <h2 class="modal-title">${data.title}</h2>
+    <p class="modal-sub">${data.sub}</p>
+    <div class="modal-opts">
+      ${data.options.map((o, i) => `
+        <div class="modal-opt" onclick="selectModalOpt(${i},'${type}')">
+          <div><div class="modal-opt-label">${o.label}</div><div class="modal-opt-meta">${o.meta}</div></div>
+          <div class="modal-opt-pct">${o.pct}</div>
+        </div>`).join('')}
     </div>
-    <p class="footer-copy">© 2026 눈치코치. All rights reserved.</p>
-  </div>
-</footer>
+    <div class="modal-result" id="modalResult">
+      <div class="modal-result-label">✦ AI 추천 행동</div>
+      <div class="modal-result-text" id="modalResultText"></div>
+    </div>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
 
+function selectModalOpt(idx, type) {
+  document.querySelectorAll('.modal-opt').forEach(o => o.classList.remove('selected'));
+  document.querySelectorAll('.modal-opt')[idx].classList.add('selected');
+  document.getElementById('modalResultText').textContent = modalData[type].options[idx].result;
+  const el = document.getElementById('modalResult');
+  el.classList.add('visible');
+  setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleOverlayClick(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+
+/* ── TOAST ── */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ── SEARCH ── */
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.value.trim()) { showToast(`"${e.target.value}" AI 분석 중...`); e.target.blur(); }
+});
+</script>
 </body>
 </html>
