@@ -84,9 +84,9 @@
     .icon-btn:hover { background: var(--pink-pale); }
     .icon-btn svg { width: 18px; height: 18px; stroke: var(--gray-700); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .notif-dot::after {
-      content: ''; position: absolute; top: 7px; right: 7px;
-      width: 7px; height: 7px; background: var(--pink);
-      border-radius: 50%; border: 2px solid var(--white);
+      content: ''; position: absolute; top: 6px; right: 7px;
+      width: 7px; height: 7px; background: #FF6B35;
+      border-radius: 50%; border: 1.5px solid var(--white);
     }
 
     /* ─── SCROLL CONTENT ─── */
@@ -218,6 +218,40 @@
     }
     .sit-card.featured .sit-arrow { background: rgba(255,255,255,.22); }
     .sit-arrow svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ─── HOT COMMUNITY CARD ─── */
+    .hot-card {
+      flex-shrink: 0; width: 230px; border-radius: var(--r-md);
+      padding: 16px; background: var(--white);
+      border: 1px solid rgba(0,0,0,.07); box-shadow: var(--shadow-sm);
+      cursor: pointer; display: flex; flex-direction: column; gap: 10px;
+      transition: transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s;
+    }
+    .hot-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .hot-card.featured {
+      background: linear-gradient(140deg, #FF5500 0%, #FF7733 100%);
+      border-color: transparent; color: white;
+    }
+    .hot-card-badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      padding: 3px 9px; border-radius: var(--r-pill);
+      background: var(--pink-pale); color: var(--pink);
+      align-self: flex-start;
+    }
+    .hot-card.featured .hot-card-badge { background: rgba(255,255,255,.22); color: white; }
+    .hot-card-title { font-size: 14px; font-weight: 800; line-height: 1.35; letter-spacing: -0.3px; }
+    .hot-card-preview { font-size: 12px; line-height: 1.5; color: var(--gray-500); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .hot-card.featured .hot-card-preview { color: rgba(255,255,255,.75); }
+    .hot-card-meta { display: flex; align-items: center; gap: 6px; }
+    .hot-card-av { width: 20px; height: 20px; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .hot-card-author { font-size: 11px; color: var(--gray-500); font-weight: 600; flex: 1; }
+    .hot-card.featured .hot-card-author { color: rgba(255,255,255,.75); }
+    .hot-card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 6px; border-top: 1px solid rgba(0,0,0,.06); }
+    .hot-card.featured .hot-card-footer { border-top-color: rgba(255,255,255,.2); }
+    .hot-card-stats { display: flex; gap: 10px; font-size: 11px; color: var(--gray-500); }
+    .hot-card.featured .hot-card-stats { color: rgba(255,255,255,.75); }
+    .hot-card-stat { display: flex; align-items: center; gap: 3px; }
+    .hot-card-stat svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
     /* ─── AI CARD ─── */
     .ai-section { padding: 0 20px; margin-bottom: 32px; }
@@ -591,13 +625,55 @@
       font-size: 11px; font-weight: 700; flex-shrink: 0;
     }
     .pd-comment-name { font-size: 12px; font-weight: 700; color: var(--black); }
-    .pd-comment-time { font-size: 11px; color: var(--gray-300); margin-left: auto; }
+    .pd-comment-time { font-size: 11px; color: var(--gray-300); }
     .pd-comment-text { font-size: 13px; color: var(--gray-700); line-height: 1.6; }
     .pd-ai-comment { background: var(--pink-pale); border-color: var(--pink-mid); }
+    .pd-ai-comment {
+      background: linear-gradient(135deg, #FFF5F2 0%, #FFF0F8 100%) !important;
+      border-color: var(--pink-mid) !important;
+    }
     .pd-ai-label {
       display: inline-flex; align-items: center; gap: 4px;
-      background: var(--pink); color: white; font-size: 10px; font-weight: 700;
-      border-radius: var(--r-pill); padding: 2px 8px; margin-bottom: 8px;
+      background: linear-gradient(90deg, var(--pink), #FF8C42); color: white;
+      font-size: 10px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 2px 9px; margin-bottom: 8px;
+    }
+    .pd-ai-avatar {
+      width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--pink), #FF8C42);
+      color: white; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ─── REPLIES ─── */
+    .pd-reply-list { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .pd-reply {
+      display: flex; align-items: flex-start; gap: 8px;
+      background: var(--gray-100); border-radius: 10px;
+      padding: 10px 12px; margin-left: 16px;
+    }
+    .pd-reply-avatar {
+      width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+      font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pd-reply-name { font-size: 12px; font-weight: 700; color: var(--black); }
+    .pd-reply-time { font-size: 10px; color: var(--gray-300); margin-left: 4px; font-weight: 400; }
+    .pd-reply-text { font-size: 12px; color: var(--gray-700); line-height: 1.55; margin-top: 3px; }
+    .pd-reply-input-wrap {
+      display: flex; align-items: center; gap: 6px;
+      margin-top: 8px; margin-left: 16px;
+    }
+    .pd-reply-input {
+      flex: 1; background: var(--gray-100); border: 1.5px solid transparent;
+      border-radius: var(--r-pill); padding: 8px 14px;
+      font-size: 12px; font-family: inherit; outline: none;
+      transition: border-color .18s;
+    }
+    .pd-reply-input:focus { border-color: var(--pink-mid); background: var(--white); }
+    .pd-reply-send {
+      font-size: 12px; font-weight: 700; color: var(--pink);
+      font-family: inherit; white-space: nowrap; padding: 6px 2px;
     }
     .pd-comment-input-row {
       position: sticky; bottom: 0; background: var(--white);
@@ -622,13 +698,14 @@
       background: rgba(255,255,255,.96);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border-top: 1px solid rgba(0,0,0,.06);
-      display: flex; align-items: center; justify-content: space-around;
-      padding: 0 4px; z-index: 200;
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      align-items: center; z-index: 200;
     }
     .nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-      padding: 6px 8px; border-radius: var(--r-sm); flex: 1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px; padding: 6px 0; border-radius: var(--r-sm);
       transition: background .18s; position: relative;
+      overflow: hidden;
     }
     .nav-badge {
       position: absolute; top: 6px; right: 12px;
@@ -638,7 +715,7 @@
     }
     .nav-item:not(.nav-home):hover { background: var(--pink-pale); }
     .nav-item svg { width: 22px; height: 22px; stroke: var(--gray-300); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: stroke .18s; }
-    .nav-item span { font-size: 9.5px; color: var(--gray-300); font-weight: 600; transition: color .18s; white-space: nowrap; }
+    .nav-item span { font-size: 9.5px; color: var(--gray-300); font-weight: 600; transition: color .18s; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
     .nav-item.active svg { stroke: var(--pink); }
     .nav-item.active span { color: var(--pink); }
 
@@ -713,6 +790,141 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+    /* ─── LEVEL BADGE ─── */
+    .level-badge {
+      display: inline-flex; align-items: center; gap: 2px;
+      font-size: 10px; font-weight: 700; padding: 2px 8px;
+      border-radius: 20px; white-space: nowrap; vertical-align: middle; line-height: 1.5;
+    }
+    /* ─── LEVEL CARD (MY PAGE) ─── */
+    .level-card {
+      margin: 16px 20px 0;
+      background: linear-gradient(135deg, #fff8f5 0%, #fff 70%);
+      border: 1.5px solid var(--pink-mid); border-radius: var(--r-lg); padding: 16px 18px;
+    }
+    .lc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .lc-name { font-size: 15px; font-weight: 800; color: var(--black); }
+    .lc-pts { font-size: 12px; color: var(--gray-500); }
+    .xp-track { height: 8px; background: var(--gray-100); border-radius: 99px; overflow: hidden; margin-bottom: 6px; }
+    .xp-fill { height: 100%; background: linear-gradient(90deg, var(--pink), #FF8C42); border-radius: 99px; transition: width .6s cubic-bezier(.4,0,.2,1); min-width: 4px; }
+    .xp-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--gray-500); }
+    .level-card { cursor: pointer; transition: box-shadow .18s; }
+    .level-card:hover { box-shadow: 0 4px 16px rgba(255,100,80,.12); }
+    .level-card-hint { font-size: 10px; color: var(--gray-300); text-align: right; margin-top: 6px; }
+
+    /* ─── LEVEL SHEET ─── */
+    .level-sheet-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.5); backdrop-filter: blur(6px);
+      z-index: 500; opacity: 0; pointer-events: none;
+      transition: opacity .3s;
+      display: flex; align-items: flex-end; justify-content: center;
+    }
+    .level-sheet-overlay.open { opacity: 1; pointer-events: all; }
+    .level-sheet {
+      width: 100%; max-width: 430px; background: var(--white);
+      border-radius: 28px 28px 0 0; padding: 12px 24px 48px;
+      transform: translateY(100%);
+      transition: transform .4s cubic-bezier(.32,0,.67,0);
+      max-height: 88vh; overflow-y: auto;
+    }
+    .level-sheet-overlay.open .level-sheet { transform: translateY(0); transition: transform .4s cubic-bezier(.16,1,.3,1); }
+    .level-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px; border-radius: var(--r-md);
+      border: 1.5px solid var(--gray-100); margin-bottom: 10px;
+      transition: border-color .18s;
+    }
+    .level-row.current { border-color: var(--pink); background: #FFF8F6; }
+    .level-row.achieved { opacity: 1; }
+    .level-row.locked { opacity: .45; }
+    .level-row-emoji { font-size: 28px; line-height: 1; flex-shrink: 0; }
+    .level-row-info { flex: 1; }
+    .level-row-name { font-size: 15px; font-weight: 700; color: var(--black); }
+    .level-row-req { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+    .level-row-right { text-align: right; flex-shrink: 0; }
+    .level-row-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; }
+    .level-row-badge.done { background: #E8F5E9; color: #2E7D32; }
+    .level-row-badge.now { background: var(--pink-pale); color: var(--pink); }
+    .level-row-badge.lock { background: var(--gray-100); color: var(--gray-500); }
+    .level-pts-guide {
+      background: linear-gradient(135deg, #FFF8F6 0%, #fff 100%);
+      border: 1.5px solid var(--pink-mid); border-radius: var(--r-md);
+      padding: 14px 16px; margin-bottom: 18px;
+    }
+    .level-pts-guide-title { font-size: 12px; font-weight: 700; color: var(--gray-700); margin-bottom: 10px; }
+    .level-pts-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 13px; }
+    .level-pts-row + .level-pts-row { border-top: 1px solid var(--gray-100); }
+    .level-pts-label { color: var(--gray-700); }
+    .level-pts-val { font-weight: 700; color: var(--pink); }
+
+    /* ─── WRITE SHEET ─── */
+    .write-sheet {
+      position: fixed; top: 0; left: 50%; width: 100%; max-width: 430px; height: 100%;
+      z-index: 400; background: var(--white);
+      transform: translateY(100%) translateX(-50%);
+      transition: transform .32s cubic-bezier(.4,0,.2,1);
+      display: flex; flex-direction: column;
+    }
+    @media (max-width: 430px) { .write-sheet { left: 0; transform: translateY(100%); } .write-sheet.open { transform: translateY(0) !important; } }
+    .write-sheet.open { transform: translateY(0) translateX(-50%); }
+    .ws-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px; height: 56px; flex-shrink: 0;
+      border-bottom: 1px solid rgba(0,0,0,.07);
+    }
+    .ws-cancel { font-size: 14px; color: var(--gray-500); font-family: inherit; padding: 6px; }
+    .ws-label { font-size: 16px; font-weight: 700; }
+    .ws-done {
+      font-size: 14px; font-weight: 700; color: #fff;
+      background: var(--pink); border-radius: 20px; padding: 7px 18px;
+      font-family: inherit; transition: opacity .2s;
+    }
+    .ws-done:disabled { opacity: .35; }
+    .ws-cats { display: flex; gap: 8px; padding: 14px 16px 4px; overflow-x: auto; scrollbar-width: none; flex-shrink: 0; }
+    .ws-cats::-webkit-scrollbar { display: none; }
+    .ws-cat {
+      flex-shrink: 0; font-size: 13px; font-weight: 600; padding: 6px 14px;
+      border-radius: 20px; border: 1.5px solid #e0e0e0;
+      color: var(--gray-500); font-family: inherit; transition: all .18s;
+    }
+    .ws-cat.on { border-color: var(--pink); color: var(--pink); background: #FFF2EE; }
+    .ws-textarea {
+      flex: 1; border: none; outline: none; resize: none;
+      font-size: 15px; font-family: inherit; color: var(--black);
+      padding: 16px 20px; line-height: 1.7;
+    }
+    .ws-footer { padding: 6px 20px 20px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+    .ws-char { font-size: 12px; color: var(--gray-300); }
+    .ws-user-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-700); font-weight: 600; }
+    .ws-avatar-sm {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #EEF2FF; color: #5B6EF5;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+    }
+    /* ─── ADOPT BUTTON ─── */
+    .pd-adopt-btn {
+      font-size: 11px; font-weight: 700; padding: 3px 11px;
+      border-radius: 20px; border: 1.5px solid var(--gray-300);
+      color: var(--gray-500); background: none; font-family: inherit;
+      cursor: pointer; transition: all .2s; flex-shrink: 0;
+    }
+    .pd-adopt-btn:hover { border-color: var(--pink); color: var(--pink); }
+    .pd-adopt-btn.adopted { border-color: var(--pink); color: var(--pink); background: #FFF2EE; pointer-events: none; }
+    .pd-comment.adopted-item { border-color: var(--pink-mid) !important; background: #FFF8F5 !important; }
+    .adopted-tag {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 10px; font-weight: 700; color: var(--pink);
+      background: #FFF2EE; border-radius: 20px; padding: 2px 8px; margin-bottom: 6px;
+    }
+    .pd-mine { font-size: 10px; font-weight: 700; color: #1565C0; background: #E3F2FD; border-radius: 20px; padding: 1px 7px; }
+    .pd-comment-footer { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--gray-100); }
+    .pd-like-btn { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--gray-500); cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; transition: color .15s; }
+    .pd-like-btn svg { width: 13px; height: 13px; stroke: var(--gray-500); fill: none; stroke-width: 2; transition: stroke .15s, fill .15s; }
+    .pd-like-btn.liked { color: var(--pink); }
+    .pd-like-btn.liked svg { stroke: var(--pink); fill: var(--pink); }
+
     /* ─── REVEAL ANIMATIONS ─── */
     .reveal { opacity: 0; transform: translateY(20px); transition: opacity .5s ease, transform .5s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -733,11 +945,14 @@
       <img src="logo.jpg" alt="눈치코치" />
     </div>
     <div class="topbar-right">
-      <button class="icon-btn notif-dot" onclick="showToast('새 알림 3개가 있어요')">
+      <button class="icon-btn" onclick="showToast('새 알림 3개가 있어요')">
         <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       </button>
       <button class="icon-btn" onclick="switchTab('messages')">
-        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <div style="position:relative;width:18px;height:18px;">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--gray-700);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span style="position:absolute;top:-4px;right:-4px;width:8px;height:8px;background:#FF6B35;border-radius:50%;border:1.5px solid #fff;display:block;"></span>
+        </div>
       </button>
     </div>
   </header>
@@ -777,46 +992,77 @@
           <button class="section-more" onclick="switchTab('simulation')">전체보기 <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
         </div>
         <div class="cards-scroll reveal-stagger">
-          <a class="sit-card featured" onclick="openModal('funeral')" href="javascript:void(0)">
-            <div class="sit-emoji">⚫</div>
-            <div class="sit-badge">인기 1위</div>
-            <div class="sit-title">장례식장<br>첫 방문 예절</div>
-            <div class="sit-category">장례식 · 공식</div>
-            <div class="sit-footer">
-              <span class="sit-count">2,847명 확인</span>
-              <div class="sit-arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          <div class="hot-card featured" onclick="openHotPost('hot1')">
+            <div class="hot-card-badge">🔥 인기 1위</div>
+            <div class="hot-card-title">팀장이 회식서 내 연봉을 다 공개했습니다</div>
+            <div class="hot-card-preview">신입이라 연봉이 낮은데, 팀장이 갑자기 "00씨는 얼마야? 우리 팀 제일 낮지?" 하면서 다 들리는 데서…</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#fff3;color:#fff">새</div>
+              <span class="hot-card-author">새벽세시반 · 3시간 전</span>
+              <span class="feed-tag tag-work" style="font-size:10px;padding:2px 7px">직장</span>
             </div>
-          </a>
-          <a class="sit-card" onclick="openModal('wedding')" href="javascript:void(0)">
-            <div class="sit-emoji">💍</div>
-            <div class="sit-badge">주간 급상승</div>
-            <div class="sit-title">결혼식<br>축의금 얼마?</div>
-            <div class="sit-category">결혼식 · 금전</div>
-            <div class="sit-footer">
-              <span class="sit-count">1,523명 확인</span>
-              <div class="sit-arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>312</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>87</span>
+              </div>
+              <span style="font-size:10px;opacity:.7">4,231명 읽음</span>
             </div>
-          </a>
-          <a class="sit-card" onclick="openModal('work')" href="javascript:void(0)">
-            <div class="sit-emoji">🍻</div>
-            <div class="sit-badge">신규</div>
-            <div class="sit-title">첫 회식<br>어디 앉지?</div>
-            <div class="sit-category">회식 · 직장</div>
-            <div class="sit-footer">
-              <span class="sit-count">987명 확인</span>
-              <div class="sit-arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+
+          <div class="hot-card" onclick="openHotPost('hot2')">
+            <div class="hot-card-badge">📈 주간 급상승</div>
+            <div class="hot-card-title">축의금 5만원 냈더니 밥도 안 줬대요</div>
+            <div class="hot-card-preview">대학 동기 결혼식에 5만원 냈는데, 식사 시간에 제 자리가 없었어요. 5만원은 밥 제공 안 하는 선이라고…</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#FFF0FB;color:#d63001">솜</div>
+              <span class="hot-card-author">솜사탕구름 · 6시간 전</span>
+              <span class="feed-tag tag-wedding" style="font-size:10px;padding:2px 7px">결혼식</span>
             </div>
-          </a>
-          <a class="sit-card" onclick="showToast('준비중이에요')" href="javascript:void(0)">
-            <div class="sit-emoji">🎓</div>
-            <div class="sit-badge">학교</div>
-            <div class="sit-title">교수님께<br>이메일 쓰기</div>
-            <div class="sit-category">학교 · 커뮤니케이션</div>
-            <div class="sit-footer">
-              <span class="sit-count">654명 확인</span>
-              <div class="sit-arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>208</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>64</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">2,847명 읽음</span>
             </div>
-          </a>
+          </div>
+
+          <div class="hot-card" onclick="openHotPost('hot3')">
+            <div class="hot-card-badge">💬 실시간 논쟁</div>
+            <div class="hot-card-title">친구 부모님 장례식 조의금 3만원이면 실례인가요?</div>
+            <div class="hot-card-preview">요즘 진짜 돈이 없어서요. 3만원이면 너무 적은 건지, 차라리 안 가는 게 나을지 고민 중이에요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#F5F5FF;color:#7C5CBF">달</div>
+              <span class="hot-card-author">달빛산책중 · 11시간 전</span>
+              <span class="feed-tag tag-funeral" style="font-size:10px;padding:2px 7px">장례식</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>175</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>52</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">1,523명 읽음</span>
+            </div>
+          </div>
+
+          <div class="hot-card" onclick="openHotPost('hot4')">
+            <div class="hot-card-badge">🆕 오늘 급상승</div>
+            <div class="hot-card-title">교수님이 시험지를 그냥 던져줬는데 이게 맞나요?</div>
+            <div class="hot-card-preview">중간고사 결과 돌려주면서 시험지를 던지듯 주고 "이것도 못 해?" 하셨어요. 학교 측에 말할 수 있나요?</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#EEF2FF;color:#5B6EF5">잠</div>
+              <span class="hot-card-author">잠수함타는사람 · 14시간 전</span>
+              <span class="feed-tag tag-school" style="font-size:10px;padding:2px 7px">학교</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>143</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>39</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">987명 읽음</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -926,7 +1172,7 @@
         <div class="sim-list-wrap" id="simListWrap">
           <div class="sim-list-header">
             <h2>시뮬레이션</h2>
-            <span>총 21개 상황</span>
+            <span>총 18개 상황</span>
           </div>
           <div class="sim-cats">
             <button class="sim-cat-chip active" onclick="filterSim(this,'전체')">전체</button>
@@ -935,6 +1181,7 @@
             <button class="sim-cat-chip" onclick="filterSim(this,'회식')">🍻 회식</button>
             <button class="sim-cat-chip" onclick="filterSim(this,'직장')">💼 직장</button>
             <button class="sim-cat-chip" onclick="filterSim(this,'학교')">🎓 학교</button>
+            <button class="sim-cat-chip" onclick="filterSim(this,'병문안')">🏥 병문안</button>
           </div>
           <div class="sim-list">
             <div class="sim-item" data-cat="장례식" onclick="startSim('funeral')">
@@ -1176,7 +1423,7 @@
       </div>
 
       <div class="feed-list" id="commFeedList">
-        <div class="feed-card" data-category="장례식" onclick="openPostDetail('dalbit')">
+        <div class="feed-card" data-category="장례식" onclick="showToast('상세 보기')">
           <div class="feed-top">
             <div class="feed-user">
               <div class="avatar" style="background:#FFF2EE;color:#FF5500;">달</div>
@@ -1195,7 +1442,7 @@
             <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span></button>
           </div>
         </div>
-        <div class="feed-card" data-category="회식" onclick="openPostDetail('gureum')">
+        <div class="feed-card" data-category="회식" onclick="showToast('상세 보기')">
           <div class="feed-top">
             <div class="feed-user">
               <div class="avatar" style="background:#F0FBF4;color:#30A55F;">구</div>
@@ -1782,7 +2029,7 @@
         <div style="height:8px"></div>
       </div>
 
-      <button class="write-fab" id="writeFab" onclick="showToast('글쓰기 화면')">
+      <button class="write-fab" id="writeFab" onclick="openWriteSheet()">
         <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       </button>
 
@@ -1803,10 +2050,23 @@
           <button class="profile-edit-btn" onclick="showToast('프로필 수정')">편집</button>
         </div>
         <div class="profile-stats">
-          <div class="profile-stat"><div class="profile-stat-num">12</div><div class="profile-stat-label">완료한 시뮬</div></div>
-          <div class="profile-stat"><div class="profile-stat-num">5개</div><div class="profile-stat-label">저장한 상황</div></div>
-          <div class="profile-stat"><div class="profile-stat-num">23</div><div class="profile-stat-label">받은 공감</div></div>
+          <div class="profile-stat"><div class="profile-stat-num" id="statPosts">3</div><div class="profile-stat-label">작성 글</div></div>
+          <div class="profile-stat"><div class="profile-stat-num" id="statComments">0</div><div class="profile-stat-label">작성 댓글</div></div>
+          <div class="profile-stat"><div class="profile-stat-num" id="statAdoptions">0</div><div class="profile-stat-label">받은 채택</div></div>
         </div>
+      </div>
+
+      <div class="level-card" onclick="openLevelSheet()">
+        <div class="lc-top">
+          <div class="lc-name" id="myLvName">🌱 눈치 새싹</div>
+          <div class="lc-pts" id="myLvPts">0점</div>
+        </div>
+        <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+        <div class="xp-labels">
+          <span id="xpCur">0 / 5점</span>
+          <span id="xpNext">다음: 🐣 눈치 초보</span>
+        </div>
+        <div class="level-card-hint">탭하여 레벨 목록 보기 →</div>
       </div>
 
       <div class="mypage-section">
@@ -1824,8 +2084,13 @@
           </div>
           <div class="menu-item" onclick="showToast('내가 쓴 글')">
             <div class="menu-icon" style="background:#EEF2FF;">✍️</div>
-            <div><div class="menu-label">내가 쓴 글</div><div class="menu-sub">3개 작성</div></div>
-            <div class="menu-right"><span class="menu-badge">3</span><div class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div><div class="menu-label">내가 쓴 글</div><div class="menu-sub" id="myPostSub">3개 작성</div></div>
+            <div class="menu-right"><span class="menu-badge" id="myPostBadge">3</span><div class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+          </div>
+          <div class="menu-item" onclick="showToast('내가 단 댓글')">
+            <div class="menu-icon" style="background:#F0FBF4;">💬</div>
+            <div><div class="menu-label">내가 단 댓글</div><div class="menu-sub" id="myCommentSub">0개 작성</div></div>
+            <div class="menu-right"><span class="menu-badge" id="myCommentBadge" style="display:none">0</span><div class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
           </div>
         </div>
       </div>
@@ -1933,9 +2198,11 @@
       </div>
     </button>
     <button class="nav-item" data-tab="messages" onclick="switchTab('messages')">
-      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <div style="position:relative;width:22px;height:22px;">
+        <svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--gray-300);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span class="nav-badge" id="msgBadge" style="top:-3px;right:-3px;position:absolute;"></span>
+      </div>
       <span>쪽지</span>
-      <span class="nav-badge" id="msgBadge"></span>
     </button>
     <button class="nav-item" data-tab="mypage" onclick="switchTab('mypage')">
       <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -1943,7 +2210,70 @@
     </button>
   </nav>
 
+<!-- POST DETAIL OVERLAY -->
+<div class="post-detail-overlay" id="pdOverlay">
+  <div class="pd-topbar">
+    <button class="pd-back" onclick="closePD()">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span class="pd-topbar-title">게시글</span>
+  </div>
+  <div class="pd-body" id="pdBody"></div>
+  <div class="pd-comment-input-row">
+    <input class="pd-comment-input" id="pdInput" placeholder="댓글을 입력하세요..." onkeydown="if(event.key==='Enter')submitPdComment()" />
+    <button class="pd-send-btn" onclick="submitPdComment()">
+      <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- WRITE SHEET -->
+<div class="write-sheet" id="writeSheet">
+  <div class="ws-header">
+    <button class="ws-cancel" onclick="closeWriteSheet()">취소</button>
+    <span class="ws-label">글쓰기</span>
+    <button class="ws-done" id="wsDone" onclick="submitPost()" disabled>등록</button>
+  </div>
+  <div class="ws-cats">
+    <button class="ws-cat" onclick="selectWsCat(this,'장례식')">⚫ 장례식</button>
+    <button class="ws-cat" onclick="selectWsCat(this,'결혼식')">💍 결혼식</button>
+    <button class="ws-cat" onclick="selectWsCat(this,'회식')">🍻 회식</button>
+    <button class="ws-cat" onclick="selectWsCat(this,'직장')">💼 직장</button>
+    <button class="ws-cat" onclick="selectWsCat(this,'학교')">🎓 학교</button>
+    <button class="ws-cat" onclick="selectWsCat(this,'자유')">💬 자유</button>
+  </div>
+  <textarea class="ws-textarea" id="wsTextarea" placeholder="궁금한 상황을 자유롭게 공유해보세요..." oninput="onWsInput(this)" maxlength="300"></textarea>
+  <div class="ws-footer">
+    <div class="ws-user-row">
+      <div class="ws-avatar-sm">봄</div>
+      <span>봄비내리는날</span>
+      <span id="wsMyBadge"></span>
+    </div>
+    <span class="ws-char" id="wsChar">0 / 300</span>
+  </div>
+</div>
+
 </div><!-- /app-shell -->
+
+<!-- LEVEL SHEET -->
+<div class="level-sheet-overlay" id="levelSheetOverlay" onclick="handleLevelOverlayClick(event)">
+  <div class="level-sheet" id="levelSheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title">눈치 레벨</h2>
+    <p class="modal-sub" id="levelSheetSub">활동할수록 레벨이 올라가요!</p>
+
+    <div class="level-pts-guide">
+      <div class="level-pts-guide-title">✦ 포인트 적립 방법</div>
+      <div class="level-pts-row"><span class="level-pts-label">✍️ 글 작성</span><span class="level-pts-val">+1 pt</span></div>
+      <div class="level-pts-row"><span class="level-pts-label">💬 댓글 작성</span><span class="level-pts-val">+1 pt</span></div>
+      <div class="level-pts-row"><span class="level-pts-label">⭐ 채택 받기</span><span class="level-pts-val">+5 pt</span></div>
+    </div>
+
+    <div id="levelRowList"></div>
+
+    <button class="modal-close-btn" onclick="closeLevelSheet()">닫기</button>
+  </div>
+</div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
@@ -2011,11 +2341,11 @@ const simData = {
   funeral: {
     tag: '⚫ 장례식 · 첫 방문',
     text: '친한 친구 아버지 장례식에 처음으로 가게 됐다. 조문 절차를 몰라서 당황스럽다.',
-    hint: '💡 절 횟수가 고인과의 관계에 따라 달라지기도 해요',
+    hint: '💡 유교식 장례는 두 번 절(재배), 기독교식은 묵념이나 한 번 절이 일반적이에요',
     choices: [
-      { label: '두 번 절하고 상주에게 짧게 위로한다', pct: '63%', result: '영정에 두 번 절 후, 상주에게 "삼가 고인의 명복을 빕니다"라고 인사드리세요. 조의금은 3~5만원이 적당합니다.' },
-      { label: '한 번만 절하고 나온다', pct: '28%', result: '한 번 절도 예의에 맞지만, 친한 친구의 경우엔 두 번 절이 더 예를 갖추는 방법입니다.' },
-      { label: '절 없이 묵념만 한다', pct: '9%', result: '묵념도 존중의 표현이지만, 가능하다면 절을 하는 것이 유가족에 대한 더 깊은 예의 표현이에요.' },
+      { label: '두 번 절하고 상주에게 짧게 위로한다', pct: '67%', result: '유교식 장례에서 두 번 절(재배)이 기본이에요. 영정에 절한 뒤 상주에게 "삼가 고인의 명복을 빕니다"라고 인사드리세요. 종교를 모를 땐 미리 파악하거나 주변을 보고 따르면 돼요.' },
+      { label: '한 번만 절하고 나온다', pct: '24%', result: '한 번 절은 기독교식 장례나 간소화된 의식에서 하는 방식이에요. 일반 유교식 장례에서는 두 번 절(재배)이 기본이므로, 확인이 어렵다면 두 번을 기준으로 하는 게 안전해요.' },
+      { label: '절 없이 묵념만 한다', pct: '9%', result: '종교적 이유로 절을 하기 어렵다면 묵념도 충분히 예의 있는 대안이에요. 상주에게 미리 "종교상 묵념으로 대신하겠습니다"라고 양해를 구하면 더 배려 있는 행동이에요.' },
     ]
   },
   wedding: {
@@ -2023,9 +2353,9 @@ const simData = {
     text: '대학 동기가 결혼식에 초대했다. 가끔 연락하는 사이인데 적정 축의금이 얼마일지 모르겠다.',
     hint: '💡 식사 참석 여부에 따라 달라질 수 있어요',
     choices: [
-      { label: '5만원 (식사 불참 예정)', pct: '51%', result: '5만원은 식사 불참 시 적당한 금액이에요. 식사에 참석한다면 7만원 이상이 일반적입니다.' },
-      { label: '7만원 (식사 참석 예정)', pct: '35%', result: '7만원은 가끔 연락하는 동기 결혼식에서 가장 보편적인 금액이에요. 적당한 성의 표현입니다.' },
-      { label: '10만원 이상', pct: '14%', result: '10만원 이상은 친한 친구 수준의 친밀도일 때 더 어울려요. 가끔 연락하는 사이라면 7만원으로도 충분해요.' },
+      { label: '7만원 (식사 불참 예정)', pct: '51%', result: '2026년 기준, 식사 불참 시 7만원이 가장 현실적인 금액이에요. 5만원은 물가 상승을 고려하면 다소 부족하게 느껴질 수 있어요.' },
+      { label: '10만원 (식사 참석 예정)', pct: '35%', result: '식사를 함께한다면 10만원이 2026년 기준 가장 보편적인 금액이에요. 음식값 포함해 적당한 성의 표현입니다.' },
+      { label: '15만원 이상', pct: '14%', result: '15만원 이상은 꽤 친한 친구 수준일 때 더 어울려요. 가끔 연락하는 사이라면 10만원으로도 충분합니다.' },
     ]
   },
   work: {
@@ -2033,9 +2363,9 @@ const simData = {
     text: '입사 후 첫 팀 회식이다. 자리 배치부터 어떻게 행동해야 할지 하나도 모르겠다.',
     hint: '💡 첫 인상이 정말 중요한 자리예요',
     choices: [
-      { label: '상급자에게 자리를 여쭤보고 끝자리에 앉는다', pct: '44%', result: '상석은 상급자 자리이므로 끝 자리나 입구 쪽에 앉는 게 예의예요. 자리를 여쭤보는 것 자체가 좋은 인상을 줍니다.' },
-      { label: '아무 자리나 자연스럽게 앉는다', pct: '38%', result: '편한 분위기의 팀이라면 괜찮지만, 첫 회식이라면 상급자에게 자리를 물어보는 것이 더 안전해요.' },
-      { label: '상급자 옆에 가서 앉는다', pct: '18%', result: '상급자 바로 옆은 배려보다 부담으로 느껴질 수 있어요. 비슷한 연차의 사람 옆에 앉는 게 자연스러워요.' },
+      { label: '상급자에게 자리를 여쭤보고 끝자리에 앉는다', pct: '53%', result: '첫 회식에서는 상석을 피하고 끝자리나 입구 쪽에 앉는 게 기본이에요. 자리를 여쭤보는 행동 자체가 배려 있다는 인상을 줄 수 있어요.' },
+      { label: '아무 자리나 자연스럽게 앉는다', pct: '30%', result: '팀 분위기에 따라 다를 수 있지만, 첫 회식에서는 상급자에게 자리를 먼저 물어보는 것이 더 안전해요. 자칫 상석이나 윗분들이 선호하는 자리에 앉을 수 있어요.' },
+      { label: '상급자 옆에 가서 앉는다', pct: '17%', result: '배려처럼 보일 수 있지만 오히려 부담을 줄 수 있어요. 신입이라면 비슷한 연차의 동료 옆이나 끝자리에 앉는 게 더 자연스럽습니다.' },
     ]
   },
   office: {
@@ -2043,7 +2373,7 @@ const simData = {
     text: '처음 만나는 거래처 담당자와 명함을 주고받아야 한다. 어떻게 해야 실례가 없을지 모르겠다.',
     hint: '💡 명함은 작은 자기소개서예요',
     choices: [
-      { label: '두 손으로 공손히 건네고, 받을 때도 두 손으로 받는다', pct: '72%', result: '명함은 두 손으로 주고받는 게 기본이에요. 받은 명함은 바로 넣지 말고 잠깐 살펴본 뒤 명함 지갑에 넣으세요.' },
+      { label: '두 손으로 공손히 건네고, 받을 때도 두 손으로 받는다', pct: '72%', result: '명함은 두 손으로 주고받는 게 기본이에요. 받은 명함은 미팅 중 테이블 위에 올려두고, 대화가 끝난 후 명함 지갑에 넣는 것이 공식 자리에서의 예의예요.' },
       { label: '한 손으로 자연스럽게 주고받는다', pct: '21%', result: '편한 사이라면 몰라도 첫 미팅에서는 두 손이 예의예요. 상대방이 공식 자리로 느낄수록 더 중요해요.' },
       { label: '받자마자 주머니에 바로 넣는다', pct: '7%', result: '명함을 바로 주머니에 넣는 건 실례예요. 잠깐 살펴보고 "잘 부탁드립니다"라고 말한 뒤 명함 지갑에 넣으세요.' },
     ]
@@ -2063,9 +2393,9 @@ const simData = {
     text: '직장 동료가 입원했다는 소식을 들었다. 처음 병문안을 가는데 무엇을 들고 가야 하고 어떻게 행동해야 할지 모르겠다.',
     hint: '💡 병문안은 짧고 조용하게가 기본이에요',
     choices: [
-      { label: '과일이나 간식을 챙겨서 짧게 안부만 묻고 나온다', pct: '61%', result: '과일, 음료, 간단한 간식이 무난해요. 환자가 피곤할 수 있으니 15~20분 이내로 짧게 머물고, 쾌유를 빌며 나오는 게 예의입니다.' },
-      { label: '꽃다발을 들고 오래 이야기하며 위로해준다', pct: '27%', result: '꽃은 병실에 따라 반입이 안 될 수 있어요. 오래 있으면 환자가 더 피곤해질 수 있으니 짧게 방문하는 게 더 배려 있는 행동이에요.' },
-      { label: '아무것도 안 들고 그냥 얼굴만 보러 간다', pct: '12%', result: '작은 선물 없이 가도 괜찮은 경우도 있지만, 간단한 음료나 과일 하나 정도는 챙기면 마음이 더 전해져요.' },
+      { label: '과일이나 간식을 챙겨서 짧게 안부만 묻고 나온다', pct: '65%', result: '음료, 과일, 죽 등 소화가 잘 되는 간식이 가장 무난해요. 환자가 쉽게 피곤해지므로 방문은 15~20분 이내가 적당하고, 쾌유를 빌며 나오면 됩니다.' },
+      { label: '꽃다발을 들고 오래 이야기하며 위로해준다', pct: '22%', result: '꽃은 병실 환경이나 알레르기 문제로 반입이 제한될 수 있어요. 또한 오래 머물면 환자가 더 피곤해질 수 있으니 짧게 다녀오는 게 더 배려 있는 행동이에요.' },
+      { label: '아무것도 안 들고 그냥 얼굴만 보러 간다', pct: '13%', result: '빈손으로 가도 예의에 크게 어긋나진 않아요. 하지만 간단한 음료나 과일 하나 정도는 챙기면 더 따뜻하게 마음이 전해져요.' },
     ]
   },
   funeral2: {
@@ -2073,9 +2403,9 @@ const simData = {
     text: '친구 아버지 장례식에 가야 하는데 조의금을 얼마나 준비해야 할지 모르겠다. 친구랑은 꽤 친한 편이다.',
     hint: '💡 조의금 봉투엔 세로로 이름을 쓰는 게 관례예요',
     choices: [
-      { label: '5만원을 봉투에 담아 전달한다', pct: '28%', result: '5만원도 예의에 어긋나지 않지만, 꽤 친한 친구라면 조금 부족할 수 있어요. 조의금은 3·5·10만원처럼 홀수 금액이 일반적입니다.' },
-      { label: '10만원을 봉투에 담아 전달한다', pct: '54%', result: '친한 친구의 가족 장례라면 10만원이 가장 보편적이고 적절해요. 봉투에 이름을 세로로 쓰고 접수대에 전달하면 됩니다.' },
-      { label: '현금 없이 마음만 전한다', pct: '18%', result: '조의금 없이 조문하는 것도 예의이긴 해요. 하지만 친한 사이라면 현금 봉투를 준비하는 게 유가족에 대한 더 깊은 예의 표현이에요.' },
+      { label: '7만원을 봉투에 담아 전달한다', pct: '17%', result: '꽤 친한 친구 부모님이라면 7만원은 다소 부족한 금액이에요. 2026년 기준 친한 친구 장례식에는 최소 10만원 이상이 적절하고, 매우 친한 사이라면 15~20만원도 일반적이에요.' },
+      { label: '10만원을 봉투에 담아 전달한다', pct: '61%', result: '2026년 기준 친한 친구 부모님 장례식에 10만원은 보편적인 금액이에요. 봉투에 "부의(賻儀)"라고 쓰고 이름을 세로로 적어 접수대에 전달하면 됩니다.' },
+      { label: '현금 없이 마음만 전한다', pct: '22%', result: '조의금 없이 조문하는 것 자체가 예의이긴 해요. 다만 꽤 친한 사이라면 소액이라도 봉투를 준비하는 것이 유가족에 대한 더 적절한 예우예요.' },
     ]
   },
   funeral3: {
@@ -2084,7 +2414,7 @@ const simData = {
     hint: '💡 단색 어두운 계열이라면 어느 정도 허용돼요',
     choices: [
       { label: '진한 남색 또는 회색 단색 옷을 입는다', pct: '61%', result: '검은색이 아닌 짙은 남색·회색도 장례식에서 허용되는 복장이에요. 무늬 없이 단색이라면 충분히 예의를 갖춘 차림입니다.' },
-      { label: '흰 셔츠에 검은 바지만 입는다', pct: '29%', result: '흰 셔츠는 유가족을 연상시켜 어색할 수 있어요. 가능하면 어두운 계열의 상의를 구하거나, 검은 재킷을 빌리는 게 낫습니다.' },
+      { label: '흰 셔츠에 검은 바지만 입는다', pct: '29%', result: '흰 셔츠에 검은 바지는 기본적인 조문 복장으로 허용돼요. 다만 검은 재킷이나 넥타이를 함께 갖추면 더 격식 있는 차림이 됩니다.' },
       { label: '그냥 평소 입는 옷을 입고 간다', pct: '10%', result: '화려한 색상이나 캐주얼한 복장은 유가족에게 실례가 될 수 있어요. 어두운 계열의 단색 옷으로 최대한 맞춰 입는 게 예의입니다.' },
     ]
   },
@@ -2093,9 +2423,9 @@ const simData = {
     text: '영정 앞에서 절을 마쳤는데 상주에게 뭐라고 말해야 할지 입이 안 떨어진다. 적절한 인사말이 뭔지 모르겠다.',
     hint: '💡 짧고 진심이 담긴 말 한마디가 최고예요',
     choices: [
-      { label: '"삼가 고인의 명복을 빕니다"라고 짧게 인사한다', pct: '67%', result: '"삼가 고인의 명복을 빕니다"는 가장 정중하고 보편적인 조문 인사말이에요. 덧붙이고 싶다면 "많이 힘드시죠, 건강 챙기세요" 정도가 자연스럽습니다.' },
-      { label: '"얼마나 슬프세요, 정말 안됐어요"라고 공감을 표현한다', pct: '22%', result: '공감의 표현이지만 자칫 상주의 감정을 자극할 수 있어요. 조문 자리에서는 짧고 격식 있는 인사가 더 예의 있게 전달됩니다.' },
-      { label: '말없이 고개를 깊이 숙여 인사한다', pct: '11%', result: '말 없는 묵례도 충분히 진심을 전할 수 있어요. 하지만 상주가 아는 사이라면 짧게라도 인사말을 건네는 게 더 따뜻한 예의 표현이에요.' },
+      { label: '"삼가 고인의 명복을 빕니다"라고 짧게 인사한다', pct: '71%', result: '"삼가 고인의 명복을 빕니다"는 가장 정중하고 보편적인 조문 인사말이에요. 더 말을 잇고 싶다면 "많이 힘드시겠어요, 건강 챙기세요" 정도가 자연스러워요. 짧을수록 더 예의 있어 보입니다.' },
+      { label: '"얼마나 슬프세요, 정말 안됐어요"라고 공감을 표현한다', pct: '18%', result: '공감을 표현하려는 마음은 좋지만, 조문 자리에서 감정적인 표현은 오히려 상주를 더 힘들게 할 수 있어요. 짧고 격식 있는 인사말이 더 예의 있게 전달돼요.' },
+      { label: '말없이 고개를 깊이 숙여 인사한다', pct: '11%', result: '묵례도 충분히 진심을 전할 수 있어요. 하지만 아는 사이라면 짧게라도 인사말을 건네는 것이 더 따뜻한 위로가 돼요.' },
     ]
   },
   funeral5: {
@@ -2224,8 +2554,11 @@ function pickChoice(idx) {
   selectedIdx = idx;
   document.querySelectorAll('.sim-choice').forEach((el, i) => el.classList.toggle('selected', i === idx));
   const btn = document.getElementById('simSubmitBtn');
-  btn.disabled = false; btn.textContent = '이걸로 골랐어요';
+  btn.disabled = false;
+  btn.textContent = '이걸로 골랐어요';
+  btn.onclick = submitSim;
   document.getElementById('simProgress').style.width = '50%';
+  document.getElementById('simResultCard').classList.remove('show');
 }
 
 function submitSim() {
@@ -2263,18 +2596,18 @@ const modalData = {
     title: '장례식장 예절',
     sub: '고인과의 관계를 선택해주세요',
     options: [
-      { label: '친한 친구의 부모님', meta: '친밀도 높음', pct: '63%', result: '영정에 두 번 절 후, 상주에게 인사드리세요. 조의금은 3~5만원이 적당합니다.' },
-      { label: '직장 동료의 부모님', meta: '친밀도 보통', pct: '28%', result: '1~2번 절, 조의금 3만원. 짧은 위로 후 빠르게 자리를 비우는 것이 예의입니다.' },
-      { label: '지인의 가족', meta: '친밀도 낮음', pct: '9%', result: '절 1번, 조의금 3만원. 부의함에 넣고 짧게 인사 후 나오셔도 됩니다.' },
+      { label: '친한 친구의 부모님', meta: '친밀도 높음', pct: '63%', result: '영정에 두 번 절(재배) 후, 상주에게 인사드리세요. 조의금은 2026년 기준 15~20만원이 일반적이고, 매우 친한 사이라면 20만원 이상도 흔합니다.' },
+      { label: '직장 동료의 부모님', meta: '친밀도 보통', pct: '28%', result: '유교식이면 두 번 절(재배)이 기본이며, 기독교식 장례이면 묵념으로 대신합니다. 조의금 5~7만원이 일반적이에요. 짧게 위로 인사 후 자리를 비우는 것이 예의입니다.' },
+      { label: '지인의 가족', meta: '친밀도 낮음', pct: '9%', result: '유교식이면 두 번 절(재배)이 기본입니다. 조의금은 5만원이 현재 최소 기준이에요. 부의함에 넣고 짧게 인사 후 나오셔도 됩니다.' },
     ]
   },
   wedding: {
     title: '결혼식 예절',
     sub: '신랑/신부와의 관계를 선택해주세요',
     options: [
-      { label: '친한 친구 (가장 친한)', meta: '10년 이상 친분', pct: '51%', result: '축의금 10만원 이상 권장. 식사 자리에 꼭 참석하고 축하 메시지를 전달해보세요.' },
-      { label: '대학교 동기 (보통)', meta: '가끔 연락하는 사이', pct: '35%', result: '축의금 5~7만원. 식사 참석 시 7만원, 불참 시 5만원이 일반적입니다.' },
-      { label: '직장 동료 (가볍게 아는)', meta: '업무상 아는 사이', pct: '14%', result: '3~5만원. 참석 여부에 따라 결정하세요.' },
+      { label: '친한 친구 (가장 친한)', meta: '10년 이상 친분', pct: '51%', result: '축의금 10~20만원이 현재 표준이에요. 매우 친한 사이라면 20만원 이상도 많습니다. 식사에 꼭 참석하고 축하 메시지를 전달해보세요.' },
+      { label: '대학교 동기 (보통)', meta: '가끔 연락하는 사이', pct: '35%', result: '축의금은 식사 참석 시 10만원, 불참 시 7만원이 2026년 기준 일반적입니다.' },
+      { label: '직장 동료 (가볍게 아는)', meta: '업무상 아는 사이', pct: '14%', result: '식사 참석 시 7만원, 불참 시 5만원이 기본이에요. 친밀도에 따라 10만원으로 맞추는 경우도 많아요.' },
     ]
   },
   work: {
@@ -2283,7 +2616,7 @@ const modalData = {
     options: [
       { label: '신입사원 첫 회식', meta: '입사 후 첫 번째', pct: '44%', result: '상석은 상급자 자리이니 끝 자리에 앉으세요. 술을 못 마셔도 정중히 사양 가능합니다.' },
       { label: '팀 정기 회식', meta: '분기 1회 정도', pct: '38%', result: '분위기 파악 후 자연스럽게 참여하세요. 1차 참여가 기본 예의이며 2차는 선택입니다.' },
-      { label: '부서 회식 (임원 포함)', meta: '공식적인 자리', pct: '18%', result: '단정한 복장 필수. 건배사 시 잔을 높이 들어올리지 마세요.' },
+      { label: '부서 회식 (임원 포함)', meta: '공식적인 자리', pct: '18%', result: '단정한 복장 필수. 건배사 시 윗사람보다 잔을 낮게 드세요.' },
     ]
   }
 };
@@ -2338,6 +2671,596 @@ function showToast(msg) {
 document.getElementById('searchInput').addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.target.value.trim()) { showToast(`"${e.target.value}" AI 분석 중...`); e.target.blur(); }
 });
+
+/* ══════════════════════════════════════
+   LEVEL SYSTEM
+══════════════════════════════════════ */
+const LEVELS = [
+  { min:  0, name: '눈치 새싹', emoji: '🌱', bg: '#E8F5E9', color: '#2E7D32' },
+  { min:  5, name: '눈치 초보', emoji: '🐣', bg: '#FFF3E0', color: '#E65100' },
+  { min: 15, name: '눈치 고수', emoji: '⭐', bg: '#E3F2FD', color: '#1565C0' },
+  { min: 30, name: '눈치 달인', emoji: '🔥', bg: '#F3E5F5', color: '#6A1B9A' },
+  { min: 60, name: '눈치왕',   emoji: '👑', bg: '#FFF2EE', color: '#FF5500' },
+];
+
+let uStats = JSON.parse(localStorage.getItem('nc-user-stats') || '{"pts":0,"posts":0,"comments":0,"adoptions":0}');
+function saveUStats() { localStorage.setItem('nc-user-stats', JSON.stringify(uStats)); }
+
+function getLv(pts) {
+  let lv = LEVELS[0];
+  for (const l of LEVELS) { if (pts >= l.min) lv = l; }
+  const idx = LEVELS.indexOf(lv);
+  const next = LEVELS[idx + 1];
+  const pct = next ? Math.round(((pts - lv.min) / (next.min - lv.min)) * 100) : 100;
+  return { ...lv, idx, next, pct };
+}
+
+function badgeHtml(pts) {
+  const lv = getLv(pts);
+  return `<span class="level-badge" style="background:${lv.bg};color:${lv.color}">${lv.emoji} ${lv.name}</span>`;
+}
+
+function openLevelSheet() {
+  const lv = getLv(uStats.pts);
+  const rowList = document.getElementById('levelRowList');
+  const sub = document.getElementById('levelSheetSub');
+
+  if (lv.next) {
+    sub.textContent = `다음 레벨까지 ${lv.next.min - uStats.pts}pt 남았어요!`;
+  } else {
+    sub.textContent = '축하해요! 최고 등급을 달성했어요 🎉';
+  }
+
+  rowList.innerHTML = LEVELS.map((l, i) => {
+    const achieved = uStats.pts >= l.min;
+    const isCurrent = lv.idx === i;
+    const nextMin = LEVELS[i + 1] ? LEVELS[i + 1].min : null;
+    let badgeText, badgeClass;
+    if (isCurrent) { badgeText = '현재'; badgeClass = 'now'; }
+    else if (achieved) { badgeText = '달성'; badgeClass = 'done'; }
+    else { badgeText = '잠김'; badgeClass = 'lock'; }
+
+    const reqText = nextMin
+      ? `${l.min}pt ~ ${nextMin - 1}pt`
+      : `${l.min}pt 이상`;
+
+    return `
+      <div class="level-row ${isCurrent ? 'current' : achieved ? 'achieved' : 'locked'}">
+        <div class="level-row-emoji">${l.emoji}</div>
+        <div class="level-row-info">
+          <div class="level-row-name">${l.name}</div>
+          <div class="level-row-req">${reqText}</div>
+        </div>
+        <div class="level-row-right">
+          <span class="level-row-badge ${badgeClass}">${badgeText}</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('levelSheetOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLevelSheet() {
+  document.getElementById('levelSheetOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleLevelOverlayClick(e) {
+  if (e.target === document.getElementById('levelSheetOverlay')) closeLevelSheet();
+}
+
+function addPts(type) {
+  const map = { post: 1, comment: 1, adoption: 5 };
+  uStats.pts += map[type] || 0;
+  if (type === 'post') uStats.posts++;
+  if (type === 'comment') uStats.comments++;
+  if (type === 'adoption') uStats.adoptions++;
+  saveUStats();
+  refreshMyPage();
+}
+
+function refreshMyPage() {
+  const lv = getLv(uStats.pts);
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  const setHTML = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+  set('myLvName', `${lv.emoji} ${lv.name}`);
+  set('myLvPts', `${uStats.pts}점`);
+  const xp = document.getElementById('xpFill');
+  if (xp) xp.style.width = lv.pct + '%';
+  set('xpCur', lv.next ? `${uStats.pts} / ${lv.next.min}점` : `MAX`);
+  set('xpNext', lv.next ? `다음: ${lv.next.emoji} ${lv.next.name}` : '최고 등급 달성! 🎉');
+  const plEl = document.querySelector('.profile-level');
+  if (plEl) plEl.innerHTML = `${lv.emoji} <span>${lv.name}</span> · 활동 28일째`;
+  const totalPosts = uStats.posts + 3;
+  set('statPosts', totalPosts);
+  set('statComments', uStats.comments);
+  set('statAdoptions', uStats.adoptions);
+  set('myPostSub', `${totalPosts}개 작성`);
+  set('myPostBadge', totalPosts);
+  if (uStats.comments > 0) {
+    set('myCommentSub', `${uStats.comments}개 작성`);
+    set('myCommentBadge', uStats.comments);
+    const cb = document.getElementById('myCommentBadge');
+    if (cb) cb.style.display = '';
+  }
+  setHTML('wsMyBadge', badgeHtml(uStats.pts));
+}
+
+/* ══════════════════════════════════════
+   WRITE SHEET
+══════════════════════════════════════ */
+let wsCat = '';
+let cardId = 200;
+
+function openWriteSheet() {
+  document.getElementById('writeSheet').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  refreshMyPage();
+}
+function closeWriteSheet() {
+  document.getElementById('writeSheet').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function selectWsCat(btn, cat) {
+  document.querySelectorAll('.ws-cat').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  wsCat = cat;
+  checkWsDone();
+}
+function onWsInput(el) {
+  document.getElementById('wsChar').textContent = `${el.value.length} / 300`;
+  checkWsDone();
+}
+function checkWsDone() {
+  const v = document.getElementById('wsTextarea').value.trim();
+  document.getElementById('wsDone').disabled = !(v && wsCat);
+}
+function submitPost() {
+  const text = document.getElementById('wsTextarea').value.trim();
+  if (!text || !wsCat) return;
+  const lv = getLv(uStats.pts);
+  const id = cardId++;
+  const catTagClass = { 장례식:'tag-funeral', 결혼식:'tag-wedding', 회식:'tag-work', 직장:'tag-work', 학교:'tag-school' }[wsCat] || '';
+  const catEmoji = { 장례식:'⚫', 결혼식:'💍', 회식:'🍻', 직장:'💼', 학교:'🎓', 자유:'💬' }[wsCat] || '';
+  const card = document.createElement('div');
+  card.className = 'feed-card';
+  card.dataset.category = wsCat;
+  card.dataset.mine = 'true';
+  card.innerHTML = `
+    <div class="feed-top">
+      <div class="feed-user">
+        <div class="avatar" style="background:${lv.bg};color:${lv.color}">봄</div>
+        <div>
+          <div class="feed-username" style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+            봄비내리는날 ${badgeHtml(uStats.pts)}
+          </div>
+          <div class="feed-time">방금</div>
+        </div>
+      </div>
+      <span class="feed-tag ${catTagClass}">${catEmoji} ${wsCat}</span>
+    </div>
+    <div class="feed-body">${text}</div>
+    <div class="feed-preview"></div>
+    <div class="feed-footer">
+      <button class="reaction-btn" id="ul${id}" onclick="toggleLike(event,'ul${id}','uc${id}')">
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span id="uc${id}">0</span>
+      </button>
+      <button class="reaction-btn" onclick="event.stopPropagation();showToast('댓글')">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>0</span>
+      </button>
+      <button class="reaction-btn" onclick="event.stopPropagation();showToast('저장됨!')">
+        <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span>
+      </button>
+    </div>`;
+  document.getElementById('commFeedList').prepend(card);
+  addPts('post');
+  document.getElementById('wsTextarea').value = '';
+  document.getElementById('wsChar').textContent = '0 / 300';
+  document.querySelectorAll('.ws-cat').forEach(b => b.classList.remove('on'));
+  wsCat = ''; document.getElementById('wsDone').disabled = true;
+  closeWriteSheet();
+  showToast('글이 등록됐어요! +1점 🎉');
+}
+
+/* ══════════════════════════════════════
+   POST DETAIL (채택 포함)
+══════════════════════════════════════ */
+/* ── AI RESPONSES BY CATEGORY ── */
+const AI_RESPONSES = {
+  '장례식': '부의금 금액보다 직접 참석하는 것이 훨씬 중요해요. 유가족에게는 "삼가 고인의 명복을 빕니다"라고 인사하고, 절은 종교에 따라 다르지만 비종교적인 장례에선 보통 두 번 합니다. 3만원이어도 진심을 담아 가는 것이 오히려 더 큰 위로가 돼요.',
+  '결혼식': '축의금은 관계와 형편에 맞게 내는 게 자연스러워요. 요즘 뷔페 식사 원가가 1인당 4~6만원이라 사전에 식사 제공 여부를 확인하는 것도 좋아요. 결혼식장에선 흰색이나 검은색 의상은 피하고, 신랑·신부 입장 전에 미리 착석하는 게 예의예요.',
+  '회식': '음주를 원하지 않는다면 "건강상 이유로 음주는 어렵지만 자리는 함께하겠습니다"라고 자연스럽게 말하는 게 효과적이에요. 음주 강요는 직장 내 괴롭힘에 해당할 수 있으니 과도하게 눈치 보지 않아도 돼요. 분위기에 맞게 음료나 안주로 자리를 즐기면 충분해요.',
+  '직장': '직장에서 불쾌한 상황을 겪었다면 날짜·장소·발언 내용을 즉시 메모해두세요. 임금 정보는 개인 정보로 보호되며, 이를 무단 공개하는 행위는 직장 내 괴롭힘으로 볼 수 있어요. HR 담당자 상담 또는 고용노동부 신고(1350)를 고려해보세요.',
+  '학교': '교수나 강사의 부당한 언행에 예민하게 반응하는 건 당연해요. 학교 내 학생상담센터나 학생권익위원회를 통해 익명 제보가 가능한 경우가 많아요. 먼저 상황을 기록하고, 같은 경험을 한 동기가 있는지 파악한 뒤 함께 대응하는 게 더 효과적이에요.',
+  '자유': '이런 상황에서 중요한 건 상대방의 의도가 악의적인지, 단순한 실수인지 먼저 파악하는 거예요. 명확하지 않다면 직접 대화로 해결하는 것이 가장 확실해요. 감정보다는 사실 중심으로 이야기하면 오해를 줄일 수 있어요.',
+};
+
+/* ── HOT POSTS DATA ── */
+const HOT_POSTS = {
+  hot1: {
+    tag: '직장', tagClass: 'tag-work',
+    author: '새벽세시반', authorBg: '#FFF2EE', authorC: '#FF5500',
+    time: '3시간 전',
+    title: '팀장이 회식서 내 연봉을 다 공개했습니다',
+    full: '신입이라 연봉이 낮은데, 팀장이 갑자기 "00씨는 얼마야? 우리 팀 제일 낮지?" 하면서 다 들리는 데서 공개해버렸어요. 순간 얼굴이 빨개졌고 아무 말도 못 했는데... 이거 그냥 넘겨야 하나요, 아니면 뭔가 말해야 할까요?',
+    aiReply: '명백히 선을 넘은 행동이에요. 임금 정보는 개인 정보로 보호되며, 공개석상에서의 무단 공개는 직장 내 괴롭힘으로 볼 수 있어요. 당장 대응이 어렵다면 날짜·장소·발언 내용을 메모해두세요. 이후 HR 담당자에게 조용히 상담하거나, 고용노동부 직장 갑질 119(1350)를 활용할 수 있어요. 혼자 참는 것보다 기록을 남기는 게 훨씬 중요합니다.',
+    likes: 312, commentCount: 87,
+    comments: [
+      { u:'달빛소나타', bg:'#FFF0F6', c:'#E45D8A', t:'1시간 전', txt:'완전 선 넘은 거 맞아요. 임금은 개인정보인데 이런 행동은 직장 내 괴롭힘으로도 볼 수 있어요.' },
+      { u:'구름위를걷는중', bg:'#F0FBF4', c:'#30A55F', t:'2시간 전', txt:'그 자리에선 웃고 넘겼더라도 나중에 조용히 팀장한테 "그런 건 공개되면 곤란하다"고 말하는 게 좋아요. 참으면 계속 당해요 진짜.' },
+      { u:'파란하늘별', bg:'#FFF8E1', c:'#f39c12', t:'2시간 전', txt:'HR에 조용히 상담해보세요. 기록 남겨두는 게 나중에 도움돼요.' },
+      { u:'잠수함타는사람', bg:'#EEF2FF', c:'#5B6EF5', t:'3시간 전', txt:'저도 비슷한 경험 있어요... 그냥 웃고 넘겼다가 두고두고 후회했어요. 지금이라도 대화하세요.' },
+    ]
+  },
+  hot2: {
+    tag: '결혼식', tagClass: 'tag-wedding',
+    author: '솜사탕구름', authorBg: '#FFF0FB', authorC: '#d63001',
+    time: '6시간 전',
+    title: '축의금 5만원 냈더니 밥도 안 줬대요',
+    full: '대학 동기 결혼식이라 5만원 냈는데, 식사 시간이 됐을 때 보니까 제 자리가 없었어요. 알고 보니 5만원은 식사 대접 안 하는 선이라고 하더라고요. 근데 저는 그 기준 자체를 몰랐거든요? 이런 기준이 실제로 있는 건가요?',
+    aiReply: '통일된 규칙은 없지만 요즘 뷔페 식사 원가가 1인당 4~6만원인 경우가 많아 5만원 이하에서 식사를 제공하지 않는 경우도 있어요. 다만 이 기준을 사전에 알리지 않은 건 명백히 아쉬운 부분이에요. 다음엔 초대를 받았을 때 "식사도 같이 하나요?"라고 자연스럽게 확인해보는 게 좋아요. 기분이 상한 건 충분히 이해가 돼요.',
+    likes: 208, commentCount: 64,
+    comments: [
+      { u:'오후세시산책', bg:'#F0FFF4', c:'#27ae60', t:'2시간 전', txt:'요즘 뷔페 식사 원가가 1인당 4~6만원이라 5만원에선 식사 안 드리는 경우가 많아요. 미리 공지를 안 한 건 좀 아쉽네요.' },
+      { u:'달팽이걸음', bg:'#F0FBF4', c:'#27ae60', t:'3시간 전', txt:'식사 제공 기준은 신랑신부가 정하는 거라 통일된 룰은 없어요. 최소한 초대장에 식사 여부는 적어줘야 하는 거 아닌가요?' },
+      { u:'이른아침이슬', bg:'#FFF0EE', c:'#FF5500', t:'5시간 전', txt:'진짜 어이없다. 밥 안 줄 거면 미리 말은 해야지. 5만원이 적다고 느끼면 안 불렀으면 됐는데.' },
+      { u:'구름한조각', bg:'#E8F4FD', c:'#2980b9', t:'6시간 전', txt:'저도 이런 경험 있어요... 그냥 마음 상한 거 맞는데 다음엔 미리 물어보는 게 최선인 것 같아요.' },
+    ]
+  },
+  hot3: {
+    tag: '장례식', tagClass: 'tag-funeral',
+    author: '달빛산책중', authorBg: '#F5F5FF', authorC: '#7C5CBF',
+    time: '11시간 전',
+    title: '친구 부모님 장례식 조의금 3만원이면 실례인가요?',
+    full: '친한 친구 어머니가 돌아가셨어요. 근데 저 요즘 진짜 돈이 없어서요... 3만원이면 너무 적은 건가요? 부의금 봉투에 이름도 써야 하는 거잖아요. 적은 금액이 오히려 실례가 될까봐 차라리 안 가는 게 나을지도 고민중이에요.',
+    aiReply: '꼭 가세요. 장례식은 금액보다 직접 참석하는 것 자체가 가장 큰 위로예요. 3만원도 충분해요 — 형편에 맞게 내는 게 자연스러운 거고, 친한 친구라면 금액으로 우정을 재지 않아요. 안 가는 것보다 3만원 들고 가는 쪽이 훨씬 낫고, 부의금 봉투에는 "부의"라고 쓰고 본인 이름을 적으면 돼요.',
+    likes: 175, commentCount: 52,
+    comments: [
+      { u:'새벽네시반', bg:'#F5F5F5', c:'#3D3D3D', t:'3시간 전', txt:'금액보다 직접 가는 게 훨씬 중요해요. 진짜 친한 친구면 돈 보러 오는 게 아니라 얼굴 보러 오는 거거든요. 꼭 가세요.' },
+      { u:'솜사탕구름', bg:'#FFF0FB', c:'#d63001', t:'5시간 전', txt:'3만원도 괜찮아요. 형편에 맞게 내는 거지 금액으로 우정 재는 사람은 없어요. 안 가는 것보다 3만원 들고 가는 게 백배 낫습니다.' },
+      { u:'파란하늘별', bg:'#FFF8E1', c:'#f39c12', t:'7시간 전', txt:'장례식은 가는 행위 자체가 위로에요. 3만원 들고 가도 충분해요. 오히려 안 가면 그게 더 상처될 수도 있어요.' },
+      { u:'달빛소나타', bg:'#FFF0F6', c:'#E45D8A', t:'10시간 전', txt:'가세요 제발. 몇 만원 때문에 평생 친구 잃지 마세요. 그 친구 지금 힘든 시간이에요.' },
+    ]
+  },
+  hot4: {
+    tag: '학교', tagClass: 'tag-school',
+    author: '잠수함타는사람', authorBg: '#EEF2FF', authorC: '#5B6EF5',
+    time: '14시간 전',
+    title: '교수님이 시험지를 그냥 던져줬는데 이게 맞나요?',
+    full: '중간고사 결과 돌려주는데 제 시험지를 그냥 던지듯이 줬어요. 점수도 낮았고 기분도 안 좋은데 "이것도 못 해?" 하는 식으로 말씀하셨어요. 주변 학생들 다 봤고요. 예민한 건지 아니면 실제로 문제 있는 건지 모르겠어요. 학교 측에 말할 수 있는 건지도 궁금합니다.',
+    aiReply: '예민한 게 아니에요. 교육자가 학생에게 그런 식으로 대하는 건 분명히 문제가 있어요. 먼저 날짜·상황·발언을 메모해두세요. 대부분의 대학에는 학생상담센터나 학생권익위원회가 있고, 익명 제보도 가능해요. 같은 경험을 한 동기가 있다면 함께 제보하는 게 더 효과적이에요. 혼자 감당하지 않아도 돼요.',
+    likes: 143, commentCount: 39,
+    comments: [
+      { u:'이른아침이슬', bg:'#FFF0EE', c:'#FF5500', t:'2시간 전', txt:'예민한 거 아니에요. 교수도 학생에게 그런 식으로 대하면 안 되는 거 맞아요. 대학에는 학생상담센터나 교수 징계 제도가 있으니 활용해보세요.' },
+      { u:'구름위를걷는중', bg:'#F0FBF4', c:'#30A55F', t:'4시간 전', txt:'학교마다 학생권익위원회 같은 거 있어요. 익명 제보도 가능한 경우 많으니까 찾아보세요. 혼자 참지 마세요.' },
+      { u:'달팽이걸음', bg:'#F0FBF4', c:'#27ae60', t:'6시간 전', txt:'일단 그 날짜, 상황, 있었던 일을 메모해두세요. 나중에 공식적으로 문제 제기할 때 증거가 돼요.' },
+      { u:'구름한조각', bg:'#E8F4FD', c:'#2980b9', t:'13시간 전', txt:'동기나 선배한테 그 교수 원래 그런 사람인지 먼저 물어봐요. 전례가 있으면 같이 움직이는 게 더 효과적이에요.' },
+    ]
+  },
+};
+
+function openHotPost(id) {
+  const p = HOT_POSTS[id];
+  if (!p) return;
+  pdPostId++;
+  pdAdoptedIdx = null;
+  pdUserComments = [];
+  pdBaseComments = p.comments;
+  pdLikes.clear();
+  Object.keys(pdReplies).forEach(k => delete pdReplies[k]);
+
+  const aiHtml = buildAiCommentHtml(p.aiReply || AI_RESPONSES[p.tag] || AI_RESPONSES['자유']);
+  const commentsHtml = p.comments.map((cm, i) => buildCommentHtml(cm, i, false, false)).join('');
+  const totalCount = 1 + p.comments.length;
+
+  document.getElementById('pdBody').innerHTML = `
+    <div class="pd-post-card">
+      <div class="feed-top" style="margin-bottom:10px">
+        <div class="feed-user">
+          <div class="avatar" style="background:${p.authorBg};color:${p.authorC}">${p.author[0]}</div>
+          <div>
+            <div class="feed-username">${p.author}</div>
+            <div class="feed-time">${p.time}</div>
+          </div>
+        </div>
+        <span class="feed-tag ${p.tagClass}">${p.tag}</span>
+      </div>
+      <div style="font-size:16px;font-weight:700;line-height:1.5;margin-bottom:8px">${p.title}</div>
+      <div class="pd-post-full">${p.full}</div>
+      <div class="pd-post-footer">
+        <button class="reaction-btn" style="font-size:13px" onclick="showToast('공감했어요!')">❤️ ${p.likes}</button>
+        <button class="reaction-btn" style="font-size:13px" onclick="showToast('저장됐어요!')">🔖 저장</button>
+      </div>
+    </div>
+    <div class="pd-comments-label" id="pdCommLabel">댓글 ${totalCount}개</div>
+    <div id="pdCommentsList">${aiHtml}${commentsHtml}</div>`;
+
+  const pd = document.getElementById('pdOverlay');
+  pd.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('pdInput').value = '';
+  pd.scrollTop = 0;
+}
+
+const SAMPLE_COMMENTS = [
+  [
+    { u:'달빛소나타', bg:'#FFF0F6', c:'#E45D8A', t:'12분 전', txt:'저도 비슷한 상황이었어요! 미리 알아보고 가면 훨씬 편하더라고요 😊' },
+    { u:'구름위를걷는중', bg:'#F0FBF4', c:'#30A55F', t:'28분 전', txt:'기본 예절만 지키면 괜찮아요. 너무 긴장하지 마세요.' },
+    { u:'새벽네시반', bg:'#F5F5F5', c:'#3D3D3D', t:'54분 전', txt:'형식보다는 진심이 더 중요해요. 걱정 마세요.' },
+  ],
+  [
+    { u:'솜사탕구름', bg:'#FFF0FB', c:'#d63031', t:'5분 전', txt:'저도 같은 고민 했어요! 솔직하게 물어보는 게 제일 좋더라고요.' },
+    { u:'오후세시산책', bg:'#F0FFF4', c:'#27ae60', t:'44분 전', txt:'시뮬레이션 먼저 해보면 많이 도움돼요 💪' },
+    { u:'파란하늘별', bg:'#FFF8E1', c:'#f39c12', t:'1시간 전', txt:'경험상 솔직하게 말씀드리는 게 최선이에요.' },
+  ],
+  [
+    { u:'이른아침이슬', bg:'#FFF0EE', c:'#FF5500', t:'8분 전', txt:'처음에는 복잡해 보여도 익숙해지면 자연스러워져요!' },
+    { u:'달팽이걸음', bg:'#F0FBF4', c:'#27ae60', t:'31분 전', txt:'좋은 질문이에요. 저도 궁금했던 내용이에요 👍' },
+    { u:'구름한조각', bg:'#E8F4FD', c:'#2980b9', t:'2시간 전', txt:'눈치코치 시뮬레이션 해보면 답이 나와요!' },
+  ],
+];
+
+let pdAdoptedIdx = null;
+let pdUserComments = [];
+let pdBaseComments = [];
+let pdPostId = 0;
+const pdLikes = new Set();
+const pdReplies = {};
+
+const HEART_SVG = '<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+const REPLY_SVG = '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+
+/* 댓글 작성자별 레벨 (0~4 → LEVELS 인덱스) */
+const USER_LEVELS = {
+  '달빛소나타': 3,      // 🔥 눈치 달인
+  '구름위를걷는중': 2,  // ⭐ 눈치 고수
+  '새벽네시반': 2,      // ⭐ 눈치 고수
+  '파란하늘별': 1,      // 🐣 눈치 초보
+  '오후세시산책': 1,    // 🐣 눈치 초보
+  '이른아침이슬': 3,    // 🔥 눈치 달인
+  '솜사탕구름': 2,      // ⭐ 눈치 고수
+  '잠수함타는사람': 4,  // 👑 눈치왕
+  '달팽이걸음': 2,      // ⭐ 눈치 고수
+  '구름한조각': 1,      // 🐣 눈치 초보
+};
+
+function userBadgeHtml(name) {
+  const idx = USER_LEVELS[name];
+  if (idx == null) return '';
+  const lv = LEVELS[idx];
+  return `<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px;background:${lv.bg};color:${lv.color};vertical-align:middle">${lv.emoji} ${lv.name}</span>`;
+}
+
+function buildCommentHtml(cm, idx, adopted, isMine) {
+  const adoptedClass = adopted ? 'adopted-item' : '';
+  const adoptedTag = adopted ? '<div class="adopted-tag">✓ 채택된 답변</div>' : '';
+  const mineTag = isMine ? ' <span class="pd-mine">내 댓글</span>' : '';
+  const liked = pdLikes.has(idx);
+  let adoptBtn = '';
+  if (adopted) {
+    adoptBtn = `<button class="pd-adopt-btn adopted" onclick="cancelAdopt(${idx},${isMine})">✓ 채택됨</button>`;
+  } else if (pdAdoptedIdx === null) {
+    adoptBtn = `<button class="pd-adopt-btn" onclick="adoptComment(${idx})">채택</button>`;
+  }
+  return `<div class="pd-comment ${adoptedClass}" id="pdc-${pdPostId}-${idx}">
+    ${adoptedTag}
+    <div class="pd-comment-user">
+      <div class="pd-comment-avatar" style="background:${cm.bg};color:${cm.c}">${cm.u[0]}</div>
+      <div style="flex:1;min-width:0">
+        <div class="pd-comment-name" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">${cm.u}${mineTag} ${userBadgeHtml(cm.u)}</div>
+        <div class="pd-comment-time" style="margin-left:0">${cm.t}</div>
+      </div>
+    </div>
+    <div class="pd-comment-text">${cm.txt}</div>
+    <div id="replies-${pdPostId}-${idx}" class="pd-reply-list"></div>
+    <div id="reply-input-${pdPostId}-${idx}" style="display:none">
+      <div class="pd-reply-input-wrap">
+        <input class="pd-reply-input" id="reply-text-${pdPostId}-${idx}" placeholder="답글을 입력하세요..." onkeydown="if(event.key==='Enter')submitReply(${pdPostId},${idx})" />
+        <button class="pd-reply-send" onclick="submitReply(${pdPostId},${idx})">등록</button>
+      </div>
+    </div>
+    <div class="pd-comment-footer">
+      <button class="pd-like-btn ${liked ? 'liked' : ''}" onclick="toggleCommentLike(this,${idx})">${HEART_SVG} 도움돼요</button>
+      <button class="pd-like-btn" onclick="showReplyInput(${pdPostId},${idx})">${REPLY_SVG} 답글</button>
+      ${adoptBtn}
+    </div>
+  </div>`;
+}
+
+function buildAiCommentHtml(txt) {
+  const liked = pdLikes.has('ai');
+  return `<div class="pd-comment pd-ai-comment">
+    <div class="pd-ai-label">✦ 눈치코치 AI</div>
+    <div class="pd-comment-user">
+      <div class="pd-ai-avatar">✦</div>
+      <div class="pd-comment-name">눈치코치</div>
+      <div class="pd-comment-time">AI 답변</div>
+    </div>
+    <div class="pd-comment-text">${txt}</div>
+    <div id="replies-${pdPostId}-ai" class="pd-reply-list"></div>
+    <div id="reply-input-${pdPostId}-ai" style="display:none">
+      <div class="pd-reply-input-wrap">
+        <input class="pd-reply-input" id="reply-text-${pdPostId}-ai" placeholder="답글을 입력하세요..." onkeydown="if(event.key==='Enter')submitReply(${pdPostId},'ai')" />
+        <button class="pd-reply-send" onclick="submitReply(${pdPostId},'ai')">등록</button>
+      </div>
+    </div>
+    <div class="pd-comment-footer">
+      <button class="pd-like-btn ${liked ? 'liked' : ''}" onclick="toggleCommentLike(this,'ai')">${HEART_SVG} 도움돼요</button>
+      <button class="pd-like-btn" onclick="showReplyInput(${pdPostId},'ai')">${REPLY_SVG} 답글</button>
+    </div>
+  </div>`;
+}
+
+function buildReplyHtml(r) {
+  return `<div class="pd-reply">
+    <div class="pd-reply-avatar" style="background:${r.bg};color:${r.c}">${r.u[0]}</div>
+    <div>
+      <div><span class="pd-reply-name">${r.u}</span><span class="pd-reply-time">${r.t}</span></div>
+      <div class="pd-reply-text">${r.txt}</div>
+    </div>
+  </div>`;
+}
+
+function toggleCommentLike(btn, idx) {
+  if (pdLikes.has(idx)) {
+    pdLikes.delete(idx);
+    btn.classList.remove('liked');
+  } else {
+    pdLikes.add(idx);
+    btn.classList.add('liked');
+  }
+}
+
+function showReplyInput(postId, idx) {
+  const el = document.getElementById('reply-input-' + postId + '-' + idx);
+  if (!el) return;
+  const isHidden = el.style.display === 'none';
+  el.style.display = isHidden ? 'block' : 'none';
+  if (isHidden) {
+    const input = document.getElementById('reply-text-' + postId + '-' + idx);
+    if (input) setTimeout(() => input.focus(), 50);
+  }
+}
+
+function submitReply(postId, idx) {
+  const input = document.getElementById('reply-text-' + postId + '-' + idx);
+  const text = input?.value?.trim();
+  if (!text) return;
+  const lv = getLv(uStats.pts);
+  const reply = { u: '봄비내리는날', bg: lv.bg, c: lv.color, t: '방금' , txt: text };
+  if (!pdReplies[idx]) pdReplies[idx] = [];
+  pdReplies[idx].push(reply);
+  const slot = document.getElementById('replies-' + postId + '-' + idx);
+  if (slot) {
+    const div = document.createElement('div');
+    div.innerHTML = buildReplyHtml(reply);
+    slot.appendChild(div.firstElementChild);
+  }
+  input.value = '';
+  document.getElementById('reply-input-' + postId + '-' + idx).style.display = 'none';
+  addPts('comment');
+  showToast('답글 등록! +1점 🎉');
+}
+
+function cancelAdopt(idx, isMine) {
+  if (pdAdoptedIdx === null) return;
+  const cm = isMine ? pdUserComments[idx - pdBaseComments.length] : pdBaseComments[idx];
+  const el = document.getElementById('pdc-' + pdPostId + '-' + idx);
+  if (el) el.outerHTML = buildCommentHtml(cm, idx, false, !!isMine);
+  pdAdoptedIdx = null;
+  document.querySelectorAll('.pd-adopt-btn').forEach(b => {
+    if (!b.classList.contains('adopted')) return;
+    b.outerHTML = '';
+  });
+  showToast('채택이 취소됐어요');
+}
+
+function openPost(card) {
+  const title = card.querySelector('.feed-body')?.textContent || '';
+  const preview = card.querySelector('.feed-preview')?.textContent || '';
+  const username = card.querySelector('.feed-username')?.textContent?.trim() || '익명';
+  const time = card.querySelector('.feed-time')?.textContent || '';
+  const tagEl = card.querySelector('.feed-tag');
+  const tag = tagEl?.textContent || '';
+  const tagClass = tagEl?.className || 'feed-tag';
+  const avatarEl = card.querySelector('.avatar');
+  const av = avatarEl?.textContent?.[0] || '?';
+  const avBg = avatarEl?.style.background || '#EEF2FF';
+  const avC = avatarEl?.style.color || '#5B6EF5';
+
+  pdPostId++;
+  pdAdoptedIdx = null;
+  pdUserComments = [];
+  pdBaseComments = SAMPLE_COMMENTS[pdPostId % SAMPLE_COMMENTS.length];
+  pdLikes.clear();
+  Object.keys(pdReplies).forEach(k => delete pdReplies[k]);
+
+  const aiReply = AI_RESPONSES[tag] || AI_RESPONSES['자유'];
+  const aiHtml = buildAiCommentHtml(aiReply);
+  const totalCount = 1 + pdBaseComments.length;
+
+  const isMine = card.dataset.mine === 'true';
+  const pdHTML = `
+    <div class="pd-post-card">
+      <div class="feed-top" style="margin-bottom:10px">
+        <div class="feed-user">
+          <div class="avatar" style="background:${avBg};color:${avC}">${av}</div>
+          <div>
+            <div class="feed-username" style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">${username.replace(/\n.*/,'')}</div>
+            <div class="feed-time">${time}</div>
+          </div>
+        </div>
+        <span class="${tagClass}">${tag}</span>
+      </div>
+      <div style="font-size:16px;font-weight:700;line-height:1.5;margin-bottom:8px">${title}</div>
+      ${preview ? `<div class="pd-post-full">${preview}</div>` : ''}
+      <div class="pd-post-footer">
+        <button class="reaction-btn" style="font-size:13px" onclick="showToast('공감했어요!')">❤️ 공감</button>
+        <button class="reaction-btn" style="font-size:13px" onclick="showToast('저장됐어요!')">🔖 저장</button>
+      </div>
+    </div>
+    <div class="pd-comments-label" id="pdCommLabel">댓글 ${totalCount}개</div>
+    <div id="pdCommentsList">
+      ${aiHtml}${pdBaseComments.map((cm, i) => buildCommentHtml(cm, i, false, false)).join('')}
+    </div>`;
+
+  document.getElementById('pdBody').innerHTML = pdHTML;
+  const pd = document.getElementById('pdOverlay');
+  pd.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('pdInput').value = '';
+  pd.scrollTop = 0;
+}
+
+function adoptComment(idx) {
+  if (pdAdoptedIdx !== null) return;
+  pdAdoptedIdx = idx;
+  const isMine = idx >= pdBaseComments.length;
+  const cm = isMine ? pdUserComments[idx - pdBaseComments.length] : pdBaseComments[idx];
+  const el = document.getElementById(`pdc-${pdPostId}-${idx}`);
+  if (el) el.outerHTML = buildCommentHtml(cm, idx, true, isMine);
+  document.querySelectorAll('.pd-adopt-btn:not(.adopted)').forEach(b => b.remove());
+  addPts('adoption');
+  showToast('채택 완료! +5점 ⭐');
+}
+
+function submitPdComment() {
+  const input = document.getElementById('pdInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const lv = getLv(uStats.pts);
+  const idx = pdBaseComments.length + pdUserComments.length;
+  const cm = { u: '봄비내리는날', bg: lv.bg, c: lv.color, t: '방금', txt: text };
+  pdUserComments.push(cm);
+  const list = document.getElementById('pdCommentsList');
+  if (list) {
+    const div = document.createElement('div');
+    div.innerHTML = buildCommentHtml(cm, idx, false, true);
+    list.appendChild(div.firstElementChild);
+  }
+  const lbl = document.getElementById('pdCommLabel');
+  if (lbl) lbl.textContent = `댓글 ${1 + pdBaseComments.length + pdUserComments.length}개`;
+  input.value = '';
+  addPts('comment');
+  showToast('댓글 등록! +1점 🎉');
+}
+
+function closePD() {
+  document.getElementById('pdOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+/* ── EVENT DELEGATION: community feed → post detail ── */
+document.getElementById('commFeedList').addEventListener('click', function(e) {
+  if (e.target.closest('.reaction-btn')) return;
+  const card = e.target.closest('.feed-card');
+  if (card) { e.stopPropagation(); openPost(card); }
+}, true);
+
+/* ── INIT ── */
+refreshMyPage();
 </script>
 </body>
 </html>
