@@ -94,7 +94,7 @@
 
     /* ─── HOME: HERO ─── */
     .hero {
-      padding: 28px 20px 20px;
+      padding: 14px 20px 20px;
       background: var(--white);
       position: relative;
     }
@@ -102,7 +102,7 @@
       display: inline-flex; align-items: center; gap: 6px;
       background: var(--pink-pale); color: var(--pink);
       font-size: 12px; font-weight: 600; padding: 5px 12px;
-      border-radius: var(--r-pill); margin-bottom: 14px;
+      border-radius: var(--r-pill); margin-bottom: 10px;
     }
     .hero-label .dot {
       width: 6px; height: 6px; background: var(--pink);
@@ -221,11 +221,12 @@
 
     /* ─── HOT COMMUNITY CARD ─── */
     .hot-card {
-      flex-shrink: 0; width: 230px; border-radius: var(--r-md);
+      flex-shrink: 0; width: 230px; height: 190px; border-radius: var(--r-md);
       padding: 16px; background: var(--white);
       border: 1px solid rgba(0,0,0,.07); box-shadow: var(--shadow-sm);
-      cursor: pointer; display: flex; flex-direction: column; gap: 10px;
+      cursor: pointer; display: flex; flex-direction: column; gap: 8px;
       transition: transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s;
+      overflow: hidden;
     }
     .hot-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
     .hot-card.featured {
@@ -239,7 +240,8 @@
       align-self: flex-start;
     }
     .hot-card.featured .hot-card-badge { background: rgba(255,255,255,.22); color: white; }
-    .hot-card-title { font-size: 14px; font-weight: 800; line-height: 1.35; letter-spacing: -0.3px; }
+    .hot-card-title { font-size: 14px; font-weight: 800; line-height: 1.35; letter-spacing: -0.3px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .hot-card-footer { margin-top: auto; }
     .hot-card-preview { font-size: 12px; line-height: 1.5; color: var(--gray-500); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .hot-card.featured .hot-card-preview { color: rgba(255,255,255,.75); }
     .hot-card-meta { display: flex; align-items: center; gap: 6px; }
@@ -314,7 +316,8 @@
     .feed-tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: var(--r-pill); white-space: nowrap; }
     .tag-funeral { background: #FFF2EE; color: #FF5500; }
     .tag-wedding  { background: #FFF0F6; color: #E45D8A; }
-    .tag-work     { background: #F0FBF4; color: #30A55F; }
+    .tag-work     { background: #2D3748; color: #fff; }
+    .tag-dining   { background: #FEF3C7; color: #B45309; }
     .tag-school   { background: #FFF8E1; color: #E6A817; }
     .tag-family   { background: var(--pink-pale); color: var(--pink); }
     .feed-body { font-size: 14px; font-weight: 600; color: var(--gray-900); line-height: 1.5; letter-spacing: -0.2px; margin-bottom: 6px; }
@@ -983,8 +986,6 @@
     <main class="scroll-content">
 
       <section class="hero reveal">
-        <div class="hero-label"><span class="dot"></span>지금 가장 많이 찾는 상황</div>
-        <p class="hero-greeting">안녕하세요 👋</p>
         <h1 class="hero-title">이 상황,<br>어떻게 하면 <span class="hl">괜찮을까요?</span></h1>
         <p class="hero-sub">실제 사람들의 경험을 바탕으로<br>상황별 예절을 안내해드려요</p>
       </section>
@@ -998,7 +999,7 @@
           <span class="search-ai-badge">AI</span>
         </div>
         <div class="quick-chips">
-          <button class="chip active" onclick="filterChip(this,'전체')">전체</button>
+          <button class="chip active" onclick="filterChip(this,'Hot')">🔥 Hot</button>
           <button class="chip" onclick="filterChip(this,'장례식')">⚫ 장례식</button>
           <button class="chip" onclick="filterChip(this,'결혼식')">💍 결혼식</button>
           <button class="chip" onclick="filterChip(this,'회식')">🍻 회식</button>
@@ -1009,11 +1010,11 @@
 
       <section class="cards-scroll-section">
         <div class="section-header reveal">
-          <h2 class="section-title">🔥 지금 핫한 게시글</h2>
+          <h2 class="section-title" id="hotSectionTitle">🔥 지금 핫한 게시글</h2>
           <button class="section-more" onclick="goHotComm()">전체보기 <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
         </div>
-        <div class="cards-scroll reveal-stagger">
-          <div class="hot-card featured" onclick="openHotPost('hot1')">
+        <div class="cards-scroll">
+          <div class="hot-card featured" data-cat="직장" data-hot="true" onclick="openHotPostFromHome('hot1')">
             <div class="hot-card-badge">🔥 인기 1위</div>
             <div class="hot-card-title">팀장이 회식서 내 연봉을 다 공개했습니다</div>
             <div class="hot-card-preview">신입이라 연봉이 낮은데, 팀장이 갑자기 "00씨는 얼마야? 우리 팀 제일 낮지?" 하면서 다 들리는 데서…</div>
@@ -1031,7 +1032,7 @@
             </div>
           </div>
 
-          <div class="hot-card" onclick="openHotPost('hot2')">
+          <div class="hot-card" data-cat="결혼식" data-hot="true" onclick="openHotPostFromHome('hot2')">
             <div class="hot-card-badge">📈 주간 급상승</div>
             <div class="hot-card-title">축의금 5만원 냈더니 밥도 안 줬대요</div>
             <div class="hot-card-preview">대학 동기 결혼식에 5만원 냈는데, 식사 시간에 제 자리가 없었어요. 5만원은 밥 제공 안 하는 선이라고…</div>
@@ -1049,7 +1050,7 @@
             </div>
           </div>
 
-          <div class="hot-card" onclick="openHotPost('hot3')">
+          <div class="hot-card" data-cat="장례식" data-hot="true" onclick="openHotPostFromHome('hot3')">
             <div class="hot-card-badge">💬 실시간 논쟁</div>
             <div class="hot-card-title">친구 부모님 장례식 조의금 3만원이면 실례인가요?</div>
             <div class="hot-card-preview">요즘 진짜 돈이 없어서요. 3만원이면 너무 적은 건지, 차라리 안 가는 게 나을지 고민 중이에요.</div>
@@ -1067,7 +1068,7 @@
             </div>
           </div>
 
-          <div class="hot-card" onclick="openHotPost('hot4')">
+          <div class="hot-card" data-cat="학교" data-hot="true" onclick="openHotPostFromHome('hot4')">
             <div class="hot-card-badge">🆕 오늘 급상승</div>
             <div class="hot-card-title">교수님이 시험지를 그냥 던져줬는데 이게 맞나요?</div>
             <div class="hot-card-preview">중간고사 결과 돌려주면서 시험지를 던지듯 주고 "이것도 못 해?" 하셨어요. 학교 측에 말할 수 있나요?</div>
@@ -1082,6 +1083,343 @@
                 <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>39</span>
               </div>
               <span style="font-size:10px;color:var(--gray-300)">987명 읽음</span>
+            </div>
+          </div>
+
+          <!-- 장례식 카테고리 카드 -->
+          <div class="hot-card" data-cat="장례식" onclick="openHotPostFromHome('hot3')">
+            <div class="hot-card-badge">⚫ 장례식</div>
+            <div class="hot-card-title">절을 한 번 해야 하나요, 두 번 해야 하나요?</div>
+            <div class="hot-card-preview">처음 장례식장에 가는데 절하는 방법을 모르겠어요. 어떻게 해야 예의 바른 건지 알려주세요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#FFF2EE;color:#FF5500">달</div>
+              <span class="hot-card-author">달빛산책중 · 23분 전</span>
+              <span class="feed-tag tag-funeral" style="font-size:10px;padding:2px 7px">장례식</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>128</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>43</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">1,102명 읽음</span>
+            </div>
+          </div>
+          <div class="hot-card" data-cat="장례식" onclick="openHotPostFromHome('hot3')">
+            <div class="hot-card-badge">⚫ 장례식</div>
+            <div class="hot-card-title">검은 옷이 없어요, 어떡하죠?</div>
+            <div class="hot-card-preview">갑자기 부고 연락을 받았는데 검은 정장이 없어요. 짙은 남색 정장도 괜찮을까요?</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#F5F5F5;color:#555">하</div>
+              <span class="hot-card-author">하늘길걷는사람 · 4시간 전</span>
+              <span class="feed-tag tag-funeral" style="font-size:10px;padding:2px 7px">장례식</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>83</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>29</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">876명 읽음</span>
+            </div>
+          </div>
+          <div class="hot-card" data-cat="장례식" onclick="openHotPostFromHome('hot3')">
+            <div class="hot-card-badge">⚫ 장례식</div>
+            <div class="hot-card-title">조문 후 식사 꼭 먹고 가야 해요?</div>
+            <div class="hot-card-preview">장례식장에서 식사 권하면 먹는 게 예의인지 그냥 나오는 게 맞는지 헷갈려요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#E8F4FD;color:#2980b9">새</div>
+              <span class="hot-card-author">새벽안개속 · 6시간 전</span>
+              <span class="feed-tag tag-funeral" style="font-size:10px;padding:2px 7px">장례식</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>61</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>22</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">654명 읽음</span>
+            </div>
+          </div>
+
+          <!-- 결혼식 카테고리 카드 -->
+          <div class="hot-card" data-cat="결혼식" onclick="openHotPostFromHome('hot2')">
+            <div class="hot-card-badge">💍 결혼식</div>
+            <div class="hot-card-title">드레스코드 안 따라도 되나요?</div>
+            <div class="hot-card-preview">청첩장에 드레스코드가 있는데 꼭 따라야 해요? 제 옷 중에 딱 맞는 게 없어서요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#FFF0FB;color:#d63001">솜</div>
+              <span class="hot-card-author">솜사탕구름 · 30분 전</span>
+              <span class="feed-tag tag-wedding" style="font-size:10px;padding:2px 7px">결혼식</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>55</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>21</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">743명 읽음</span>
+            </div>
+          </div>
+          <div class="hot-card" data-cat="결혼식" onclick="openHotPostFromHome('hot2')">
+            <div class="hot-card-badge">💍 결혼식</div>
+            <div class="hot-card-title">결혼식에 20분 늦었어요</div>
+            <div class="hot-card-preview">길이 막혀서 식 시작하고 20분 뒤에 도착했어요. 이미 진행 중인데 그냥 들어가도 될까요?</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#F0FFF4;color:#27ae60">오</div>
+              <span class="hot-card-author">오후세시산책 · 2시간 전</span>
+              <span class="feed-tag tag-wedding" style="font-size:10px;padding:2px 7px">결혼식</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>88</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>34</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">1,214명 읽음</span>
+            </div>
+          </div>
+          <div class="hot-card" data-cat="결혼식" onclick="openHotPostFromHome('hot2')">
+            <div class="hot-card-badge">💍 결혼식</div>
+            <div class="hot-card-title">청첩장 받았는데 못 가면 어떡해요?</div>
+            <div class="hot-card-preview">갑자기 일이 생겨서 결혼식에 못 가게 됐어요. 미리 연락해야 하는지, 축의금은 어떻게 해야 하는지 모르겠어요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#E8F4FD;color:#3498db">여</div>
+              <span class="hot-card-author">여름소나기 · 6시간 전</span>
+              <span class="feed-tag tag-wedding" style="font-size:10px;padding:2px 7px">결혼식</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>67</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>28</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">891명 읽음</span>
+            </div>
+          </div>
+
+          <!-- 결혼식 추가 카드 -->
+          <div class="hot-card" data-cat="결혼식" onclick="openHotPostFromHome('hot2')">
+            <div class="hot-card-badge">💍 결혼식</div>
+            <div class="hot-card-title">혼주 테이블에 인사드려야 하나요?</div>
+            <div class="hot-card-preview">신랑 측 하객인데 신부 부모님께도 따로 인사드려야 하는 건지 모르겠어요. 아는 분도 아니라서요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#FFF9E6;color:#f39c12">초</div>
+              <span class="hot-card-author">초승달빛 · 4시간 전</span>
+              <span class="feed-tag tag-wedding" style="font-size:10px;padding:2px 7px">결혼식</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>92</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>36</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">1,089명 읽음</span>
+            </div>
+          </div>
+
+          <!-- 직장 카테고리 카드 -->
+          <div class="hot-card" data-cat="직장" onclick="openHotPostFromHome('hot1')">
+            <div class="hot-card-badge">💼 직장</div>
+            <div class="hot-card-title">상사한테 업무 실수 어떻게 사과해요?</div>
+            <div class="hot-card-preview">보고서 실수를 뒤늦게 발견했어요. 팀장님께 어떻게 말씀드려야 하는지 모르겠어요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#F0F4FF;color:#6c5ce7">오</div>
+              <span class="hot-card-author">오전열시 · 1시간 전</span>
+              <span class="feed-tag tag-work" style="font-size:10px;padding:2px 7px">직장</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>73</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>27</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">934명 읽음</span>
+            </div>
+          </div>
+          <div class="hot-card" data-cat="직장" onclick="openHotPostFromHome('hot1')">
+            <div class="hot-card-badge">💼 직장</div>
+            <div class="hot-card-title">회의 중 의견 내는 게 눈치 보여요</div>
+            <div class="hot-card-preview">아이디어가 있는데 선임들 앞에서 의견 내기가 너무 무서워요. 잘못 말했다가 찍힐까봐요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#FFF8E1;color:#f39c12">저</div>
+              <span class="hot-card-author">저녁노을빛 · 3시간 전</span>
+              <span class="feed-tag tag-work" style="font-size:10px;padding:2px 7px">직장</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>104</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>41</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">1,567명 읽음</span>
+            </div>
+          </div>
+          <div class="hot-card" data-cat="직장" onclick="openHotPostFromHome('hot1')">
+            <div class="hot-card-badge">💼 직장</div>
+            <div class="hot-card-title">퇴근 인사 어느 정도로 해요?</div>
+            <div class="hot-card-preview">팀장님이 아직 계신데 제가 먼저 퇴근해야 해요. "먼저 들어가겠습니다"면 충분한가요?</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#FFF0EE;color:#FF5500">별</div>
+              <span class="hot-card-author">별빛강물 · 7시간 전</span>
+              <span class="feed-tag tag-work" style="font-size:10px;padding:2px 7px">직장</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>82</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>30</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">1,102명 읽음</span>
+            </div>
+          </div>
+
+          <!-- 직장 추가 카드 -->
+          <div class="hot-card" data-cat="직장" onclick="openHotPostFromHome('hot1')">
+            <div class="hot-card-badge">💼 직장</div>
+            <div class="hot-card-title">점심 혼밥 해도 될까요?</div>
+            <div class="hot-card-preview">팀원들이 항상 같이 먹자고 하는데 혼자 먹고 싶을 때가 있어요. 거절하면 이상하게 볼까봐 걱정돼요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#EEF2FF;color:#5B6EF5">봄</div>
+              <span class="hot-card-author">봄비내리는날 · 4시간 전</span>
+              <span class="feed-tag tag-work" style="font-size:10px;padding:2px 7px">직장</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>68</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>25</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">876명 읽음</span>
+            </div>
+          </div>
+
+          <!-- 학교 카테고리 카드 -->
+          <div class="hot-card" data-cat="학교" onclick="openHotPostFromHome('hot4')">
+            <div class="hot-card-badge">🎓 학교</div>
+            <div class="hot-card-title">팀플 무임승차 어떻게 대처해요?</div>
+            <div class="hot-card-preview">팀원 한 명이 아무것도 안 하는데 교수님께 말씀드려야 할지 그냥 제가 다 해야 할지요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#FFF9E6;color:#f39c12">파</div>
+              <span class="hot-card-author">파도소리 · 2시간 전</span>
+              <span class="feed-tag tag-school" style="font-size:10px;padding:2px 7px">학교</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>97</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>38</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">1,231명 읽음</span>
+            </div>
+          </div>
+          <div class="hot-card" data-cat="학교" onclick="openHotPostFromHome('hot4')">
+            <div class="hot-card-badge">🎓 학교</div>
+            <div class="hot-card-title">교수님 연구실 방문할 때 예약해야 하나요?</div>
+            <div class="hot-card-preview">성적 관련해서 교수님과 면담을 하고 싶은데 그냥 찾아가면 실례인가요?</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#F0F4FF;color:#6c5ce7">새</div>
+              <span class="hot-card-author">새벽달빛 · 5시간 전</span>
+              <span class="feed-tag tag-school" style="font-size:10px;padding:2px 7px">학교</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>51</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>18</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">643명 읽음</span>
+            </div>
+          </div>
+          <div class="hot-card" data-cat="학교" onclick="openHotPostFromHome('hot4')">
+            <div class="hot-card-badge">🎓 학교</div>
+            <div class="hot-card-title">수업 중 화장실 가도 될까요?</div>
+            <div class="hot-card-preview">강의 중간에 화장실이 너무 급한데 그냥 일어나서 나가면 실례인가요?</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#F0FFF4;color:#27ae60">초</div>
+              <span class="hot-card-author">초록잔디 · 8시간 전</span>
+              <span class="feed-tag tag-school" style="font-size:10px;padding:2px 7px">학교</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>63</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>24</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">812명 읽음</span>
+            </div>
+          </div>
+
+          <!-- 회식 카테고리 카드 5개 -->
+          <div class="hot-card" data-cat="회식" onclick="openHotPostFromHome('hot5')">
+            <div class="hot-card-badge">🍻 회식</div>
+            <div class="hot-card-title">부장님이 음식 시키래요, 비싼 거 시켜도 되나요?</div>
+            <div class="hot-card-preview">첫 회식인데 부장님이 제가 먹고 싶은 거 시키라고 하셨어요. 뭘 시켜야 할지 너무 눈치 보여요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#F0FBF4;color:#27ae60">달</div>
+              <span class="hot-card-author">달팽이걸음 · 5시간 전</span>
+              <span class="feed-tag tag-dining" style="font-size:10px;padding:2px 7px">회식</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>66</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>25</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">1,209명 읽음</span>
+            </div>
+          </div>
+          <div class="hot-card" data-cat="회식" onclick="openHotPostFromHome('hot5')">
+            <div class="hot-card-badge">🍻 회식</div>
+            <div class="hot-card-title">2차 꼭 가야 하나요?</div>
+            <div class="hot-card-preview">팀장님이 2차 가자고 하시는데 내일 일찍 출근이에요. 거절하면 눈치 보일 것 같아요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#EEF2FF;color:#5B6EF5">소</div>
+              <span class="hot-card-author">소라치즈 · 40분 전</span>
+              <span class="feed-tag tag-dining" style="font-size:10px;padding:2px 7px">회식</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>112</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>47</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">1,891명 읽음</span>
+            </div>
+          </div>
+          <div class="hot-card" data-cat="회식" onclick="openHotPostFromHome('hot5')">
+            <div class="hot-card-badge">🍻 회식</div>
+            <div class="hot-card-title">먼저 자리 뜨는 거 실례인가요?</div>
+            <div class="hot-card-preview">개인 사정으로 회식 도중 먼저 나가야 하는데 팀장님한테 어떻게 말씀드려야 할지요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#FFF8E1;color:#f39c12">파</div>
+              <span class="hot-card-author">파란하늘별 · 2시간 전</span>
+              <span class="feed-tag tag-dining" style="font-size:10px;padding:2px 7px">회식</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>79</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>31</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">956명 읽음</span>
+            </div>
+          </div>
+          <div class="hot-card" data-cat="회식" onclick="openHotPostFromHome('hot5')">
+            <div class="hot-card-badge">🍻 회식</div>
+            <div class="hot-card-title">부장님이 취하신 것 같아요, 어떻게 해요?</div>
+            <div class="hot-card-preview">팀장님이 많이 드신 것 같은데 제가 모셔다드려야 하는 건지 모르겠어요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#E8F4FD;color:#2980b9">구</div>
+              <span class="hot-card-author">구름한조각 · 어제</span>
+              <span class="feed-tag tag-dining" style="font-size:10px;padding:2px 7px">회식</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>91</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>36</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">1,145명 읽음</span>
+            </div>
+          </div>
+          <div class="hot-card" data-cat="회식" onclick="openHotPostFromHome('hot5')">
+            <div class="hot-card-badge">🍻 회식</div>
+            <div class="hot-card-title">회식 대화 어떻게 이끌어야 해요?</div>
+            <div class="hot-card-preview">내성적인 편인데 회식 자리가 너무 어색해요. 선배들이랑 무슨 대화를 해야 할지 모르겠어요.</div>
+            <div class="hot-card-meta">
+              <div class="hot-card-av" style="background:#FFF0EE;color:#FF5500">이</div>
+              <span class="hot-card-author">이른아침이슬 · 8시간 전</span>
+              <span class="feed-tag tag-dining" style="font-size:10px;padding:2px 7px">회식</span>
+            </div>
+            <div class="hot-card-footer">
+              <div class="hot-card-stats">
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>53</span>
+                <span class="hot-card-stat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>18</span>
+              </div>
+              <span style="font-size:10px;color:var(--gray-300)">732명 읽음</span>
             </div>
           </div>
         </div>
@@ -1128,7 +1466,7 @@
                 <div class="avatar" style="background:#F0FBF4;color:#30A55F;">구</div>
                 <div><div class="feed-username">구름위를걷는중</div><div class="feed-time">1시간 전</div></div>
               </div>
-              <span class="feed-tag tag-work">직장</span>
+              <span class="feed-tag tag-dining">회식</span>
             </div>
             <div class="feed-body">신입인데 회식에서 술 안 마셔도 될까요?</div>
             <div class="feed-preview">입사한 지 두 달 됐는데 팀장님이 술 좀 마셔야 한다고 하셔서요. 강요처럼 느껴지는데 어떻게 해야 할지...</div>
@@ -1246,6 +1584,54 @@
                 <button class="sim-start-btn">시작하기</button>
               </div>
             </div>
+            <div class="sim-item" data-cat="학교" onclick="startSim('school2')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🎓 학교</span>
+                <span class="sim-item-count">521명 참여</span>
+              </div>
+              <div class="sim-item-title">수업 중 손 들고 질문해도 되나요?</div>
+              <div class="sim-item-desc">궁금한 게 생겼는데 교수님이 기분 나빠하실까봐 참고 있어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="학교" onclick="startSim('school3')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🎓 학교</span>
+                <span class="sim-item-count">893명 참여</span>
+              </div>
+              <div class="sim-item-title">팀플 무임승차자, 교수님께 말해야 해?</div>
+              <div class="sim-item-desc">팀원 한 명이 아무것도 안 하는데 그냥 제가 다 해야 할까요?</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot on"></span> 어려움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="학교" onclick="startSim('school4')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🎓 학교</span>
+                <span class="sim-item-count">378명 참여</span>
+              </div>
+              <div class="sim-item-title">교수님 연구실, 그냥 찾아가도 되나요?</div>
+              <div class="sim-item-desc">성적 관련 면담을 원하는데 예약 없이 방문해도 될지 모르겠어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot"></span> 보통</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="학교" onclick="startSim('school5')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🎓 학교</span>
+                <span class="sim-item-count">462명 참여</span>
+              </div>
+              <div class="sim-item-title">강의 중 화장실, 그냥 나가도 되나요?</div>
+              <div class="sim-item-desc">수업 중 화장실이 너무 급한데 교수님께 말씀드려야 하나요?</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
             <div class="sim-item" data-cat="직장" onclick="startSim('office')">
               <div class="sim-item-header">
                 <span class="sim-item-tag">💼 직장</span>
@@ -1253,6 +1639,54 @@
               </div>
               <div class="sim-item-title">처음 만나는 거래처, 명함 주고받기</div>
               <div class="sim-item-desc">첫 미팅에서 명함을 어떻게 주고받아야 실례가 없을까요?</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot"></span> 보통</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="직장" onclick="startSim('office2')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">💼 직장</span>
+                <span class="sim-item-count">614명 참여</span>
+              </div>
+              <div class="sim-item-title">업무 실수를 상사에게 어떻게 보고해요?</div>
+              <div class="sim-item-desc">보고서 오류를 뒤늦게 발견했어요. 팀장님께 어떻게 말씀드려야 할까요?</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot on"></span> 어려움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="직장" onclick="startSim('office3')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">💼 직장</span>
+                <span class="sim-item-count">487명 참여</span>
+              </div>
+              <div class="sim-item-title">회의에서 선임 앞에 의견 내기</div>
+              <div class="sim-item-desc">아이디어가 있는데 선임들 앞에서 말을 꺼내기가 무서워요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot on"></span> 어려움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="직장" onclick="startSim('office4')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">💼 직장</span>
+                <span class="sim-item-count">339명 참여</span>
+              </div>
+              <div class="sim-item-title">팀장님 계실 때 먼저 퇴근 인사하기</div>
+              <div class="sim-item-desc">팀장님이 아직 계신데 제가 먼저 퇴근해야 해요. 어떻게 말해야 할까요?</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="직장" onclick="startSim('office5')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">💼 직장</span>
+                <span class="sim-item-count">276명 참여</span>
+              </div>
+              <div class="sim-item-title">처음 거래처에 업무 이메일 쓰기</div>
+              <div class="sim-item-desc">공식 이메일 형식을 모르겠어요. 인사말부터 마무리까지 어떻게 하나요?</div>
               <div class="sim-item-footer">
                 <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot"></span> 보통</span>
                 <button class="sim-start-btn">시작하기</button>
@@ -1267,6 +1701,54 @@
               <div class="sim-item-desc">직장 동료가 입원했는데 병문안 예절을 하나도 모르겠어요.</div>
               <div class="sim-item-footer">
                 <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="병문안" onclick="startSim('hospital2')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🏥 병문안</span>
+                <span class="sim-item-count">274명 참여</span>
+              </div>
+              <div class="sim-item-title">병문안 얼마나 있다 와야 해요?</div>
+              <div class="sim-item-desc">환자가 쉬어야 하는데 얼마나 머물러야 실례가 없을까요?</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="병문안" onclick="startSim('hospital3')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🏥 병문안</span>
+                <span class="sim-item-count">193명 참여</span>
+              </div>
+              <div class="sim-item-title">꽃다발 들고 가도 되나요?</div>
+              <div class="sim-item-desc">꽃을 사 가려는데 병원에서 반입이 안 된다는 말을 들었어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot"></span><span class="diff-dot"></span> 쉬움</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="병문안" onclick="startSim('hospital4')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🏥 병문안</span>
+                <span class="sim-item-count">231명 참여</span>
+              </div>
+              <div class="sim-item-title">병문안에서 뭐라고 위로해야 할까요?</div>
+              <div class="sim-item-desc">뭐라고 말해야 할지 몰라 침묵이 이어지는 상황이에요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot"></span> 보통</span>
+                <button class="sim-start-btn">시작하기</button>
+              </div>
+            </div>
+            <div class="sim-item" data-cat="병문안" onclick="startSim('hospital5')">
+              <div class="sim-item-header">
+                <span class="sim-item-tag">🏥 병문안</span>
+                <span class="sim-item-count">158명 참여</span>
+              </div>
+              <div class="sim-item-title">퇴원 소식 들었을 때 어떻게 해요?</div>
+              <div class="sim-item-desc">동료가 퇴원했는데 연락을 해야 할지, 선물을 보내야 할지 모르겠어요.</div>
+              <div class="sim-item-footer">
+                <span class="difficulty"><span class="diff-dot on"></span><span class="diff-dot on"></span><span class="diff-dot"></span> 보통</span>
                 <button class="sim-start-btn">시작하기</button>
               </div>
             </div>
@@ -1534,7 +2016,7 @@
               <div class="avatar" style="background:#F0FBF4;color:#30A55F;">구</div>
               <div><div class="feed-username">구름위를걷는중</div><div class="feed-time">1시간 전</div></div>
             </div>
-            <span class="feed-tag tag-work">회식</span>
+            <span class="feed-tag tag-dining">회식</span>
           </div>
           <div class="feed-body">신입인데 회식에서 술 안 마셔도 될까요?</div>
           <div class="feed-preview">입사한 지 두 달 됐는데 팀장님이 술 좀 마셔야 한다고 하셔서요. 강요처럼 느껴지는데 어떻게 해야 할지...</div>
@@ -1775,7 +2257,7 @@
               <div class="avatar" style="background:#EEF2FF;color:#5B6EF5;">소</div>
               <div><div class="feed-username">소라치즈</div><div class="feed-time">40분 전</div></div>
             </div>
-            <span class="feed-tag tag-work">회식</span>
+            <span class="feed-tag tag-dining">회식</span>
           </div>
           <div class="feed-body">2차 꼭 가야 하나요?</div>
           <div class="feed-preview">팀장님이 2차 가자고 하시는데 내일 일찍 출근이에요. 거절하면 눈치 보일 것 같고, 진짜 가기 싫은데 어떻게 해요?</div>
@@ -1791,7 +2273,7 @@
               <div class="avatar" style="background:#FFF8E1;color:#f39c12;">파</div>
               <div><div class="feed-username">파란하늘별</div><div class="feed-time">2시간 전</div></div>
             </div>
-            <span class="feed-tag tag-work">회식</span>
+            <span class="feed-tag tag-dining">회식</span>
           </div>
           <div class="feed-body">먼저 자리 뜨는 거 실례인가요?</div>
           <div class="feed-preview">개인 사정으로 회식 도중 먼저 나가야 하는데 팀장님한테 어떻게 말씀드려야 할지 모르겠어요.</div>
@@ -1807,7 +2289,7 @@
               <div class="avatar" style="background:#F0FBF4;color:#27ae60;">달</div>
               <div><div class="feed-username">달팽이걸음</div><div class="feed-time">5시간 전</div></div>
             </div>
-            <span class="feed-tag tag-work">회식</span>
+            <span class="feed-tag tag-dining">회식</span>
           </div>
           <div class="feed-body">부장님이 음식 시키래요, 비싼 거 시켜도 되나요?</div>
           <div class="feed-preview">첫 회식인데 부장님이 제가 먹고 싶은 거 시키라고 하셨어요. 뭘 시켜야 할지 너무 눈치 보여요.</div>
@@ -1823,7 +2305,7 @@
               <div class="avatar" style="background:#FFF0EE;color:#FF5500;">이</div>
               <div><div class="feed-username">이른아침이슬</div><div class="feed-time">8시간 전</div></div>
             </div>
-            <span class="feed-tag tag-work">회식</span>
+            <span class="feed-tag tag-dining">회식</span>
           </div>
           <div class="feed-body">회식 대화 어떻게 이끌어야 해요?</div>
           <div class="feed-preview">분위기가 너무 가라앉았는데 제가 말을 잘 못 하는 편이에요. 어떤 주제로 말을 꺼내야 어색하지 않을까요?</div>
@@ -1839,7 +2321,7 @@
               <div class="avatar" style="background:#E8F4FD;color:#2980b9;">구</div>
               <div><div class="feed-username">구름한조각</div><div class="feed-time">어제</div></div>
             </div>
-            <span class="feed-tag tag-work">회식</span>
+            <span class="feed-tag tag-dining">회식</span>
           </div>
           <div class="feed-body">팀장님이 취하신 것 같아요, 어떻게 해요?</div>
           <div class="feed-preview">팀장님이 많이 드신 것 같은데 제가 모셔다드려야 하는 건지, 어디까지 챙겨드려야 하는 건지 모르겠어요.</div>
@@ -2403,7 +2885,22 @@ function switchTab(tab) {
 /* ── FILTERS ── */
 function filterChip(el, label) {
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active'); showToast(`"${label}" 상황 보기`);
+  el.classList.add('active');
+
+  const cards = document.querySelectorAll('.cards-scroll .hot-card');
+  const title = document.getElementById('hotSectionTitle');
+  const emojis = { '장례식':'⚫', '결혼식':'💍', '회식':'🍻', '직장':'💼', '학교':'🎓' };
+
+  if (label === 'Hot') {
+    cards.forEach(card => card.style.display = card.dataset.hot ? '' : 'none');
+    if (title) title.textContent = '🔥 지금 핫한 게시글';
+  } else {
+    cards.forEach(card => {
+      card.style.display = card.dataset.cat === label ? '' : 'none';
+    });
+    const emoji = emojis[label] || '';
+    if (title) title.textContent = `${emoji} ${label} 게시글`;
+  }
 }
 function filterSim(el, label) {
   document.querySelectorAll('.sim-cat-chip').forEach(c => c.classList.remove('active'));
@@ -2439,9 +2936,9 @@ const simData = {
     text: '친한 친구 아버지 장례식에 처음으로 가게 됐다. 조문 절차를 몰라서 당황스럽다.',
     hint: '💡 유교식 장례는 두 번 절(재배), 기독교식은 묵념이나 한 번 절이 일반적이에요',
     choices: [
-      { label: '두 번 절하고 상주에게 짧게 위로한다', pct: '67%', result: '유교식 장례에서 두 번 절(재배)이 기본이에요. 영정에 절한 뒤 상주에게 "삼가 고인의 명복을 빕니다"라고 인사드리세요. 종교를 모를 땐 미리 파악하거나 주변을 보고 따르면 돼요.' },
-      { label: '한 번만 절하고 나온다', pct: '24%', result: '한 번 절은 기독교식 장례나 간소화된 의식에서 하는 방식이에요. 일반 유교식 장례에서는 두 번 절(재배)이 기본이므로, 확인이 어렵다면 두 번을 기준으로 하는 게 안전해요.' },
-      { label: '절 없이 묵념만 한다', pct: '9%', result: '종교적 이유로 절을 하기 어렵다면 묵념도 충분히 예의 있는 대안이에요. 상주에게 미리 "종교상 묵념으로 대신하겠습니다"라고 양해를 구하면 더 배려 있는 행동이에요.' },
+      { label: '두 번 절하고 상주에게 짧게 위로한다', pct: '67%', result: '유교식 장례에서 두 번 절(재배)이 기본이에요. 영정에 절한 뒤 상주에게 "삼가 고인의 명복을 빕니다"라고 짧게 인사드리면 돼요. 종교를 모를 땐 주변 분들 따라 하면 실수 없어요.' },
+      { label: '한 번만 절하고 나온다', pct: '24%', result: '한 번 절은 기독교식 장례나 간소화된 의식에서 하는 방식이에요. 유교식이라면 두 번이 기본이니까 확인이 안 되면 두 번 기준으로 하는 게 안전해요.' },
+      { label: '절 없이 묵념만 한다', pct: '9%', result: '종교 때문에 절이 어렵다면 묵념으로 대신해도 돼요. 상주에게 미리 "저는 종교상 묵념으로 대신하겠습니다"라고 말하면 더 자연스러워요.' },
     ]
   },
   wedding: {
@@ -2449,9 +2946,9 @@ const simData = {
     text: '대학 동기가 결혼식에 초대했다. 가끔 연락하는 사이인데 적정 축의금이 얼마일지 모르겠다.',
     hint: '💡 식사 참석 여부에 따라 달라질 수 있어요',
     choices: [
-      { label: '7만원 (식사 불참 예정)', pct: '51%', result: '2026년 기준, 식사 불참 시 7만원이 가장 현실적인 금액이에요. 5만원은 물가 상승을 고려하면 다소 부족하게 느껴질 수 있어요.' },
-      { label: '10만원 (식사 참석 예정)', pct: '35%', result: '식사를 함께한다면 10만원이 2026년 기준 가장 보편적인 금액이에요. 음식값 포함해 적당한 성의 표현입니다.' },
-      { label: '15만원 이상', pct: '14%', result: '15만원 이상은 꽤 친한 친구 수준일 때 더 어울려요. 가끔 연락하는 사이라면 10만원으로도 충분합니다.' },
+      { label: '7만원 (식사 불참 예정)', pct: '51%', result: '2026년 기준, 가끔 연락하는 동기라면 식사 불참 시 7만원이 무난해요. 5만원은 요즘 물가 생각하면 좀 빡빡하게 느껴질 수 있어요.' },
+      { label: '10만원 (식사 참석 예정)', pct: '35%', result: '식사까지 같이 한다면 10만원이 2026년 기준 제일 무난해요. 밥값 포함해서 딱 맞는 금액이에요.' },
+      { label: '15만원 이상', pct: '14%', result: '15만원 이상은 꽤 친한 친구 수준일 때 어울려요. 가끔 연락하는 동기라면 10만원으로 충분하고요.' },
     ]
   },
   work: {
@@ -2459,9 +2956,9 @@ const simData = {
     text: '입사 후 첫 팀 회식이다. 자리 배치부터 어떻게 행동해야 할지 하나도 모르겠다.',
     hint: '💡 첫 인상이 정말 중요한 자리예요',
     choices: [
-      { label: '상급자에게 자리를 여쭤보고 끝자리에 앉는다', pct: '53%', result: '첫 회식에서는 상석을 피하고 끝자리나 입구 쪽에 앉는 게 기본이에요. 자리를 여쭤보는 행동 자체가 배려 있다는 인상을 줄 수 있어요.' },
-      { label: '아무 자리나 자연스럽게 앉는다', pct: '30%', result: '팀 분위기에 따라 다를 수 있지만, 첫 회식에서는 상급자에게 자리를 먼저 물어보는 것이 더 안전해요. 자칫 상석이나 윗분들이 선호하는 자리에 앉을 수 있어요.' },
-      { label: '상급자 옆에 가서 앉는다', pct: '17%', result: '배려처럼 보일 수 있지만 오히려 부담을 줄 수 있어요. 신입이라면 비슷한 연차의 동료 옆이나 끝자리에 앉는 게 더 자연스럽습니다.' },
+      { label: '상급자에게 자리를 여쭤보고 끝자리에 앉는다', pct: '53%', result: '첫 회식에서는 상석 피하고 끝자리나 입구 쪽에 앉는 게 기본이에요. 자리 여쭤보는 것 자체가 눈치 있다는 좋은 인상 줄 수 있어요.' },
+      { label: '아무 자리나 자연스럽게 앉는다', pct: '30%', result: '팀 분위기 따라 다르지만, 첫 회식이라면 자리를 먼저 여쭤보는 게 더 안전해요. 모르고 상석에 앉으면 분위기 어색해질 수 있거든요.' },
+      { label: '상급자 옆에 가서 앉는다', pct: '17%', result: '배려하는 마음은 알겠지만 오히려 부담 줄 수 있어요. 신입이라면 비슷한 연차 동료 옆이나 끝자리가 더 자연스럽습니다.' },
     ]
   },
   office: {
@@ -2469,9 +2966,9 @@ const simData = {
     text: '처음 만나는 거래처 담당자와 명함을 주고받아야 한다. 어떻게 해야 실례가 없을지 모르겠다.',
     hint: '💡 명함은 작은 자기소개서예요',
     choices: [
-      { label: '두 손으로 공손히 건네고, 받을 때도 두 손으로 받는다', pct: '72%', result: '명함은 두 손으로 주고받는 게 기본이에요. 받은 명함은 미팅 중 테이블 위에 올려두고, 대화가 끝난 후 명함 지갑에 넣는 것이 공식 자리에서의 예의예요.' },
-      { label: '한 손으로 자연스럽게 주고받는다', pct: '21%', result: '편한 사이라면 몰라도 첫 미팅에서는 두 손이 예의예요. 상대방이 공식 자리로 느낄수록 더 중요해요.' },
-      { label: '받자마자 주머니에 바로 넣는다', pct: '7%', result: '명함을 바로 주머니에 넣는 건 실례예요. 잠깐 살펴보고 "잘 부탁드립니다"라고 말한 뒤 명함 지갑에 넣으세요.' },
+      { label: '두 손으로 공손히 건네고, 받을 때도 두 손으로 받는다', pct: '72%', result: '명함은 두 손으로 주고받는 게 기본이에요. 받은 명함은 미팅 중 테이블에 올려두고, 대화 끝나면 명함 지갑에 넣으세요. 바로 주머니에 넣으면 실례예요.' },
+      { label: '한 손으로 자연스럽게 주고받는다', pct: '21%', result: '편한 사이면 몰라도 첫 미팅에선 두 손이 예의예요. 특히 상대방이 연배가 있는 분이라면 더 신경 쓰는 게 좋아요.' },
+      { label: '받자마자 주머니에 바로 넣는다', pct: '7%', result: '명함 받자마자 주머니에 넣는 건 실례예요. 잠깐 봐주면서 "잘 부탁드립니다" 한 마디 하고 나서 지갑에 넣으세요.' },
     ]
   },
   school: {
@@ -2479,9 +2976,9 @@ const simData = {
     text: '과제 제출 기한을 하루 넘겼다. 교수님께 이메일로 늦은 이유를 말씀드려야 하는데 어떻게 써야 할지 모르겠다.',
     hint: '💡 핵심은 솔직함과 간결함이에요',
     choices: [
-      { label: '이유를 자세히 설명하고 양해를 구하는 이메일을 쓴다', pct: '58%', result: '"늦게 제출하게 되어 죄송합니다. [이유]로 인해 기한을 지키지 못했습니다. 첨부파일로 제출드립니다"처럼 간결하고 진심 어린 이메일이 가장 좋아요.' },
-      { label: '이유 없이 "늦어서 죄송합니다"만 보낸다', pct: '30%', result: '사과만으로도 예의는 있지만, 간단한 이유를 함께 쓰면 교수님 입장에서 더 납득하기 쉬워요.' },
-      { label: '그냥 조용히 제출만 한다', pct: '12%', result: '아무 연락 없이 늦게 제출하면 인식이 나빠질 수 있어요. 짧게라도 이메일로 먼저 연락드리는 게 좋아요.' },
+      { label: '이유를 자세히 설명하고 양해를 구하는 이메일을 쓴다', pct: '58%', result: '"늦게 제출하게 되어 죄송합니다. 몸이 갑자기 안 좋아져서 기한을 못 지켰습니다. 첨부파일로 제출드립니다"처럼 짧고 솔직하게 쓰는 게 제일 좋아요.' },
+      { label: '이유 없이 "늦어서 죄송합니다"만 보낸다', pct: '30%', result: '사과만 해도 예의는 있지만, 한 줄이라도 이유 적어주면 교수님 입장에서 이해하기 훨씬 쉬워요.' },
+      { label: '그냥 조용히 제출만 한다', pct: '12%', result: '아무 말 없이 늦게 내면 나중에 성적이나 인상에 영향 줄 수 있어요. 짧게라도 메일 먼저 드리는 게 낫습니다.' },
     ]
   },
   hospital: {
@@ -2489,9 +2986,9 @@ const simData = {
     text: '직장 동료가 입원했다는 소식을 들었다. 처음 병문안을 가는데 무엇을 들고 가야 하고 어떻게 행동해야 할지 모르겠다.',
     hint: '💡 병문안은 짧고 조용하게가 기본이에요',
     choices: [
-      { label: '과일이나 간식을 챙겨서 짧게 안부만 묻고 나온다', pct: '65%', result: '음료, 과일, 죽 등 소화가 잘 되는 간식이 가장 무난해요. 환자가 쉽게 피곤해지므로 방문은 15~20분 이내가 적당하고, 쾌유를 빌며 나오면 됩니다.' },
-      { label: '꽃다발을 들고 오래 이야기하며 위로해준다', pct: '22%', result: '꽃은 병실 환경이나 알레르기 문제로 반입이 제한될 수 있어요. 또한 오래 머물면 환자가 더 피곤해질 수 있으니 짧게 다녀오는 게 더 배려 있는 행동이에요.' },
-      { label: '아무것도 안 들고 그냥 얼굴만 보러 간다', pct: '13%', result: '빈손으로 가도 예의에 크게 어긋나진 않아요. 하지만 간단한 음료나 과일 하나 정도는 챙기면 더 따뜻하게 마음이 전해져요.' },
+      { label: '과일이나 간식을 챙겨서 짧게 안부만 묻고 나온다', pct: '65%', result: '음료, 과일, 죽 같은 소화 잘 되는 간식이 제일 무난해요. 환자는 금방 피곤해지니까 15~20분 이내로 짧게 다녀오는 게 좋아요.' },
+      { label: '꽃다발을 들고 오래 이야기하며 위로해준다', pct: '22%', result: '꽃은 병원에서 반입 제한되는 경우 많아요. 오래 있으면 환자가 더 힘들 수 있으니까 짧게 다녀오는 게 오히려 더 배려하는 거예요.' },
+      { label: '아무것도 안 들고 그냥 얼굴만 보러 간다', pct: '13%', result: '빈손으로 가도 크게 어긋나진 않아요. 근데 음료나 과일 하나 정도만 챙겨도 마음이 훨씬 따뜻하게 전해져요.' },
     ]
   },
   funeral2: {
@@ -2499,9 +2996,9 @@ const simData = {
     text: '친구 아버지 장례식에 가야 하는데 조의금을 얼마나 준비해야 할지 모르겠다. 친구랑은 꽤 친한 편이다.',
     hint: '💡 조의금 봉투엔 세로로 이름을 쓰는 게 관례예요',
     choices: [
-      { label: '7만원을 봉투에 담아 전달한다', pct: '17%', result: '꽤 친한 친구 부모님이라면 7만원은 다소 부족한 금액이에요. 2026년 기준 친한 친구 장례식에는 최소 10만원 이상이 적절하고, 매우 친한 사이라면 15~20만원도 일반적이에요.' },
-      { label: '10만원을 봉투에 담아 전달한다', pct: '61%', result: '2026년 기준 친한 친구 부모님 장례식에 10만원은 보편적인 금액이에요. 봉투에 "부의(賻儀)"라고 쓰고 이름을 세로로 적어 접수대에 전달하면 됩니다.' },
-      { label: '현금 없이 마음만 전한다', pct: '22%', result: '조의금 없이 조문하는 것 자체가 예의이긴 해요. 다만 꽤 친한 사이라면 소액이라도 봉투를 준비하는 것이 유가족에 대한 더 적절한 예우예요.' },
+      { label: '7만원을 봉투에 담아 전달한다', pct: '17%', result: '꽤 친한 친구 부모님이라면 7만원은 좀 부족한 금액이에요. 2026년 기준 친한 친구 장례식에는 10~15만원은 돼야 하고, 많이 친한 사이라면 20~30만원도 흔해요.' },
+      { label: '10만원을 봉투에 담아 전달한다', pct: '61%', result: '10만원은 기본이에요. 다만 꽤 친한 사이라면 15~20만원이 더 일반적이에요. 봉투에 "부의(賻儀)"라고 쓰고 이름을 세로로 적어 접수대에 전달하면 됩니다.' },
+      { label: '현금 없이 마음만 전한다', pct: '22%', result: '조의금 없이 조문하는 것 자체가 예의이긴 해요. 그래도 꽤 친한 사이라면 소액이라도 봉투 챙겨가는 게 유가족 입장에선 더 고마워해요.' },
     ]
   },
   funeral3: {
@@ -2519,9 +3016,9 @@ const simData = {
     text: '영정 앞에서 절을 마쳤는데 상주에게 뭐라고 말해야 할지 입이 안 떨어진다. 적절한 인사말이 뭔지 모르겠다.',
     hint: '💡 짧고 진심이 담긴 말 한마디가 최고예요',
     choices: [
-      { label: '"삼가 고인의 명복을 빕니다"라고 짧게 인사한다', pct: '71%', result: '"삼가 고인의 명복을 빕니다"는 가장 정중하고 보편적인 조문 인사말이에요. 더 말을 잇고 싶다면 "많이 힘드시겠어요, 건강 챙기세요" 정도가 자연스러워요. 짧을수록 더 예의 있어 보입니다.' },
-      { label: '"얼마나 슬프세요, 정말 안됐어요"라고 공감을 표현한다', pct: '18%', result: '공감을 표현하려는 마음은 좋지만, 조문 자리에서 감정적인 표현은 오히려 상주를 더 힘들게 할 수 있어요. 짧고 격식 있는 인사말이 더 예의 있게 전달돼요.' },
-      { label: '말없이 고개를 깊이 숙여 인사한다', pct: '11%', result: '묵례도 충분히 진심을 전할 수 있어요. 하지만 아는 사이라면 짧게라도 인사말을 건네는 것이 더 따뜻한 위로가 돼요.' },
+      { label: '"삼가 고인의 명복을 빕니다"라고 짧게 인사한다', pct: '71%', result: '"삼가 고인의 명복을 빕니다"가 제일 정중하고 무난해요. 더 말하고 싶으면 "많이 힘드시겠어요, 건강 챙기세요" 정도면 충분해요. 길게 말할수록 오히려 어색해질 수 있어요.' },
+      { label: '"얼마나 슬프세요, 정말 안됐어요"라고 공감을 표현한다', pct: '18%', result: '마음은 이해하지만, 조문 자리에서 너무 감정적인 표현은 상주를 더 힘들게 할 수 있어요. 짧고 간결한 인사말이 오히려 더 위로가 돼요.' },
+      { label: '말없이 고개를 깊이 숙여 인사한다', pct: '11%', result: '묵례도 충분히 진심이 전해져요. 다만 아는 사이라면 짧게라도 말 한마디 건네는 게 더 따뜻하게 느껴질 수 있어요.' },
     ]
   },
   funeral5: {
@@ -2529,9 +3026,9 @@ const simData = {
     text: '조문을 마치고 나오는데 직원이 식사하고 가라고 안내한다. 어떻게 하는 게 맞는지 모르겠다.',
     hint: '💡 장례식 식사는 고인에 대한 예우의 연장이에요',
     choices: [
-      { label: '조용히 자리에 앉아 식사하고 나온다', pct: '57%', result: '장례식 식사는 유가족이 준비한 예우이므로 받아들이는 것이 예의예요. 조용히 식사하고 감사 인사 후 나오면 됩니다.' },
-      { label: '"바빠서요"라며 정중히 사양하고 나온다', pct: '35%', result: '식사를 사양해도 실례는 아니에요. 다만 이유를 간단히 말하고 정중하게 인사한 뒤 나오는 것이 예의 있는 행동입니다.' },
-      { label: '음식을 싸서 들고 나온다', pct: '8%', result: '장례 음식을 포장해 나가는 것은 예의에 어긋나요. 식사는 그 자리에서 조용히 하거나 정중히 사양하는 것이 맞습니다.' },
+      { label: '조용히 자리에 앉아 식사하고 나온다', pct: '57%', result: '장례식 식사는 유가족이 준비한 거라 받아들이는 게 예의예요. 시간 된다면 조용히 식사하고 감사 인사 후 나오면 돼요.' },
+      { label: '"바빠서요"라며 정중히 사양하고 나온다', pct: '35%', result: '사양해도 실례 아니에요. "일이 있어서 먼저 가야 할 것 같아요"라고 짧게 말하고 인사드리면 충분해요.' },
+      { label: '음식을 싸서 들고 나온다', pct: '8%', result: '장례 음식을 포장해서 나가는 건 예의에 어긋나요. 먹고 나가거나, 못 먹으면 정중히 사양하면 돼요.' },
     ]
   },
   wedding2: {
@@ -2539,9 +3036,9 @@ const simData = {
     text: '친구 결혼식 하객으로 참석한다. 화사한 원피스를 입으려고 했는데 흰색 원피스도 괜찮은지 고민된다.',
     hint: '💡 흰색은 신부를 위해 피하는 게 암묵적 예절이에요',
     choices: [
-      { label: '흰색 원피스는 피하고 다른 색으로 바꾼다', pct: '79%', result: '흰색은 신부의 드레스 색상과 겹쳐 하객이 입는 것은 예의에 어긋나는 관례예요. 파스텔·코랄·민트 등 화사한 색상을 선택하는 게 좋아요.' },
-      { label: '흰색이어도 레이스나 장식이 있으면 괜찮다', pct: '15%', result: '디자인과 관계없이 흰색 자체가 신부의 컬러로 여겨져요. 비슷한 스타일의 아이보리나 다른 밝은 색상으로 대체하는 게 안전합니다.' },
-      { label: '상관없이 입고 싶은 걸 입는다', pct: '6%', result: '최근엔 관대해지는 추세이긴 하지만, 특히 한국 결혼식에서는 흰색 하객 복장이 신부 측 가족에게 불편함을 줄 수 있어요. 피하는 게 무난해요.' },
+      { label: '흰색 원피스는 피하고 다른 색으로 바꾼다', pct: '79%', result: '흰색은 신부 색이라는 암묵적인 룰이 있어서 하객이 입으면 어색해요. 파스텔, 코랄, 민트 같은 화사한 색상이 딱이에요.' },
+      { label: '흰색이어도 레이스나 장식이 있으면 괜찮다', pct: '15%', result: '디자인이랑 상관없이 흰색 자체가 문제가 돼요. 아이보리나 다른 밝은 색상으로 바꾸는 게 안전해요.' },
+      { label: '상관없이 입고 싶은 걸 입는다', pct: '6%', result: '요즘은 좀 관대해지긴 했는데, 한국 결혼식에서 흰색 하객 복장은 신부 쪽 가족이 불편해할 수 있어요. 굳이 피하는 게 낫긴 해요.' },
     ]
   },
   wedding3: {
@@ -2549,9 +3046,9 @@ const simData = {
     text: '식이 시작되기 전 웨딩홀에 도착했다. 예쁜 포토존에서 사진을 찍고 싶은데 어디까지 찍어도 되는지 모르겠다.',
     hint: '💡 공식 촬영 시간에는 조용히 관람하는 게 예의예요',
     choices: [
-      { label: '식 전후 포토존에서는 자유롭게 찍고, 식 중엔 플래시 없이 조용히 찍는다', pct: '65%', result: '식 전후 포토존은 자유롭게 이용해도 돼요. 식이 진행되는 동안에는 플래시를 끄고 조용히, 전문 촬영팀의 동선을 방해하지 않는 게 기본 예절입니다.' },
-      { label: '식이 진행되는 동안에도 자유롭게 찍는다', pct: '22%', result: '플래시·셔터 소리·이동 등이 공식 촬영 및 식의 분위기를 방해할 수 있어요. 하이라이트 장면에서는 조용히 감상하는 게 예의예요.' },
-      { label: '사진은 전혀 찍지 않고 감상만 한다', pct: '13%', result: '가장 방해 없는 선택이지만 과도하게 조심할 필요는 없어요. 포토존은 하객을 위한 공간이니 식 전후에는 편하게 찍어도 됩니다.' },
+      { label: '식 전후 포토존에서는 자유롭게 찍고, 식 중엔 플래시 없이 조용히 찍는다', pct: '65%', result: '포토존은 식 전후로 자유롭게 쓰면 돼요. 식 진행 중엔 플래시 끄고 전문 촬영팀 동선 방해 안 하게 조심하는 정도면 충분해요.' },
+      { label: '식이 진행되는 동안에도 자유롭게 찍는다', pct: '22%', result: '플래시, 셔터 소리, 이동이 분위기를 방해할 수 있어요. 신랑신부 입장이나 서약 같은 하이라이트 순간엔 그냥 눈으로 보는 게 예의예요.' },
+      { label: '사진은 전혀 찍지 않고 감상만 한다', pct: '13%', result: '그렇게까지 조심할 필요는 없어요. 포토존은 하객을 위한 공간이니까 식 전후엔 편하게 찍어도 돼요.' },
     ]
   },
   wedding4: {
@@ -2559,9 +3056,9 @@ const simData = {
     text: '교통 체증으로 결혼식에 20분 늦었다. 식은 이미 시작됐고 입장해야 하는데 어떻게 해야 할지 모르겠다.',
     hint: '💡 조용히 눈에 띄지 않게 들어가는 게 핵심이에요',
     choices: [
-      { label: '조용히 뒷자리에 앉아 식을 지켜본다', pct: '71%', result: '이미 진행 중인 식에는 소리 내지 않고 뒷자리에 조용히 앉는 게 맞아요. 앞 자리를 찾아 이동하거나 시선을 끄는 행동은 피하는 게 예의예요.' },
-      { label: '신랑신부 측에 연락해 미리 사과한다', pct: '22%', result: '진심 어린 사과는 중요하지만, 식 진행 중 연락하면 오히려 방해가 될 수 있어요. 식이 끝난 후 직접 사과하는 것이 더 적절합니다.' },
-      { label: '늦었으니 그냥 식사만 하러 간다', pct: '7%', result: '식에 참석하지 않고 식사만 하는 건 신랑신부에게 예의 없게 보일 수 있어요. 조용히라도 식장에 들어가 참석하는 게 예의 있는 행동이에요.' },
+      { label: '조용히 뒷자리에 앉아 식을 지켜본다', pct: '71%', result: '이미 진행 중이면 소리 안 내고 뒷자리에 조용히 앉는 게 정답이에요. 앞자리 찾아 이동하거나 시선 끄는 행동은 피하는 게 예의예요.' },
+      { label: '신랑신부 측에 연락해 미리 사과한다', pct: '22%', result: '사과하고 싶은 마음은 이해하지만, 식 진행 중에 연락하면 오히려 방해가 돼요. 식 끝나고 직접 사과하는 게 더 나아요.' },
+      { label: '늦었으니 그냥 식사만 하러 간다', pct: '7%', result: '식에 안 들어가고 밥만 먹으러 가는 건 신랑신부 입장에서 좀 섭섭할 수 있어요. 늦었더라도 조용히 들어가서 참석하는 게 예의예요.' },
     ]
   },
   wedding5: {
@@ -2579,9 +3076,9 @@ const simData = {
     text: '회식 중 부장님이 직접 술을 따라주며 한 잔 권한다. 나는 술을 못 마시는데 어떻게 해야 할지 모르겠다.',
     hint: '💡 부드럽게 거절해도 괜찮아요, 이유가 명확하면 돼요',
     choices: [
-      { label: '"저는 술을 못해서요, 음료로 함께하겠습니다"라고 정중히 말한다', pct: '69%', result: '술을 마시지 못한다는 이유를 간단히 말하면 대부분 이해해요. 음료라도 함께 들어 분위기에 참여하는 의지를 보여주는 게 좋아요.' },
-      { label: '거절하기 어려우니 조금만 받아서 입에만 댄다', pct: '24%', result: '원치 않으면 억지로 마실 필요 없어요. 다만 정말 못 마시는 상황이라면 솔직하게 말하는 것이 오히려 신뢰를 주는 행동이에요.' },
-      { label: '아무 말 없이 잔을 받아두고 안 마신다', pct: '7%', result: '잔을 받아두고 마시지 않으면 오히려 어색한 상황이 생길 수 있어요. 처음부터 솔직하게 못 마신다고 말하는 게 서로에게 편해요.' },
+      { label: '"저는 술을 못해서요, 음료로 함께하겠습니다"라고 정중히 말한다', pct: '69%', result: '간단하게 이유 말하면 대부분 이해해요. 음료라도 들면서 분위기는 맞춰주는 게 좋고, 억지로 마실 필요는 없어요.' },
+      { label: '거절하기 어려우니 조금만 받아서 입에만 댄다', pct: '24%', result: '정말 못 마신다면 솔직하게 말하는 게 더 낫긴 해요. 억지로 마시면 더 억지로 마시는 상황이 반복될 수 있어요.' },
+      { label: '아무 말 없이 잔을 받아두고 안 마신다', pct: '7%', result: '이러면 오히려 더 어색해져요. 처음부터 솔직하게 말하는 게 서로 편해요.' },
     ]
   },
   work3: {
@@ -2589,9 +3086,9 @@ const simData = {
     text: '1차 회식이 끝났는데 팀장이 2차를 가자고 한다. 내일 일찍 출근인데 가야 할지 고민된다.',
     hint: '💡 2차는 선택이에요, 단 거절 방식이 중요해요',
     choices: [
-      { label: '"내일 일정이 있어서 오늘은 먼저 들어가겠습니다"라고 말한다', pct: '62%', result: '자신의 상황을 솔직하게 말하는 건 예의에 어긋나지 않아요. "좋은 시간 됐습니다"처럼 긍정적인 마무리와 함께 이야기하면 더 좋아요.' },
-      { label: '피곤해도 그냥 2차까지 함께 간다', pct: '29%', result: '팀 분위기에 맞추는 것도 하나의 방법이에요. 다만 무리하면 다음 날 업무에 영향을 줄 수 있으니 본인 상황을 우선 판단하세요.' },
-      { label: '아무 말 없이 슬쩍 자리를 피한다', pct: '9%', result: '말 없이 사라지면 팀장이나 동료에게 인상이 좋지 않을 수 있어요. 짧게라도 이유를 말하고 인사하고 나가는 게 훨씬 나아요.' },
+      { label: '"내일 일정이 있어서 오늘은 먼저 들어가겠습니다"라고 말한다', pct: '62%', result: '이 정도면 충분해요. 솔직하게 말하는 게 예의에 어긋나지 않아요. "오늘 좋은 시간이었습니다" 한 마디 덧붙이면 더 자연스럽게 마무리돼요.' },
+      { label: '피곤해도 그냥 2차까지 함께 간다', pct: '29%', result: '팀 분위기 맞추는 것도 방법인데, 너무 무리하면 다음 날 업무에 영향 줄 수 있어요. 내 상황 먼저 판단하는 게 맞아요.' },
+      { label: '아무 말 없이 슬쩍 자리를 피한다', pct: '9%', result: '말 없이 사라지면 인상이 안 좋을 수 있어요. 짧게라도 이유 말하고 인사하고 나가는 게 훨씬 낫습니다.' },
     ]
   },
   work4: {
@@ -2599,9 +3096,129 @@ const simData = {
     text: '첫 팀 회식인데 팀장이 나에게 먼저 메뉴를 고르라고 한다. 뭘 시켜야 할지 눈치가 보인다.',
     hint: '💡 너무 비싸거나 너무 튀는 메뉴는 피하는 게 좋아요',
     choices: [
-      { label: '"다들 드시고 싶은 게 있으세요? 저는 잘 맞출게요"라고 먼저 여쭤본다', pct: '55%', result: '처음 자리에서는 의견을 물어보는 것 자체가 배려로 보여요. 팀의 선호를 파악하면서 자신을 낮추는 자세가 신입에게 좋은 인상을 줍니다.' },
-      { label: '중간 가격대의 무난한 메뉴를 선택한다', pct: '37%', result: '무난한 선택도 좋아요. 너무 저렴하거나 너무 비싼 메뉴보다 팀 분위기에 맞는 중간 선택이 부담 없이 받아들여져요.' },
-      { label: '가장 비싼 메뉴를 시킨다', pct: '8%', result: '신입이 가장 비싼 메뉴를 고르면 팀장 입장에서 부담스럽게 느껴질 수 있어요. 첫 회식에선 눈치껏 중간 가격대를 고르는 게 무난해요.' },
+      { label: '"다들 드시고 싶은 게 있으세요? 저는 잘 맞출게요"라고 먼저 여쭤본다', pct: '55%', result: '의견 먼저 물어보는 게 배려 있어 보여요. 신입 자리에서 자신을 낮추는 자세가 좋은 첫인상을 주거든요.' },
+      { label: '중간 가격대의 무난한 메뉴를 선택한다', pct: '37%', result: '이것도 좋은 선택이에요. 너무 저렴하거나 너무 비싼 것 피하고 중간 정도로 고르면 부담 없이 받아들여져요.' },
+      { label: '가장 비싼 메뉴를 시킨다', pct: '8%', result: '첫 회식에서 신입이 제일 비싼 걸 시키면 팀장 입장에서 부담스러울 수 있어요. 눈치껏 중간 가격대 고르는 게 무난해요.' },
+    ]
+  },
+  school2: {
+    tag: '🎓 학교 · 수업 중 질문',
+    text: '강의 중 갑자기 궁금한 점이 생겼다. 교수님이 기분 나빠하실까봐 손을 들기가 망설여진다.',
+    hint: '💡 질문은 수업을 풍성하게 만드는 참여 행동이에요',
+    choices: [
+      { label: '손을 들고 "교수님, 질문 있습니다"라고 말한다', pct: '71%', result: '손 들고 물어보는 게 제일 자연스러워요. 교수님들 대부분은 적극적인 학생 좋아해요. "잠깐 여쭤봐도 될까요?" 한 마디 붙이면 더 부드럽고요.' },
+      { label: '수업이 끝난 후 따로 찾아가 여쭤본다', pct: '23%', result: '수업 흐름 방해하기 싫은 거 이해해요. 근데 그 자리 맥락에서 나온 질문은 그때 물어보는 게 제일 효과적이에요.' },
+      { label: '그냥 참고 나중에 혼자 찾아본다', pct: '6%', result: '혼자 찾아보는 것도 좋은데, 수업 내용에서 생긴 의문은 교수님한테 직접 물어보는 게 제일 정확해요. 그냥 넘기면 나중에 더 헷갈릴 수 있어요.' },
+    ]
+  },
+  school3: {
+    tag: '🎓 학교 · 팀플 갈등',
+    text: '팀플 마감이 다가오는데 팀원 한 명이 며칠째 아무것도 하지 않고 있다. 어떻게 해야 할지 모르겠다.',
+    hint: '💡 먼저 팀 내 대화를 시도하는 게 순서예요',
+    choices: [
+      { label: '팀 채팅에서 부드럽게 역할 분담을 다시 확인한다', pct: '60%', result: '교수님께 바로 가기 전에 팀 내에서 먼저 해결 시도해보는 게 순서예요. "우리 각자 파트 언제까지 될 것 같아요?"처럼 확인하면 자연스럽게 압박이 되거든요.' },
+      { label: '교수님께 바로 상황을 알린다', pct: '28%', result: '팀 내에서 안 될 경우 교수님께 알리는 건 맞아요. 대신 "먼저 팀끼리 얘기해봤는데 해결이 안 됐어요"라고 말하면 더 설득력 있어요.' },
+      { label: '그냥 내가 다 하고 이름만 올려준다', pct: '12%', result: '단기적으로 해결되는 것 같아도 결국 억울함이 쌓여요. 팀원이랑 먼저 얘기해보고, 그래도 안 되면 교수님께 말씀드리는 게 맞아요.' },
+    ]
+  },
+  school4: {
+    tag: '🎓 학교 · 교수님 면담',
+    text: '성적이 생각보다 낮게 나와서 교수님과 면담하고 싶다. 예약 없이 연구실을 찾아가도 될지 모르겠다.',
+    hint: '💡 이메일로 먼저 일정을 잡는 게 예의예요',
+    choices: [
+      { label: '이메일로 "면담 가능한 시간이 있으신지요?" 여쭤본다', pct: '74%', result: '교수님은 강의·연구·회의 등으로 바쁜 경우가 많아요. 갑자기 찾아가면 시간이 안 맞을 수 있으니 이메일로 먼저 가능 시간을 여쭤보는 게 기본 예의예요.' },
+      { label: '강의가 끝난 직후 교수님을 붙잡고 이야기한다', pct: '20%', result: '잠깐 짧은 질문은 괜찮지만, 성적 면담처럼 시간이 필요한 경우는 먼저 약속을 잡는 게 좋아요. 교수님이 다른 일정이 있을 수 있어요.' },
+      { label: '그냥 연구실 문을 두드린다', pct: '6%', result: '예고 없이 찾아가면 불편할 수 있어요. 이메일로 먼저 연락하거나, 부득이한 경우 방문 전 노크 후 "지금 잠깐 시간이 괜찮으신가요?"라고 먼저 여쭤보세요.' },
+    ]
+  },
+  school5: {
+    tag: '🎓 학교 · 수업 중 화장실',
+    text: '2시간짜리 강의 중간에 화장실이 너무 급하다. 교수님께 따로 말씀드려야 할지 그냥 나가도 될지 모르겠다.',
+    hint: '💡 조용히 나갔다 오는 게 오히려 덜 방해돼요',
+    choices: [
+      { label: '조용히 자리에서 일어나 최대한 빠르게 다녀온다', pct: '66%', result: '화장실은 생리적 필요라 허락 없이 다녀와도 돼요. 단 출입 시 최대한 소음을 줄이고, 앉은 자리가 통로 쪽이 아니라면 신중하게 이동하세요.' },
+      { label: '손을 들어 교수님께 "화장실 다녀와도 될까요?" 여쭤본다', pct: '28%', result: '정중한 행동이지만 오히려 수업을 잠깐 멈추게 할 수 있어요. 짧은 자리 이탈은 조용히 다녀오는 게 서로에게 덜 방해돼요.' },
+      { label: '급해도 참고 수업이 끝날 때까지 기다린다', pct: '6%', result: '집중력이 오히려 더 떨어질 수 있어요. 화장실은 기본 생리 욕구라 조용히 다녀오는 게 모두에게 더 나은 선택이에요.' },
+    ]
+  },
+  office2: {
+    tag: '💼 직장 · 업무 실수',
+    text: '작성한 보고서에 중요한 오류가 있다는 것을 제출 후에 발견했다. 팀장님께 어떻게 말씀드려야 할지 모르겠다.',
+    hint: '💡 빠르게 보고할수록 수습이 쉬워져요',
+    choices: [
+      { label: '즉시 팀장님께 "제가 실수한 부분을 발견했습니다"라고 보고한다', pct: '73%', result: '실수를 발견했다면 빠르게 보고하는 게 맞아요. 보고할 때는 "어떤 부분에서 어떤 실수가 있었고, 수정 방향은 이렇습니다"처럼 문제와 해결책을 함께 제시하면 더 신뢰를 줘요.' },
+      { label: '혼자 몰래 수정해서 새 버전을 다시 보낸다', pct: '21%', result: '이미 공유된 보고서라면 변경 사실을 알리지 않으면 더 큰 혼선이 생길 수 있어요. 수정 후에도 "오류를 발견해 수정본을 다시 드립니다"라고 설명하는 게 맞아요.' },
+      { label: '아무도 눈치채지 못하길 기다린다', pct: '6%', result: '실수가 나중에 발견되면 신뢰가 더 크게 무너져요. 직접 먼저 보고하는 사람이 책임감 있다는 인상을 줘요.' },
+    ]
+  },
+  office3: {
+    tag: '💼 직장 · 회의 발언',
+    text: '팀 회의 중 좋은 아이디어가 떠올랐다. 선임들이 많이 참석한 자리라 의견을 내기가 망설여진다.',
+    hint: '💡 "제 생각엔~"으로 시작하면 부드럽게 말문을 열 수 있어요',
+    choices: [
+      { label: '"제가 한 가지 제안을 드려도 될까요?"라고 말문을 연다', pct: '65%', result: '"아이디어 하나 여쭤봐도 될까요?" 하고 허락 먼저 구하면 자연스럽게 말문 열려요. 생각보다 선임들이 신입 의견에 귀 기울이는 경우 많아요.' },
+      { label: '회의가 끝나고 선임에게 개인적으로 말한다', pct: '27%', result: '1:1로 나누는 것도 방법이에요. 근데 회의 맥락에서 나온 아이디어는 그 자리에서 바로 말하는 게 타이밍 면에서 제일 좋아요.' },
+      { label: '눈치 보여서 그냥 아이디어를 넘어간다', pct: '8%', result: '아이디어 계속 묻어두면 나중에 아쉬울 수 있어요. 겸손하게 한마디라도 꺼내보는 연습이 필요해요.' },
+    ]
+  },
+  office4: {
+    tag: '💼 직장 · 퇴근 인사',
+    text: '팀장님이 아직 자리에 계신데 나는 정시에 퇴근해야 하는 상황이다. 어떻게 인사해야 할지 모르겠다.',
+    hint: '💡 짧고 명확한 인사가 가장 좋아요',
+    choices: [
+      { label: '"먼저 들어가겠습니다, 수고하세요"라고 인사하고 나간다', pct: '68%', result: '"먼저 들어가겠습니다, 수고하십시오"라고 짧게 인사하고 나가면 충분해요. 눈 한 번 마주치고 나가면 더 자연스러워요. 정시 퇴근하는 게 눈치 볼 일 아니에요.' },
+      { label: '아무 말 없이 조용히 나간다', pct: '22%', result: '아무 말 없이 나가면 무례하게 보일 수 있어요. 짧게라도 인사하고 나가는 게 팀 분위기에도 자연스러워요.' },
+      { label: '"팀장님 먼저 가셔도 됩니다"라고 말한다', pct: '10%', result: '상하 관계에서는 어색한 표현이에요. "저 먼저 들어가겠습니다"처럼 내가 먼저 나간다는 의사를 표현하는 게 맞아요.' },
+    ]
+  },
+  office5: {
+    tag: '💼 직장 · 업무 이메일',
+    text: '처음 외부 거래처에 공식 이메일을 보내야 한다. 어떤 형식으로 써야 할지, 인사말은 어떻게 해야 할지 막막하다.',
+    hint: '💡 제목 → 인사 → 용건 → 마무리 순서로 쓰면 돼요',
+    choices: [
+      { label: '"안녕하세요, [회사명]의 [이름]입니다"로 시작해 용건을 간결하게 쓴다', pct: '70%', result: '공식 이메일은 소속과 이름을 먼저 밝히는 게 기본이에요. 본문은 요점 위주로 짧게, 마지막엔 "감사합니다. [이름] 드림"으로 마무리하세요. 제목은 핵심 내용을 한 줄로 쓰면 됩니다.' },
+      { label: '"처음 연락드립니다"로만 시작하고 내용을 길게 쓴다', pct: '23%', result: '처음 연락 인사는 좋지만 내용이 길면 읽기 불편해요. 핵심만 간결하게, 자세한 내용은 첨부 파일로 보내는 게 더 깔끔해요.' },
+      { label: '형식 없이 편하게 쓴다', pct: '7%', result: '업무 이메일에는 기본 형식이 있어요. 형식을 갖추는 것이 신뢰감을 주고 상대방이 내용을 파악하기도 쉬워요.' },
+    ]
+  },
+  hospital2: {
+    tag: '🏥 병문안 · 방문 시간',
+    text: '동료가 입원해서 병문안을 가게 됐다. 얼마나 있다 와야 실례가 없을지 모르겠다.',
+    hint: '💡 15~20분이 병문안의 황금 시간이에요',
+    choices: [
+      { label: '안부를 묻고 15~20분 내로 일어선다', pct: '72%', result: '환자는 금방 피곤해지거든요. 15~20분 안에 쾌유 빌고 나오는 게 오히려 더 배려하는 거예요. "이제 가볼게요, 빨리 나으세요" 하고 자연스럽게 일어서면 돼요.' },
+      { label: '친하니까 1시간 이상 이야기를 나눈다', pct: '20%', result: '친해도 환자 상태에 따라 달라요. 처음엔 짧게 다녀오고, 환자가 괜찮다고 하면 그때 더 있어도 돼요.' },
+      { label: '환자가 나가라고 할 때까지 기다린다', pct: '8%', result: '환자는 피곤해도 나가달라고 말하기 어려워해요. 방문자 쪽에서 먼저 "이제 가볼게요" 하고 자리 정리하는 게 더 배려 있어요.' },
+    ]
+  },
+  hospital3: {
+    tag: '🏥 병문안 · 선물',
+    text: '병문안을 가면서 꽃다발을 사 가려고 했는데 꽃은 병원에 반입이 안 된다는 말을 들었다.',
+    hint: '💡 음식보다 실용적인 선물이 더 환영받아요',
+    choices: [
+      { label: '과일, 음료, 죽 등 소화가 잘 되는 식품을 준비한다', pct: '67%', result: '과일, 스무디, 죽 등 소화가 잘 되는 식품이 입원 중 가장 환영받는 선물이에요. 미리 환자가 먹어도 되는 음식인지 확인하면 더 좋아요.' },
+      { label: '그냥 빈손으로 얼굴만 보러 간다', pct: '24%', result: '빈손으로 가도 예의에 크게 어긋나지 않아요. 하지만 음료나 간식 하나 정도는 챙기면 더 따뜻하게 전달돼요.' },
+      { label: '방향제나 화분을 선물한다', pct: '9%', result: '화분은 꽃과 마찬가지로 병원 반입이 제한될 수 있어요. 방향제도 냄새에 예민한 환자에게는 오히려 불편할 수 있으니 피하는 게 좋아요.' },
+    ]
+  },
+  hospital4: {
+    tag: '🏥 병문안 · 대화',
+    text: '병문안을 갔는데 뭐라고 위로해야 할지 몰라 어색한 침묵이 이어지고 있다.',
+    hint: '💡 병에 대한 이야기보다 일상 이야기가 더 편해요',
+    choices: [
+      { label: '"많이 힘드셨겠다, 어서 낫길 바란다"고 짧게 마음을 전한다', pct: '61%', result: '"많이 힘드셨겠어요, 빨리 나으셔야 해요"처럼 짧은 공감이 가장 진심으로 전달돼요. 병 상태를 자세히 물어보거나 경과를 걱정하는 말은 오히려 환자에게 부담이 될 수 있어요.' },
+      { label: '병 상태, 치료 과정에 대해 자세히 물어본다', pct: '27%', result: '관심을 표현하려는 의도이지만, 자세한 질문은 환자를 지치게 할 수 있어요. 환자가 먼저 이야기를 꺼낼 때까지 기다리는 게 좋아요.' },
+      { label: '병과 관계없는 일상 이야기를 한다', pct: '12%', result: '일상 대화는 환자의 기분을 환기시켜줘요. 단, 너무 밝고 요란한 분위기는 오히려 부담될 수 있으니 편안한 주제로 조용히 이야기 나누세요.' },
+    ]
+  },
+  hospital5: {
+    tag: '🏥 병문안 · 퇴원 후',
+    text: '동료가 퇴원했다는 소식을 들었다. 연락을 해야 할지, 선물을 보내야 할지 모르겠다.',
+    hint: '💡 퇴원 후에도 짧은 메시지 하나가 큰 힘이 돼요',
+    choices: [
+      { label: '"퇴원 축하해요, 무리하지 마세요"라고 짧게 메시지를 보낸다', pct: '70%', result: '"퇴원하셨다니 다행이에요. 빨리 회복하시길 바랍니다"처럼 짧고 따뜻한 메시지가 가장 좋아요. 오랫동안 아팠던 사람에게는 이 한마디가 큰 힘이 돼요.' },
+      { label: '아무것도 하지 않고 회사에서 만나면 인사한다', pct: '21%', result: '관계에 따라 다를 수 있지만, 아는 사이라면 짧은 메시지 하나 정도는 챙기는 게 좋아요.' },
+      { label: '퇴원 선물을 사서 직접 전달하러 간다', pct: '9%', result: '퇴원 직후는 환자에게 쉬는 시간이 필요해요. 방문보다는 메시지를 먼저 보내고, 환자가 만나자고 할 때 선물을 전하는 게 더 배려 있는 방법이에요.' },
     ]
   },
   work5: {
@@ -2691,21 +3308,21 @@ function toggleLike(e, btnId, countId) {
 const AI_ANALYSIS_DATA = {
   '장례식': {
     high: {
-      formal: '친한 분의 장례식이라면 직접 참석하는 것이 가장 중요해요. 유교식이라면 두 번 절(재배), 상주에게 "삼가 고인의 명복을 빕니다"라고 인사드리세요. 조의금은 10~20만원이 적절하고, 식사도 함께하는 것이 예우예요.',
+      formal: '친한 분의 장례식이라면 직접 참석하는 게 제일 중요해요. 유교식이라면 두 번 절(재배), 상주에게 "삼가 고인의 명복을 빕니다"라고 인사드리세요. 조의금은 20~30만원이 일반적이고, 시간 되면 식사도 같이 하는 게 예우예요.',
       casual: '편한 사이라도 장례식 예절은 동일하게 지키는 게 좋아요. 상주를 너무 오래 붙잡지 말고, 짧게 위로 후 식사 자리로 이동하면 돼요.',
     },
     mid: {
-      formal: '기본 조문 예절을 지키는 것이 중요해요. 두 번 절 후 상주에게 짧게 인사, 조의금은 5~10만원이 일반적이에요. 식사는 여건이 되면 하고, 바쁘면 정중히 사양해도 됩니다.',
+      formal: '결혼식보다 장례식 참석이 우선이에요. 두 번 절 후 상주에게 짧게 인사, 조의금은 5~10만원이 무난해요. 식사는 여건이 되면 하고, 바쁘면 정중히 사양해도 됩니다.',
       casual: '조문만 하고 나와도 실례가 아니에요. 짧고 정중하게 마무리하면 충분해요.',
     },
     low: {
-      formal: '부의함에 조의금(5만원)을 넣고 짧게 목례 인사 후 나와도 됩니다. 참석 자체가 위로예요.',
+      formal: '잘 모르는 사이여도 장례식은 되도록 가는 게 좋아요. 부의함에 조의금 넣고 짧게 목례 인사 후 나와도 충분해요. 참석 자체가 위로가 됩니다.',
       casual: '짧게 다녀오는 것만으로도 충분해요. 오래 머물 필요 없이 조문하고 가볍게 인사 후 나오면 됩니다.',
     },
   },
   '결혼식': {
     high: {
-      formal: '오랜 친구의 결혼식이라면 10~20만원 축의금이 기본이에요. 드레스코드가 있다면 꼭 맞춰 입고, 흰색 복장은 피하세요. 식 전에 미리 도착해 신랑신부에게 직접 축하를 전하는 것도 좋아요.',
+      formal: '오랜 친구의 결혼식이라면 20~30만원 축의금이 기본이에요. 드레스코드가 있다면 꼭 맞춰 입고, 흰색 복장은 피하세요. 식 전에 미리 도착해 신랑신부에게 직접 축하를 전하는 것도 좋아요.',
       casual: '편한 자리라도 기본 예절은 지켜요. 흰색 복장은 피하고, 식 진행 중 사진은 플래시 없이 조용히 찍으세요.',
     },
     mid: {
@@ -2824,7 +3441,7 @@ const modalData = {
     title: '장례식장 예절',
     sub: '고인과의 관계를 선택해주세요',
     options: [
-      { label: '친한 친구의 부모님', meta: '친밀도 높음', pct: '63%', result: '영정에 두 번 절(재배) 후, 상주에게 인사드리세요. 조의금은 2026년 기준 15~20만원이 일반적이고, 매우 친한 사이라면 20만원 이상도 흔합니다.' },
+      { label: '친한 친구의 부모님', meta: '친밀도 높음', pct: '63%', result: '영정에 두 번 절(재배) 후, 상주에게 인사드리세요. 조의금은 2026년 기준 20~30만원이 일반적이고, 정말 친한 사이라면 30만원 이상도 많아요.' },
       { label: '직장 동료의 부모님', meta: '친밀도 보통', pct: '28%', result: '유교식이면 두 번 절(재배)이 기본이며, 기독교식 장례이면 묵념으로 대신합니다. 조의금 5~7만원이 일반적이에요. 짧게 위로 인사 후 자리를 비우는 것이 예의입니다.' },
       { label: '지인의 가족', meta: '친밀도 낮음', pct: '9%', result: '유교식이면 두 번 절(재배)이 기본입니다. 조의금은 5만원이 현재 최소 기준이에요. 부의함에 넣고 짧게 인사 후 나오셔도 됩니다.' },
     ]
@@ -2833,7 +3450,7 @@ const modalData = {
     title: '결혼식 예절',
     sub: '신랑/신부와의 관계를 선택해주세요',
     options: [
-      { label: '친한 친구 (가장 친한)', meta: '10년 이상 친분', pct: '51%', result: '축의금 10~20만원이 현재 표준이에요. 매우 친한 사이라면 20만원 이상도 많습니다. 식사에 꼭 참석하고 축하 메시지를 전달해보세요.' },
+      { label: '친한 친구 (가장 친한)', meta: '10년 이상 친분', pct: '51%', result: '축의금 20~30만원이 친한 친구 사이 현재 표준이에요. 정말 가까운 사이라면 30만원 이상도 많아요. 식사도 꼭 참석하고 직접 축하 인사 전하는 거 잊지 마세요.' },
       { label: '대학교 동기 (보통)', meta: '가끔 연락하는 사이', pct: '35%', result: '축의금은 식사 참석 시 10만원, 불참 시 7만원이 2026년 기준 일반적입니다.' },
       { label: '직장 동료 (가볍게 아는)', meta: '업무상 아는 사이', pct: '14%', result: '식사 참석 시 7만원, 불참 시 5만원이 기본이에요. 친밀도에 따라 10만원으로 맞추는 경우도 많아요.' },
     ]
@@ -3049,7 +3666,7 @@ function submitPost() {
   if (!text || !wsCat) return;
   const lv = getLv(uStats.pts);
   const id = cardId++;
-  const catTagClass = { 장례식:'tag-funeral', 결혼식:'tag-wedding', 회식:'tag-work', 직장:'tag-work', 학교:'tag-school' }[wsCat] || '';
+  const catTagClass = { 장례식:'tag-funeral', 결혼식:'tag-wedding', 회식:'tag-dining', 직장:'tag-work', 학교:'tag-school' }[wsCat] || '';
   const catEmoji = { 장례식:'⚫', 결혼식:'💍', 회식:'🍻', 직장:'💼', 학교:'🎓', 자유:'💬' }[wsCat] || '';
   const card = document.createElement('div');
   card.className = 'feed-card';
@@ -3068,7 +3685,7 @@ function submitPost() {
       </div>
       <span class="feed-tag ${catTagClass}">${catEmoji} ${wsCat}</span>
     </div>
-    <div class="feed-body">${text}</div>
+    <div class="feed-body"></div>
     <div class="feed-preview"></div>
     <div class="feed-footer">
       <button class="reaction-btn" id="ul${id}" onclick="toggleLike(event,'ul${id}','uc${id}')">
@@ -3082,6 +3699,7 @@ function submitPost() {
         <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>저장</span>
       </button>
     </div>`;
+  card.querySelector('.feed-body').textContent = text;
   document.getElementById('commFeedList').prepend(card);
   addPts('post');
   document.getElementById('wsTextarea').value = '';
@@ -3097,12 +3715,12 @@ function submitPost() {
 ══════════════════════════════════════ */
 /* ── AI RESPONSES BY CATEGORY ── */
 const AI_RESPONSES = {
-  '장례식': '조의금 금액보다 직접 참석하는 것이 훨씬 큰 위로예요. 유교식이라면 두 번 절(재배), 기독교식이라면 묵념으로 대신해요. 유가족에게는 "삼가 고인의 명복을 빕니다"라고 짧게 인사하고, 상황이 된다면 식사도 함께하는 게 예우예요.',
-  '결혼식': '축의금은 식사 참석 여부와 관계에 따라 달라요. 2026년 기준 식사 참석 시 10만원, 불참 시 7만원이 일반적이에요. 흰색 의상은 피하고, 드레스코드가 있다면 최대한 맞춰 입는 게 배려예요. 식 시작 10분 전엔 착석하는 게 예의예요.',
+  '장례식': '경사는 축하해줄 사람이 많지만 조사는 달라요. 부고를 알리기 꺼려하는 경우도 많고, 오는 사람 수가 적을 수 있어요. 그래서 장례식 참석은 결혼식보다 더 중요해요. 금액보다 직접 와준 것 자체가 가장 큰 위로예요. 유교식은 두 번 절(재배), 기독교식은 묵념으로 대신하고 유가족에게 짧게 인사드린 뒤 시간 되면 식사도 함께하는 게 예우예요.',
+  '결혼식': '축의금은 식사 참석 여부와 친밀도에 따라 달라요. 2026년 기준 친한 친구라면 20~30만원, 가끔 연락하는 사이라면 식사 참석 시 10만원, 불참 시 7만원이 무난해요. 흰색 의상은 피하고, 드레스코드가 있으면 최대한 맞춰 입는 게 배려예요. 식 시작 10분 전엔 착석하는 게 예의예요.',
   '회식': '회식에서는 자리 배치부터 눈치가 필요해요. 상석은 상급자 자리이니 끝자리에 앉고, 건배 시 잔을 낮게 드세요. 음주가 어렵다면 "건강상 이유로 음료로 함께하겠습니다"라고 정중히 말하면 대부분 이해해요. 1차 참석이 기본, 2차는 선택이에요.',
-  '직장': '직장 예절은 작은 것에서 시작돼요. 명함은 두 손으로, 이메일은 격식을 갖춰, 퇴근 인사는 팀장님께 직접 하는 것이 기본이에요. 실수를 했다면 변명 전에 사과가 먼저예요. 불쾌한 상황이 반복된다면 날짜·장소·발언 내용을 기록해두는 것이 중요해요.',
-  '학교': '학교에서는 모르는 게 있어도 먼저 물어보는 것이 예의예요. 교수님 면담은 오피스 아워를 활용하거나 이메일로 미리 요청하세요. 과제가 늦어진다면 미리 연락드리는 게 인상에 훨씬 좋아요. 팀플 문제는 당사자와 먼저 대화하고, 해결이 안 되면 교수님께 말씀드리세요.',
-  '자유': '눈치와 예절은 상황마다 다르고 세대마다 차이가 있어요. 정답이 없는 상황이라면 상대방을 배려하는 마음을 기준으로 판단하세요. 모를 때는 솔직하게 물어보는 것도 예의예요. 미리 시뮬레이션해보면 실제 상황에서 훨씬 덜 당황하게 돼요.',
+  '직장': '직장 예절은 사실 별거 없어요. 명함은 두 손으로, 퇴근 인사는 팀장님께 직접, 이메일은 너무 편하게 쓰지 않는 게 기본이에요. 실수했으면 변명보다 사과가 먼저고요. 불편한 상황이 반복된다면 그냥 참지 말고 날짜랑 상황 메모해두는 게 나중을 위해 좋아요.',
+  '학교': '모르는 게 생기면 그냥 물어보는 게 제일 빨라요. 교수님 면담이 필요하면 오피스 아워 시간이나 이메일로 먼저 연락드리는 게 낫고, 과제가 늦어질 것 같으면 미리 말씀드리는 게 인상 관리에 훨씬 좋아요. 팀플 갈등은 팀원이랑 먼저 해보고, 안 되면 교수님께 말씀드리는 게 순서예요.',
+  '자유': '사실 뭐가 정답인지 모르겠는 상황들이 제일 많잖아요. 그럴 때는 상대방 입장에서 한 번만 생각해보면 대충 감이 와요. 모를 때 솔직하게 물어보는 것도 좋은 방법이고요. 미리 시뮬레이션해보면 실제로 닥쳤을 때 훨씬 덜 당황하게 돼요.',
 };
 
 /* ── HOT POSTS DATA ── */
@@ -3113,7 +3731,7 @@ const HOT_POSTS = {
     time: '3시간 전',
     title: '팀장이 회식서 내 연봉을 다 공개했습니다',
     full: '신입이라 연봉이 낮은데, 팀장이 갑자기 "00씨는 얼마야? 우리 팀 제일 낮지?" 하면서 다 들리는 데서 공개해버렸어요. 순간 얼굴이 빨개졌고 아무 말도 못 했는데... 이거 그냥 넘겨야 하나요, 아니면 뭔가 말해야 할까요?',
-    aiReply: '명백히 선을 넘은 행동이에요. 임금 정보는 개인 정보로 보호되며, 공개석상에서의 무단 공개는 직장 내 괴롭힘으로 볼 수 있어요. 당장 대응이 어렵다면 날짜·장소·발언 내용을 메모해두세요. 이후 HR 담당자에게 조용히 상담하거나, 고용노동부 직장 갑질 119(1350)를 활용할 수 있어요. 혼자 참는 것보다 기록을 남기는 게 훨씬 중요합니다.',
+    aiReply: '그거 진짜 선 넘은 거 맞아요. 연봉은 개인정보인데 그걸 공개석상에서 말하는 건 직장 내 괴롭힘으로도 볼 수 있어요. 지금 당장은 아무 말 못 했더라도 날짜랑 상황 메모해두는 게 좋아요. HR에 조용히 물어보거나 고용노동부 직장 갑질 119(1350) 활용해봐도 돼요. 혼자 참지 않아도 됩니다.',
     likes: 312, commentCount: 87,
     comments: [
       { u:'달빛소나타', bg:'#FFF0F6', c:'#E45D8A', t:'1시간 전', txt:'완전 선 넘은 거 맞아요. 임금은 개인정보인데 이런 행동은 직장 내 괴롭힘으로도 볼 수 있어요.' },
@@ -3128,7 +3746,7 @@ const HOT_POSTS = {
     time: '6시간 전',
     title: '축의금 5만원 냈더니 밥도 안 줬대요',
     full: '대학 동기 결혼식이라 5만원 냈는데, 식사 시간이 됐을 때 보니까 제 자리가 없었어요. 알고 보니 5만원은 식사 대접 안 하는 선이라고 하더라고요. 근데 저는 그 기준 자체를 몰랐거든요? 이런 기준이 실제로 있는 건가요?',
-    aiReply: '통일된 규칙은 없지만 요즘 뷔페 식사 원가가 1인당 4~6만원인 경우가 많아 5만원 이하에서 식사를 제공하지 않는 경우도 있어요. 다만 이 기준을 사전에 알리지 않은 건 명백히 아쉬운 부분이에요. 다음엔 초대를 받았을 때 "식사도 같이 하나요?"라고 자연스럽게 확인해보는 게 좋아요. 기분이 상한 건 충분히 이해가 돼요.',
+    aiReply: '통일된 룰은 없지만 요즘 뷔페 밥값이 1인당 4~6만원 하는 데도 있어서 5만원에서 식사 안 드리는 경우가 생기긴 해요. 그래도 미리 공지를 안 한 건 확실히 아쉬운 거 맞아요. 다음엔 초대받으면 "식사 자리도 있나요?"라고 미리 확인해두는 게 속 편해요. 기분 상하는 거 당연해요.',
     likes: 208, commentCount: 64,
     comments: [
       { u:'오후세시산책', bg:'#F0FFF4', c:'#27ae60', t:'2시간 전', txt:'요즘 뷔페 식사 원가가 1인당 4~6만원이라 5만원에선 식사 안 드리는 경우가 많아요. 미리 공지를 안 한 건 좀 아쉽네요.' },
@@ -3143,7 +3761,7 @@ const HOT_POSTS = {
     time: '11시간 전',
     title: '친구 부모님 장례식 조의금 3만원이면 실례인가요?',
     full: '친한 친구 어머니가 돌아가셨어요. 근데 저 요즘 진짜 돈이 없어서요... 3만원이면 너무 적은 건가요? 부의금 봉투에 이름도 써야 하는 거잖아요. 적은 금액이 오히려 실례가 될까봐 차라리 안 가는 게 나을지도 고민중이에요.',
-    aiReply: '꼭 가세요. 장례식은 금액보다 직접 참석하는 것 자체가 가장 큰 위로예요. 3만원도 충분해요 — 형편에 맞게 내는 게 자연스러운 거고, 친한 친구라면 금액으로 우정을 재지 않아요. 안 가는 것보다 3만원 들고 가는 쪽이 훨씬 낫고, 부의금 봉투에는 "부의"라고 쓰고 본인 이름을 적으면 돼요.',
+    aiReply: '꼭 가세요. 결혼식은 못 가도 장례식은 다르거든요. 경사는 축하해줄 사람이 많지만, 장례는 부고를 알리기 꺼려하는 경우도 많고 오는 사람이 적을 수 있어요. 금액보다 직접 참석하는 게 훨씬 큰 위로예요. 3만원도 충분해요 — 형편에 맞게 내는 거고, 친한 친구라면 금액으로 재지 않아요. 부의금 봉투에는 "부의"라고 쓰고 이름 적으면 돼요.',
     likes: 175, commentCount: 52,
     comments: [
       { u:'새벽네시반', bg:'#F5F5F5', c:'#3D3D3D', t:'3시간 전', txt:'금액보다 직접 가는 게 훨씬 중요해요. 진짜 친한 친구면 돈 보러 오는 게 아니라 얼굴 보러 오는 거거든요. 꼭 가세요.' },
@@ -3158,13 +3776,27 @@ const HOT_POSTS = {
     time: '14시간 전',
     title: '교수님이 시험지를 그냥 던져줬는데 이게 맞나요?',
     full: '중간고사 결과 돌려주는데 제 시험지를 그냥 던지듯이 줬어요. 점수도 낮았고 기분도 안 좋은데 "이것도 못 해?" 하는 식으로 말씀하셨어요. 주변 학생들 다 봤고요. 예민한 건지 아니면 실제로 문제 있는 건지 모르겠어요. 학교 측에 말할 수 있는 건지도 궁금합니다.',
-    aiReply: '예민한 게 아니에요. 교육자가 학생에게 그런 식으로 대하는 건 분명히 문제가 있어요. 먼저 날짜·상황·발언을 메모해두세요. 대부분의 대학에는 학생상담센터나 학생권익위원회가 있고, 익명 제보도 가능해요. 같은 경험을 한 동기가 있다면 함께 제보하는 게 더 효과적이에요. 혼자 감당하지 않아도 돼요.',
+    aiReply: '예민한 거 아니에요. 교수라도 학생한테 그렇게 하면 안 되는 거 맞아요. 날짜랑 상황 메모해두는 게 좋고, 대학마다 학생상담센터나 학생권익위원회가 있거든요 — 익명 제보도 가능한 경우 많아요. 같은 경험 한 동기가 있으면 같이 움직이는 게 훨씬 힘이 돼요. 혼자 버티지 않아도 됩니다.',
     likes: 143, commentCount: 39,
     comments: [
       { u:'이른아침이슬', bg:'#FFF0EE', c:'#FF5500', t:'2시간 전', txt:'예민한 거 아니에요. 교수도 학생에게 그런 식으로 대하면 안 되는 거 맞아요. 대학에는 학생상담센터나 교수 징계 제도가 있으니 활용해보세요.' },
       { u:'구름위를걷는중', bg:'#F0FBF4', c:'#30A55F', t:'4시간 전', txt:'학교마다 학생권익위원회 같은 거 있어요. 익명 제보도 가능한 경우 많으니까 찾아보세요. 혼자 참지 마세요.' },
       { u:'달팽이걸음', bg:'#F0FBF4', c:'#27ae60', t:'6시간 전', txt:'일단 그 날짜, 상황, 있었던 일을 메모해두세요. 나중에 공식적으로 문제 제기할 때 증거가 돼요.' },
       { u:'구름한조각', bg:'#E8F4FD', c:'#2980b9', t:'13시간 전', txt:'동기나 선배한테 그 교수 원래 그런 사람인지 먼저 물어봐요. 전례가 있으면 같이 움직이는 게 더 효과적이에요.' },
+    ]
+  },
+  hot5: {
+    tag: '회식', tagClass: 'tag-dining',
+    author: '구름위를걷는중', authorBg: '#F0FBF4', authorC: '#30A55F',
+    time: '1시간 전',
+    title: '신입인데 회식에서 술 안 마셔도 될까요?',
+    full: '입사한 지 두 달 됐는데 팀장님이 술 좀 마셔야 한다고 하셔서요. 강요처럼 느껴지는데 어떻게 해야 할지... 건강상 이유를 대면 될까요? 아니면 그냥 맞춰줘야 하나요?',
+    aiReply: '충분히 안 마셔도 돼요. "건강상 이유로 음료로 함께하겠습니다"라고 말하면 대부분 이해해요. 억지로 맞춰줄 필요 없고, 음주 강요가 반복된다면 그건 직장 내 괴롭힘으로도 볼 수 있어요. 1차 참석이 기본이고, 2차는 선택이에요.',
+    likes: 94, commentCount: 31,
+    comments: [
+      { u:'이른아침이슬', bg:'#FFF0EE', c:'#FF5500', t:'10분 전', txt:'충분히 안 마셔도 돼요. "건강상 이유로 음주는 어렵습니다"라고 하면 대부분 이해해요.' },
+      { u:'달빛소나타', bg:'#FFF0F6', c:'#E45D8A', t:'35분 전', txt:'음료수라도 잔에 따라서 건배만 맞춰주면 분위기 상하지 않아요.' },
+      { u:'파란하늘별', bg:'#FFF8E1', c:'#f39c12', t:'58분 전', txt:'음주 강요는 직장 내 괴롭힘에 해당할 수 있어요. 과도하게 눈치 볼 필요 없어요.' },
     ]
   },
 };
@@ -3224,9 +3856,9 @@ const POST_COMMENTS = {
     { u:'구름위를걷는중', bg:'#F0FBF4', c:'#30A55F', t:'58분 전', txt:'음주 강요는 직장 내 괴롭힘에 해당할 수 있어요. 과도하게 눈치 볼 필요 없어요.' },
   ],
   '친구 결혼식 축의금 5만원이면 적은 건가요?': [
-    { u:'오후세시산책', bg:'#F0FFF4', c:'#27ae60', t:'20분 전', txt:'식사 참석이면 10만원이 요즘 기준이에요. 5만원은 식사 불참 기준으로도 조금 부족할 수 있어요.' },
-    { u:'솜사탕구름', bg:'#FFF0FB', c:'#d63031', t:'1시간 전', txt:'그냥 동기 사이라면 7~10만원이 현실적이에요. 식사 자리에 초대됐다면 최소 10만원은 맞춰주는 게 좋아요.' },
-    { u:'파란하늘별', bg:'#FFF8E1', c:'#f39c12', t:'2시간 전', txt:'뷔페 식사 원가가 1인당 4~6만원이라 5만원이면 부담 주는 경우도 있어요. 가능하면 7만원 이상 추천해요.' },
+    { u:'오후세시산책', bg:'#F0FFF4', c:'#27ae60', t:'20분 전', txt:'밥까지 먹는 거면 10만원은 맞춰주는 게 맞아요. 5만원은 솔직히 요즘 좀 빡빡한 금액이긴 해요.' },
+    { u:'솜사탕구름', bg:'#FFF0FB', c:'#d63031', t:'1시간 전', txt:'동기 사이면 7만원도 되는데 식사 자리까지 있는 거면 10만원은 돼야 해요. 요즘 웨딩홀 밥값이 진짜 비싸요.' },
+    { u:'파란하늘별', bg:'#FFF8E1', c:'#f39c12', t:'2시간 전', txt:'웨딩홀 밥값이 한 사람당 5~7만원 하는 데도 있어요. 그래서 5만원 내고 식사 못 한 거 그냥 억울한 케이스네요 ㅠ' },
   ],
   '교수님한테 과제 늦게 낸다고 어떻게 말해요?': [
     { u:'달빛소나타', bg:'#FFF0F6', c:'#E45D8A', t:'8분 전', txt:'"늦게 제출하게 되어 죄송합니다. 건강상의 이유로 하루 늦어졌습니다" — 간단하고 솔직하게 쓰면 돼요.' },
@@ -3296,7 +3928,7 @@ const POST_COMMENTS = {
   '먼저 자리 뜨는 거 실례인가요?': [
     { u:'이른아침이슬', bg:'#FFF0EE', c:'#FF5500', t:'18분 전', txt:'개인 사정 있으면 팀장님께 미리 "혹시 먼저 자리 비워도 될까요?"라고 여쭤보고 가는 게 좋아요.' },
     { u:'구름한조각', bg:'#E8F4FD', c:'#2980b9', t:'43분 전', txt:'갑자기 일어나는 것보단 식사 끝나고 잠깐 쉬는 타이밍에 인사드리는 게 나아요.' },
-    { u:'달빛소나타', bg:'#FFF0F6', c:'#E45D8A', t:'1시간 전', txt:'충분히 있었다 싶으면 자연스럽게 자리 마무리하고 인사드리면 돼요. 억지로 오래 있을 필요는 없어요.' },
+    { u:'달빛소나타', bg:'#FFF0F6', c:'#E45D8A', t:'1시간 전', txt:'개인 사정이 생겼다고 솔직하게 말씀드리는 게 나아요. "개인 사정이 생겨서 먼저 실례하겠습니다"라고 짧게 인사드리면 돼요.' },
   ],
   '부장님이 음식 시키래요, 비싼 거 시켜도 되나요?': [
     { u:'달팽이걸음', bg:'#F0FBF4', c:'#27ae60', t:'15분 전', txt:'제일 비싼 건 피하고 중간 가격대로 시키는 게 무난해요. 모르면 "뭐가 맛있어요?" 여쭤보는 것도 방법이에요.' },
@@ -3540,14 +4172,11 @@ function submitReply(postId, idx) {
 
 function cancelAdopt(idx, isMine) {
   if (pdAdoptedIdx === null) return;
+  pdAdoptedIdx = null; // Reset BEFORE buildCommentHtml so the adopt button reappears
   const cm = isMine ? pdUserComments[idx - pdBaseComments.length] : pdBaseComments[idx];
   const el = document.getElementById('pdc-' + pdPostId + '-' + idx);
   if (el) el.outerHTML = buildCommentHtml(cm, idx, false, !!isMine);
-  pdAdoptedIdx = null;
-  document.querySelectorAll('.pd-adopt-btn').forEach(b => {
-    if (!b.classList.contains('adopted')) return;
-    b.outerHTML = '';
-  });
+  document.querySelectorAll('.pd-adopt-btn.adopted').forEach(b => b.remove());
   showToast('채택이 취소됐어요');
 }
 
@@ -3646,6 +4275,11 @@ function closePD() {
   document.body.style.overflow = '';
 }
 
+function openHotPostFromHome(id) {
+  switchTab('community');
+  openHotPost(id);
+}
+
 /* ── EVENT DELEGATION: home feed → post detail ── */
 document.getElementById('homeFeedList').addEventListener('click', function(e) {
   if (e.target.closest('.reaction-btn')) return;
@@ -3667,6 +4301,10 @@ document.getElementById('commFeedList').addEventListener('click', function(e) {
 
 /* ── INIT ── */
 refreshMyPage();
+(function() {
+  const hotChip = document.querySelector('.chip.active');
+  if (hotChip) filterChip(hotChip, 'Hot');
+})();
 </script>
 </body>
 </html>
