@@ -936,7 +936,8 @@
       cursor: pointer; transition: all .2s; flex-shrink: 0;
     }
     .pd-adopt-btn:hover { border-color: var(--pink); color: var(--pink); }
-    .pd-adopt-btn.adopted { border-color: var(--pink); color: var(--pink); background: #FFF2EE; pointer-events: none; }
+    .pd-adopt-btn.adopted { border-color: var(--pink); color: var(--pink); background: #FFF2EE; cursor: pointer; }
+    .pd-adopt-btn.adopted:hover { background: #FFE0D6; border-color: var(--pink-dark); color: var(--pink-dark); }
     .pd-comment.adopted-item { border-color: var(--pink-mid) !important; background: #FFF8F5 !important; }
     .adopted-tag {
       display: inline-flex; align-items: center; gap: 3px;
@@ -944,11 +945,35 @@
       background: #FFF2EE; border-radius: 20px; padding: 2px 8px; margin-bottom: 6px;
     }
     .pd-mine { font-size: 10px; font-weight: 700; color: #1565C0; background: #E3F2FD; border-radius: 20px; padding: 1px 7px; }
-    .pd-comment-footer { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--gray-100); }
+    .pd-comment-footer { display: flex; align-items: center; gap: 6px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--gray-100); }
     .pd-like-btn { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--gray-500); cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; transition: color .15s; }
     .pd-like-btn svg { width: 13px; height: 13px; stroke: var(--gray-500); fill: none; stroke-width: 2; transition: stroke .15s, fill .15s; }
     .pd-like-btn.liked { color: var(--pink); }
     .pd-like-btn.liked svg { stroke: var(--pink); fill: var(--pink); }
+    .pd-vote-btn { display: flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 600; cursor: pointer; background: none; border: 1.5px solid transparent; font-family: inherit; padding: 3px 8px; border-radius: 20px; transition: all .15s; line-height: 1; }
+    .pd-vote-btn svg { width: 13px; height: 13px; fill: none; stroke-width: 2; flex-shrink: 0; transition: stroke .15s, fill .15s; }
+    .pd-upvote-btn { color: var(--gray-500); }
+    .pd-upvote-btn svg { stroke: var(--gray-500); }
+    .pd-upvote-btn:hover { color: #1565C0; background: #E3F2FD; border-color: #90CAF9; }
+    .pd-upvote-btn:hover svg { stroke: #1565C0; }
+    .pd-upvote-btn.active { color: #1565C0; background: #E3F2FD; border-color: #90CAF9; }
+    .pd-upvote-btn.active svg { stroke: #1565C0; fill: #1565C0; }
+    .pd-downvote-btn { color: var(--gray-500); }
+    .pd-downvote-btn svg { stroke: var(--gray-500); }
+    .pd-downvote-btn:hover { color: #C62828; background: #FFEBEE; border-color: #EF9A9A; }
+    .pd-downvote-btn:hover svg { stroke: #C62828; }
+    .pd-downvote-btn.active { color: #C62828; background: #FFEBEE; border-color: #EF9A9A; }
+    .pd-downvote-btn.active svg { stroke: #C62828; fill: #C62828; }
+    .vote-count { font-variant-numeric: tabular-nums; }
+    .pd-best-label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #1565C0; margin: 10px 0 6px; }
+    .pd-best-label svg { width: 14px; height: 14px; stroke: #1565C0; fill: #FDD835; stroke-width: 1.5; }
+    .pd-best-comment { border-color: #90CAF9 !important; background: linear-gradient(135deg, #F0F7FF 0%, #EEF6FF 100%) !important; }
+    .pd-comments-divider { border: none; border-top: 1px solid var(--gray-100); margin: 10px 0 8px; }
+    .pd-comment-blinded { background: var(--gray-100) !important; border-color: var(--gray-300) !important; }
+    .pd-blinded-msg { font-size: 12.5px; color: var(--gray-500); display: flex; align-items: center; justify-content: space-between; padding: 4px 0 6px; gap: 8px; }
+    .pd-blinded-msg-text { display: flex; align-items: center; gap: 5px; }
+    .pd-reveal-btn { font-size: 11px; font-weight: 600; color: var(--gray-500); border: 1px solid var(--gray-300); border-radius: 20px; padding: 3px 10px; cursor: pointer; background: none; font-family: inherit; transition: all .15s; flex-shrink: 0; }
+    .pd-reveal-btn:hover { color: var(--black); border-color: var(--gray-700); }
 
     /* ─── REVEAL ANIMATIONS ─── */
     .reveal { opacity: 0; transform: translateY(20px); transition: opacity .5s ease, transform .5s ease; }
@@ -3738,6 +3763,7 @@ const HOT_POSTS = {
       { u:'구름위를걷는중', bg:'#F0FBF4', c:'#30A55F', t:'2시간 전', txt:'그 자리에선 웃고 넘겼더라도 나중에 조용히 팀장한테 "그런 건 공개되면 곤란하다"고 말하는 게 좋아요. 참으면 계속 당해요 진짜.' },
       { u:'파란하늘별', bg:'#FFF8E1', c:'#f39c12', t:'2시간 전', txt:'HR에 조용히 상담해보세요. 기록 남겨두는 게 나중에 도움돼요.' },
       { u:'잠수함타는사람', bg:'#EEF2FF', c:'#5B6EF5', t:'3시간 전', txt:'저도 비슷한 경험 있어요... 그냥 웃고 넘겼다가 두고두고 후회했어요. 지금이라도 대화하세요.' },
+      { u:'팀워크제일', bg:'#F5F5F5', c:'#999999', t:'4시간 전', txt:'팀워크를 위해서 연봉 공유하고 화기애애하게 지내는 게 낫지 않을까요? 다들 아는 거 숨겨봤자 어차피 나와요.', initUp: 3, initDown: 12 },
     ]
   },
   hot2: {
@@ -3753,6 +3779,7 @@ const HOT_POSTS = {
       { u:'달팽이걸음', bg:'#F0FBF4', c:'#27ae60', t:'3시간 전', txt:'식사 제공 기준은 신랑신부가 정하는 거라 통일된 룰은 없어요. 최소한 초대장에 식사 여부는 적어줘야 하는 거 아닌가요?' },
       { u:'이른아침이슬', bg:'#FFF0EE', c:'#FF5500', t:'5시간 전', txt:'진짜 어이없다. 밥 안 줄 거면 미리 말은 해야지. 5만원이 적다고 느끼면 안 불렀으면 됐는데.' },
       { u:'구름한조각', bg:'#E8F4FD', c:'#2980b9', t:'6시간 전', txt:'저도 이런 경험 있어요... 그냥 마음 상한 거 맞는데 다음엔 미리 물어보는 게 최선인 것 같아요.' },
+      { u:'냉정한시선', bg:'#F5F5F5', c:'#999999', t:'7시간 전', txt:'솔직히 5만원 내고 식사까지 기대하는 게 좀 무리 아닌가요? 축의금은 축하 의미로 내는 거지 밥값이 아니잖아요.', initUp: 2, initDown: 11 },
     ]
   },
   hot3: {
@@ -3768,6 +3795,7 @@ const HOT_POSTS = {
       { u:'솜사탕구름', bg:'#FFF0FB', c:'#d63031', t:'5시간 전', txt:'3만원도 괜찮아요. 형편에 맞게 내는 거지 금액으로 우정 재는 사람은 없어요. 안 가는 것보다 3만원 들고 가는 게 백배 낫습니다.' },
       { u:'파란하늘별', bg:'#FFF8E1', c:'#f39c12', t:'7시간 전', txt:'장례식은 가는 행위 자체가 위로에요. 3만원 들고 가도 충분해요. 오히려 안 가면 그게 더 상처될 수도 있어요.' },
       { u:'달빛소나타', bg:'#FFF0F6', c:'#E45D8A', t:'10시간 전', txt:'가세요 제발. 몇 만원 때문에 평생 친구 잃지 마세요. 그 친구 지금 힘든 시간이에요.' },
+      { u:'냉정한현실', bg:'#F5F5F5', c:'#999999', t:'11시간 전', txt:'3만원 들고 가면 오히려 없어 보일 수 있어요. 카톡으로 위로 메시지 보내는 게 더 낫지 않을까요? 굳이 민망한 상황 만들 필요 없잖아요.', initUp: 1, initDown: 14 },
     ]
   },
   hot4: {
@@ -3783,6 +3811,7 @@ const HOT_POSTS = {
       { u:'구름위를걷는중', bg:'#F0FBF4', c:'#30A55F', t:'4시간 전', txt:'학교마다 학생권익위원회 같은 거 있어요. 익명 제보도 가능한 경우 많으니까 찾아보세요. 혼자 참지 마세요.' },
       { u:'달팽이걸음', bg:'#F0FBF4', c:'#27ae60', t:'6시간 전', txt:'일단 그 날짜, 상황, 있었던 일을 메모해두세요. 나중에 공식적으로 문제 제기할 때 증거가 돼요.' },
       { u:'구름한조각', bg:'#E8F4FD', c:'#2980b9', t:'13시간 전', txt:'동기나 선배한테 그 교수 원래 그런 사람인지 먼저 물어봐요. 전례가 있으면 같이 움직이는 게 더 효과적이에요.' },
+      { u:'현실조언자', bg:'#F5F5F5', c:'#999999', t:'14시간 전', txt:'교수님들 원래 다 그래요. 너무 예민하게 굴면 학점에 불이익 받을 수 있어요. 그냥 조용히 참고 졸업하는 게 현명한 거예요.', initUp: 4, initDown: 13 },
     ]
   },
   hot5: {
@@ -3797,6 +3826,7 @@ const HOT_POSTS = {
       { u:'이른아침이슬', bg:'#FFF0EE', c:'#FF5500', t:'10분 전', txt:'충분히 안 마셔도 돼요. "건강상 이유로 음주는 어렵습니다"라고 하면 대부분 이해해요.' },
       { u:'달빛소나타', bg:'#FFF0F6', c:'#E45D8A', t:'35분 전', txt:'음료수라도 잔에 따라서 건배만 맞춰주면 분위기 상하지 않아요.' },
       { u:'파란하늘별', bg:'#FFF8E1', c:'#f39c12', t:'58분 전', txt:'음주 강요는 직장 내 괴롭힘에 해당할 수 있어요. 과도하게 눈치 볼 필요 없어요.' },
+      { u:'사회초년생조언', bg:'#F5F5F5', c:'#999999', t:'1시간 전', txt:'신입이면 어느 정도 분위기는 맞춰야 해요. 술 못 마신다고 하면 팀워크 안 맞는 사람으로 낙인찍힐 수 있어요. 조금이라도 마시는 척하는 게 회사 생활에 도움돼요.', initUp: 2, initDown: 15 },
     ]
   },
   f1: {
@@ -4071,10 +4101,14 @@ function openHotPost(id) {
   pdUserComments = [];
   pdBaseComments = p.comments;
   pdLikes.clear();
+  pdUpvotes.clear();
+  pdDownvotes.clear();
+  pdRevealedComments.clear();
+  Object.keys(pdVoteCounts).forEach(k => delete pdVoteCounts[k]);
+  initCommentVotesFromData(p.comments);
   Object.keys(pdReplies).forEach(k => delete pdReplies[k]);
 
   const aiHtml = buildAiCommentHtml(p.aiReply || AI_RESPONSES[p.tag] || AI_RESPONSES['자유']);
-  const commentsHtml = p.comments.map((cm, i) => buildCommentHtml(cm, i, false, false)).join('');
   const totalCount = 1 + p.comments.length;
 
   document.getElementById('pdBody').innerHTML = `
@@ -4097,7 +4131,9 @@ function openHotPost(id) {
       </div>
     </div>
     <div class="pd-comments-label" id="pdCommLabel">댓글 ${totalCount}개</div>
-    <div id="pdCommentsList">${aiHtml}${commentsHtml}</div>`;
+    <div id="pdAiComment">${aiHtml}</div>
+    <div id="pdCommentsList"></div>`;
+  renderCommentsList();
 
   const pd = document.getElementById('pdOverlay');
   pd.classList.add('show');
@@ -4295,10 +4331,16 @@ let pdUserComments = [];
 let pdBaseComments = [];
 let pdPostId = 0;
 const pdLikes = new Set();
+const pdUpvotes = new Set();
+const pdDownvotes = new Set();
+const pdVoteCounts = {};
+const pdRevealedComments = new Set();
 const pdReplies = {};
 
 const HEART_SVG = '<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
 const REPLY_SVG = '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+const THUMBSUP_SVG = '<svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+const THUMBSDOWN_SVG = '<svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>';
 
 /* 댓글 작성자별 레벨 (0~4 → LEVELS 인덱스) */
 const USER_LEVELS = {
@@ -4321,18 +4363,35 @@ function userBadgeHtml(name) {
   return `<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px;background:${lv.bg};color:${lv.color};vertical-align:middle">${lv.emoji} ${lv.name}</span>`;
 }
 
-function buildCommentHtml(cm, idx, adopted, isMine) {
+function buildCommentHtml(cm, idx, adopted, isMine, isBest) {
+  const vc = getVoteCount(idx);
+  const upvoted = pdUpvotes.has(idx);
+  const downvoted = pdDownvotes.has(idx);
+
+  if (vc.down >= 10 && !pdRevealedComments.has(idx)) {
+    return `<div class="pd-comment pd-comment-blinded" id="pdc-${pdPostId}-${idx}">
+      <div class="pd-blinded-msg">
+        <span class="pd-blinded-msg-text">🚫 비추천이 많아 블라인드된 댓글입니다</span>
+        <button class="pd-reveal-btn" onclick="revealComment(${JSON.stringify(idx)})">보기</button>
+      </div>
+      <div class="pd-comment-footer">
+        <button class="pd-vote-btn pd-upvote-btn ${upvoted ? 'active' : ''}" onclick="toggleCommentVote(this,${JSON.stringify(idx)},'up')">${THUMBSUP_SVG}<span class="vote-count">${vc.up}</span></button>
+        <button class="pd-vote-btn pd-downvote-btn ${downvoted ? 'active' : ''}" onclick="toggleCommentVote(this,${JSON.stringify(idx)},'down')">${THUMBSDOWN_SVG}<span class="vote-count">${vc.down}</span></button>
+      </div>
+    </div>`;
+  }
+
+  const bestClass = isBest ? ' pd-best-comment' : '';
   const adoptedClass = adopted ? 'adopted-item' : '';
   const adoptedTag = adopted ? '<div class="adopted-tag">✓ 채택된 답변</div>' : '';
   const mineTag = isMine ? ' <span class="pd-mine">내 댓글</span>' : '';
-  const liked = pdLikes.has(idx);
   let adoptBtn = '';
   if (adopted) {
-    adoptBtn = `<button class="pd-adopt-btn adopted" onclick="cancelAdopt(${idx},${isMine})">✓ 채택됨</button>`;
+    adoptBtn = `<button class="pd-adopt-btn adopted" onclick="cancelAdopt(${idx},${isMine})" onmouseenter="this.textContent='✕ 채택 취소'" onmouseleave="this.textContent='✓ 채택됨'">✓ 채택됨</button>`;
   } else if (pdAdoptedIdx === null) {
     adoptBtn = `<button class="pd-adopt-btn" onclick="adoptComment(${idx})">채택</button>`;
   }
-  return `<div class="pd-comment ${adoptedClass}" id="pdc-${pdPostId}-${idx}">
+  return `<div class="pd-comment ${adoptedClass}${bestClass}" id="pdc-${pdPostId}-${idx}">
     ${adoptedTag}
     <div class="pd-comment-user">
       <div class="pd-comment-avatar" style="background:${cm.bg};color:${cm.c}">${cm.u[0]}</div>
@@ -4350,15 +4409,16 @@ function buildCommentHtml(cm, idx, adopted, isMine) {
       </div>
     </div>
     <div class="pd-comment-footer">
-      <button class="pd-like-btn ${liked ? 'liked' : ''}" onclick="toggleCommentLike(this,${idx})">${HEART_SVG} 도움돼요</button>
+      <button class="pd-vote-btn pd-upvote-btn ${upvoted ? 'active' : ''}" onclick="toggleCommentVote(this,${JSON.stringify(idx)},'up')">${THUMBSUP_SVG}<span class="vote-count">${vc.up}</span></button>
+      <button class="pd-vote-btn pd-downvote-btn ${downvoted ? 'active' : ''}" onclick="toggleCommentVote(this,${JSON.stringify(idx)},'down')">${THUMBSDOWN_SVG}<span class="vote-count">${vc.down}</span></button>
       <button class="pd-like-btn" onclick="showReplyInput(${pdPostId},${idx})">${REPLY_SVG} 답글</button>
       ${adoptBtn}
+      ${vc.down >= 10 ? `<button class="pd-reveal-btn" style="margin-left:auto" onclick="hideComment(${JSON.stringify(idx)})">숨기기</button>` : ''}
     </div>
   </div>`;
 }
 
 function buildAiCommentHtml(txt) {
-  const liked = pdLikes.has('ai');
   return `<div class="pd-comment pd-ai-comment">
     <div class="pd-ai-label">✦ 눈치코치 AI</div>
     <div class="pd-comment-user">
@@ -4375,7 +4435,6 @@ function buildAiCommentHtml(txt) {
       </div>
     </div>
     <div class="pd-comment-footer">
-      <button class="pd-like-btn ${liked ? 'liked' : ''}" onclick="toggleCommentLike(this,'ai')">${HEART_SVG} 도움돼요</button>
       <button class="pd-like-btn" onclick="showReplyInput(${pdPostId},'ai')">${REPLY_SVG} 답글</button>
     </div>
   </div>`;
@@ -4399,6 +4458,95 @@ function toggleCommentLike(btn, idx) {
     pdLikes.add(idx);
     btn.classList.add('liked');
   }
+}
+
+function initCommentVotesFromData(comments) {
+  comments.forEach((cm, i) => {
+    if (cm.initUp !== undefined || cm.initDown !== undefined) {
+      pdVoteCounts[i] = {
+        up: cm.initUp !== undefined ? cm.initUp : ((i * 17 + pdPostId * 7) % 45 + 5),
+        down: cm.initDown !== undefined ? cm.initDown : 0
+      };
+    }
+  });
+}
+
+function getVoteCount(idx) {
+  if (!pdVoteCounts[idx]) {
+    const seed = typeof idx === 'number' ? idx : 99;
+    pdVoteCounts[idx] = {
+      up: (seed * 17 + pdPostId * 7) % 45 + 5,
+      down: (seed * 3 + pdPostId) % 5
+    };
+  }
+  return pdVoteCounts[idx];
+}
+
+function revealComment(idx) {
+  pdRevealedComments.add(idx);
+  renderCommentsList();
+}
+
+function hideComment(idx) {
+  pdRevealedComments.delete(idx);
+  renderCommentsList();
+}
+
+function toggleCommentVote(btn, idx, type) {
+  const vc = getVoteCount(idx);
+  const isUp = type === 'up';
+  const mySet = isUp ? pdUpvotes : pdDownvotes;
+  const otherSet = isUp ? pdDownvotes : pdUpvotes;
+  const otherType = isUp ? 'down' : 'up';
+  if (mySet.has(idx)) {
+    mySet.delete(idx);
+    vc[type]--;
+  } else {
+    if (otherSet.has(idx)) {
+      otherSet.delete(idx);
+      vc[otherType]--;
+    }
+    mySet.add(idx);
+    vc[type]++;
+  }
+  renderCommentsList();
+}
+
+const BEST_STAR_SVG = '<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+
+function renderCommentsList() {
+  const list = document.getElementById('pdCommentsList');
+  if (!list) return;
+
+  const all = [];
+  pdBaseComments.forEach((cm, i) => all.push({ cm, idx: i, isMine: false }));
+  pdUserComments.forEach((cm, i) => all.push({ cm, idx: pdBaseComments.length + i, isMine: true }));
+
+  if (all.length === 0) { list.innerHTML = ''; return; }
+
+  const netScore = idx => { const v = getVoteCount(idx); return v.up - v.down; };
+  const sorted = [...all].sort((a, b) => netScore(b.idx) - netScore(a.idx));
+  const best = sorted[0];
+  const rest = sorted.slice(1);
+
+  const bestHtml = `
+    <div class="pd-best-label">${BEST_STAR_SVG} 베스트 댓글</div>
+    ${buildCommentHtml(best.cm, best.idx, pdAdoptedIdx === best.idx, best.isMine, true)}`;
+
+  const restHtml = rest.length > 0
+    ? `<hr class="pd-comments-divider">` + rest.map(({ cm, idx, isMine }) =>
+        buildCommentHtml(cm, idx, pdAdoptedIdx === idx, isMine, false)
+      ).join('')
+    : '';
+
+  list.innerHTML = bestHtml + restHtml;
+
+  Object.keys(pdReplies).forEach(k => {
+    const slot = document.getElementById('replies-' + pdPostId + '-' + k);
+    if (slot && pdReplies[k]) {
+      slot.innerHTML = pdReplies[k].map(buildReplyHtml).join('');
+    }
+  });
 }
 
 function showReplyInput(postId, idx) {
@@ -4434,11 +4582,8 @@ function submitReply(postId, idx) {
 
 function cancelAdopt(idx, isMine) {
   if (pdAdoptedIdx === null) return;
-  pdAdoptedIdx = null; // Reset BEFORE buildCommentHtml so the adopt button reappears
-  const cm = isMine ? pdUserComments[idx - pdBaseComments.length] : pdBaseComments[idx];
-  const el = document.getElementById('pdc-' + pdPostId + '-' + idx);
-  if (el) el.outerHTML = buildCommentHtml(cm, idx, false, !!isMine);
-  document.querySelectorAll('.pd-adopt-btn.adopted').forEach(b => b.remove());
+  pdAdoptedIdx = null;
+  renderCommentsList();
   showToast('채택이 취소됐어요');
 }
 
@@ -4461,6 +4606,11 @@ function openPost(card) {
   pdUserComments = [];
   pdBaseComments = POST_COMMENTS[title] || SAMPLE_COMMENTS[pdPostId % SAMPLE_COMMENTS.length];
   pdLikes.clear();
+  pdUpvotes.clear();
+  pdDownvotes.clear();
+  pdRevealedComments.clear();
+  Object.keys(pdVoteCounts).forEach(k => delete pdVoteCounts[k]);
+  initCommentVotesFromData(pdBaseComments);
   Object.keys(pdReplies).forEach(k => delete pdReplies[k]);
 
   const aiReply = AI_RESPONSES[card.dataset.category] || AI_RESPONSES[tag] || AI_RESPONSES['자유'];
@@ -4488,11 +4638,11 @@ function openPost(card) {
       </div>
     </div>
     <div class="pd-comments-label" id="pdCommLabel">댓글 ${totalCount}개</div>
-    <div id="pdCommentsList">
-      ${aiHtml}${pdBaseComments.map((cm, i) => buildCommentHtml(cm, i, false, false)).join('')}
-    </div>`;
+    <div id="pdAiComment">${aiHtml}</div>
+    <div id="pdCommentsList"></div>`;
 
   document.getElementById('pdBody').innerHTML = pdHTML;
+  renderCommentsList();
   const pd = document.getElementById('pdOverlay');
   pd.classList.add('show');
   document.body.style.overflow = 'hidden';
@@ -4503,11 +4653,7 @@ function openPost(card) {
 function adoptComment(idx) {
   if (pdAdoptedIdx !== null) return;
   pdAdoptedIdx = idx;
-  const isMine = idx >= pdBaseComments.length;
-  const cm = isMine ? pdUserComments[idx - pdBaseComments.length] : pdBaseComments[idx];
-  const el = document.getElementById(`pdc-${pdPostId}-${idx}`);
-  if (el) el.outerHTML = buildCommentHtml(cm, idx, true, isMine);
-  document.querySelectorAll('.pd-adopt-btn:not(.adopted)').forEach(b => b.remove());
+  renderCommentsList();
   addPts('adoption');
   showToast('채택 완료! +5점 ⭐');
 }
@@ -4517,15 +4663,9 @@ function submitPdComment() {
   const text = input.value.trim();
   if (!text) return;
   const lv = getLv(uStats.pts);
-  const idx = pdBaseComments.length + pdUserComments.length;
   const cm = { u: '봄비내리는날', bg: lv.bg, c: lv.color, t: '방금', txt: text };
   pdUserComments.push(cm);
-  const list = document.getElementById('pdCommentsList');
-  if (list) {
-    const div = document.createElement('div');
-    div.innerHTML = buildCommentHtml(cm, idx, false, true);
-    list.appendChild(div.firstElementChild);
-  }
+  renderCommentsList();
   const lbl = document.getElementById('pdCommLabel');
   if (lbl) lbl.textContent = `댓글 ${1 + pdBaseComments.length + pdUserComments.length}개`;
   input.value = '';
